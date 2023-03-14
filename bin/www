@@ -10,14 +10,14 @@ var http = require('http');
 
 const diskLogic = require('../logic/disk');
 const diskService = require('../services/disk');
-const bitcoindLogic = require('../logic/bitcoind');
+const monerodLogic = require('../logic/monerod');
 const constants = require('../utils/const');
 
 /**
  * Get port from environment and store in Express.
  */
-
-var port = normalizePort(process.env.PORT || '3005');
+// Refactor: This port is used by bitcoin core, not monerod
+var port = normalizePort(process.env.PORT || '8889');
 app.set('port', port);
 
 /**
@@ -38,21 +38,21 @@ server.on('listening', onListening);
  * Function to create default bitcoin core config files if they do not already exist.
  */
 
-async function createConfFilesAndRestartBitcoind() {
-  console.log('umbrel-bitcoin.conf does not exist, creating config files with Umbrel default values');
+async function createConfFilesAndRestartMonerod() {
+  console.log('umbrel-monero.conf does not exist, creating config files with Umbrel default values');
   const config = await diskLogic.getJsonStore();
 
   // set torProxyForClearnet to false for existing installs
-  if (constants.BITCOIN_INITIALIZE_WITH_CLEARNET_OVER_TOR) config.torProxyForClearnet = true;
+  if (constants.MONERO_INITIALIZE_WITH_CLEARNET_OVER_TOR) config.torProxyForClearnet = true;
 
-  await diskLogic.applyCustomBitcoinConfig(config);
+  await diskLogic.applyCustomMoneroConfig(config);
 
   const MAX_TRIES = 60;
   let tries = 0;
 
   while (tries < MAX_TRIES) {
     try {
-      await bitcoindLogic.stop();
+      await monerodLogic.stop();
       break;
     } catch (error) {
       console.error(error);
@@ -123,7 +123,7 @@ async function onListening() {
   console.log('Listening on ' + bind);
 
   // if umbrel-bitcoin.conf does not exist, create default bitcoin core config files and restart bitcoind.
-  if (! await diskService.fileExists(constants.UMBREL_BITCOIN_CONF_FILEPATH)) {
-    createConfFilesAndRestartBitcoind();
+  if (! await diskService.fileExists(constants.UMBREL_MONERO_CONF_FILEPATH)) {
+    createConfFilesAndRestartMonerod();
   }
 }

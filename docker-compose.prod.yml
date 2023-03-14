@@ -9,22 +9,22 @@ services:
     stop_grace_period: 15m30s
     ports:
       - "18443:18443"
-      # - "8333:8333" # "$BITCOIN_P2P_PORT:$BITCOIN_P2P_PORT"
+      # - "18080:18080" # "$MONERO_P2P_PORT:$MONERO_P2P_PORT"
   server:
     build: .
-    depends_on: [bitcoind]
+    depends_on: [monerod]
     command: ["npm", "start"]
     restart: on-failure
     ports:
-      - "3005:3005"
+      - "8889:8889"
     environment:
-      PORT: "3005"
-      BITCOIN_HOST: "bitcoind"
-      RPC_PORT: $BITCOIN_RPC_PORT
-      RPC_USER: $BITCOIN_RPC_USER
-      RPC_PASSWORD: $BITCOIN_RPC_PASS
-      BITCOIN_RPC_HIDDEN_SERVICE: "/var/lib/tor/bitcoin-rpc/hostname"
-      BITCOIN_P2P_HIDDEN_SERVICE: "/var/lib/tor/bitcoin-p2p/hostname"
+      PORT: "8889"
+      MONERO_HOST: "monerod"
+      RPC_PORT: $MONERO_RPC_PORT
+      RPC_USER: $MONERO_RPC_USER
+      RPC_PASSWORD: $MONERO_RPC_PASS
+      MONERO_RPC_HIDDEN_SERVICE: "/var/lib/tor/bitcoin-rpc/hostname"
+      MONERO_P2P_HIDDEN_SERVICE: "/var/lib/tor/bitcoin-p2p/hostname"
 
 networks:
   default:

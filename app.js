@@ -15,11 +15,13 @@ const errorHandleMiddleware = require('middlewares/errorHandling.js');
 
 const logger = require('utils/logger.js');
 
-const bitcoind = require('routes/v1/bitcoind/info.js');
-const charts = require('routes/v1/bitcoind/charts.js');
-const system = require('routes/v1/bitcoind/system.js');
+const monerod = require('routes/v1/monerod/info.js');
+const charts = require('routes/v1/monerod/charts.js');
+const system = require('routes/v1/monerod/system.js');
 const ping = require('routes/ping.js');
 const app = express();
+
+
 
 // Handles CORS
 app.use(cors());
@@ -34,9 +36,9 @@ app.use(morgan(logger.morganConfiguration));
 
 app.use('/', express.static('./ui/dist'));
 
-app.use('/v1/bitcoind/info', bitcoind);
-app.use('/v1/bitcoind/info', charts);
-app.use('/v1/bitcoind/system', system);
+app.use('/v1/monerod/info', monerod);
+app.use('/v1/monerod/info', charts);
+app.use('/v1/monerod/system', system);
 app.use('/ping', ping);
 
 app.use(errorHandleMiddleware);

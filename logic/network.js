@@ -1,12 +1,12 @@
-const bitcoindService = require('services/bitcoind.js');
+const monerodService = require('services/monerod.js');
 const bashService = require('services/bash.js');
 
-async function getBitcoindAddresses() {
+async function getMonerodAddresses() {
 
   const addresses = [];
 
   // Find standard ip address
-  const peerInfo = (await bitcoindService.getPeerInfo()).result;
+  const peerInfo = (await monerodService.getPeerInfo()).result;
 
   if (peerInfo.length === 0) {
     addresses.push(await getExternalIPFromIPInfo());
@@ -23,7 +23,7 @@ async function getBitcoindAddresses() {
   }
 
   // Try to find that Tor onion address.
-  const networkInfo = (await bitcoindService.getNetworkInfo()).result;
+  const networkInfo = (await monerodService.getNetworkInfo()).result;
 
   if (Object.prototype.hasOwnProperty.call(networkInfo, 'localaddresses')
     && networkInfo.localaddresses.length > 0) {
@@ -62,7 +62,7 @@ function getMostValidatedIP(peerInfo) {
       const semi = peer.addrlocal.lastIndexOf(':');
       const externalIP = peer.addrlocal.substr(0, semi);
 
-      // Ignore localhost, this is incorrect data from bitcoind
+      // Ignore localhost, this is incorrect data from monerod
       if (externalIP !== '127.0.0.1' || externalIP !== '0.0.0.0') {
 
         // Increment the count for this external ip
@@ -85,5 +85,6 @@ function getMostValidatedIP(peerInfo) {
 }
 
 module.exports = {
-  getBitcoindAddresses,
+  // getMonerodAddresses,
+  getMonerodAddresses,
 };

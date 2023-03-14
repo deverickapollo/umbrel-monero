@@ -1,14 +1,14 @@
-const bitcoindService = require('services/bitcoind.js');
-const BitcoindError = require('models/errors.js').BitcoindError;
+const monerodService = require('services/monerod.js');
+const MonerodError = require('models/errors.js').MonerodError;
 
 async function getBlockCount() {
-  const blockCount = await bitcoindService.getBlockCount();
+  const blockCount = await monerodService.getBlockCount();
 
   return {blockCount: blockCount.result};
 }
 
 async function getConnectionsCount() {
-  const peerInfo = await bitcoindService.getPeerInfo();
+  const peerInfo = await monerodService.getPeerInfo();
 
   var outBoundConnections = 0;
   var inBoundConnections = 0;
@@ -47,11 +47,11 @@ async function getConnectionsCount() {
 
 async function getStatus() {
   try {
-    await bitcoindService.help();
+    await monerodService.help();
 
     return {operational: true};
   } catch (error) {
-    if (error instanceof BitcoindError) {
+    if (error instanceof MonerodError) {
       return {operational: false};
     }
 
@@ -61,7 +61,7 @@ async function getStatus() {
 
 // Return the max synced header for all connected peers or -1 if no data is available.
 async function getMaxSyncHeader() {
-  const peerInfo = (await bitcoindService.getPeerInfo()).result;
+  const peerInfo = (await monerodService.getPeerInfo()).result;
 
   if (peerInfo.length === 0) {
     return -1;
@@ -75,11 +75,11 @@ async function getMaxSyncHeader() {
 }
 
 async function getMempoolInfo() {
-  return await bitcoindService.getMempoolInfo();
+  return await monerodService.getMempoolInfo();
 }
 
 async function getLocalSyncInfo() {
-  const info = await bitcoindService.getBlockChainInfo();
+  const info = await monerodService.getBlockChainInfo();
 
   var blockChainInfo = info.result;
   var chain = blockChainInfo.chain;
@@ -112,7 +112,7 @@ async function getSyncStatus() {
 
 // TODO - consider using getNetworkInfo for info on proxy for ipv4 and ipv6
 async function getVersion() {
-  const networkInfo = await bitcoindService.getNetworkInfo();
+  const networkInfo = await monerodService.getNetworkInfo();
   const unformattedVersion = networkInfo.result.subversion;
 
   // Remove all non-digits or decimals.
@@ -122,7 +122,7 @@ async function getVersion() {
 }
 
 async function getTransaction(txid) {
-  const transactionObj = await bitcoindService.getTransaction(txid);
+  const transactionObj = await monerodService.getTransaction(txid);
 
   return {
     txid,
@@ -137,13 +137,13 @@ async function getTransaction(txid) {
 }
 
 async function getNetworkInfo() {
-  const networkInfo = await bitcoindService.getNetworkInfo();
+  const networkInfo = await monerodService.getNetworkInfo();
 
   return networkInfo.result; // eslint-disable-line object-shorthand
 }
 
 async function getBlock(hash) {
-  const blockObj = await bitcoindService.getBlock(hash);
+  const blockObj = await monerodService.getBlock(hash);
 
   return {
     block: hash,
@@ -175,15 +175,15 @@ const memoizedGetFormattedBlock = () => {
     } else {
       let blockHash;
       try {
-        ({result: blockHash} = await bitcoindService.getBlockHash(blockHeight));
+        ({result: blockHash} = await monerodService.getBlockHash(blockHeight));
       } catch (error) {
-        if (error instanceof BitcoindError) {
+        if (error instanceof MonerodError) {
           return error;
         }
         throw error;
       }
 
-      const {result: block} = await bitcoindService.getBlock(blockHash);
+      const {result: block} = await monerodService.getBlock(blockHash);
 
       cache[blockHeight] = {
         hash: block.hash,
@@ -242,7 +242,7 @@ async function getBlocks(fromHeight, toHeight) {
 }
 
 async function getBlockHash(height) {
-  const getBlockHashObj = await bitcoindService.getBlockHash(height);
+  const getBlockHashObj = await monerodService.getBlockHash(height);
 
   return {
     hash: getBlockHashObj.result
@@ -250,10 +250,10 @@ async function getBlockHash(height) {
 }
 
 async function nodeStatusDump() {
-  const blockchainInfo = await bitcoindService.getBlockChainInfo();
-  const networkInfo = await bitcoindService.getNetworkInfo();
-  const mempoolInfo = await bitcoindService.getMempoolInfo();
-  const miningInfo = await bitcoindService.getMiningInfo();
+  const blockchainInfo = await monerodService.getBlockChainInfo();
+  const networkInfo = await monerodService.getNetworkInfo();
+  const mempoolInfo = await monerodService.getMempoolInfo();
+  const miningInfo = await monerodService.getMiningInfo();
 
   return {
     blockchain_info: blockchainInfo.result,
@@ -264,10 +264,10 @@ async function nodeStatusDump() {
 }
 
 async function nodeStatusSummary() {
-  const blockchainInfo = await bitcoindService.getBlockChainInfo();
-  const networkInfo = await bitcoindService.getNetworkInfo();
-  const mempoolInfo = await bitcoindService.getMempoolInfo();
-  const miningInfo = await bitcoindService.getMiningInfo();
+  const blockchainInfo = await monerodService.getBlockChainInfo();
+  const networkInfo = await monerodService.getNetworkInfo();
+  const mempoolInfo = await monerodService.getMempoolInfo();
+  const miningInfo = await monerodService.getMiningInfo();
 
   return {
     difficulty: blockchainInfo.result.difficulty,
@@ -279,7 +279,7 @@ async function nodeStatusSummary() {
 }
 
 async function stop() {
-  const stopResponse = await bitcoindService.stop();
+  const stopResponse = await monerodService.stop();
   return {stopResponse};
 }
 

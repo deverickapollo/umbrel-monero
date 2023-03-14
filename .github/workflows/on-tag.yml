@@ -32,5 +32,5 @@ jobs:
         run: |
           docker buildx build \
           --platform linux/amd64,linux/arm64 \
-          --tag ${{ secrets.DOCKER_HUB_USER }}/umbrel-bitcoin:$VERSION \
+          --tag ${{ secrets.DOCKER_HUB_USER }}/umbrel-monero:$VERSION \
           --push .

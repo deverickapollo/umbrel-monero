@@ -30,5 +30,5 @@ COPY --from=umbrel-middleware-builder /app /app
 # Change directory to '/app' 
 WORKDIR /app
 
-EXPOSE 3006
+EXPOSE 8998
 CMD [ "yarn", "start" ]

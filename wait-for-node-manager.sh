@@ -22,7 +22,7 @@ cmd="$@"
 found=1
 iterations=1
 until [ $found = 2 ]; do
-  if node -e "const axios = require('axios').default; axios.get('http://$host:3006/ping').then((resp) => {console.log(resp.data); process.exit(0); }).catch((error) => {process.exit(1) } );" ; then
+  if node -e "const axios = require('axios').default; axios.get('http://$host:8998/ping').then((resp) => {console.log(resp.data); process.exit(0); }).catch((error) => {process.exit(1) } );" ; then
     echo "Can connect, lets proceed with server starting"
     found=2
   else

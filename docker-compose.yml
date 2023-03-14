@@ -28,43 +28,44 @@ services:
       default:
         ipv4_address: "10.21.0.3"
   
-  bitcoind:
-    image: lncm/bitcoind:v24.0@sha256:db19fe46f30acd3854f4f0d239278137d828ce3728f925c8d92faaab1ba8556a
+  monerod:
+    image: sethsimmons/simple-monerod:latest
     user: "1000:1000"
-    command: -port=8333 -rpcport=8332 -rpcbind=0.0.0.0 -rpcallowip=0.0.0.0/0 -rpcauth=umbrel:5071d8b3ba93e53e414446ff9f1b7d7b$$375e9731abd2cd2c2c44d2327ec19f4f2644256fdeaf4fc5229bf98b778aafec
+    command: -port=18080 -rpcport=18081 -rpcbind=0.0.0.0 -rpcallowip=0.0.0.0/0 -rpcauth=umbrel:5071d8b3ba93e53e414446ff9f1b7d7b$$375e9731abd2cd2c2c44d2327ec19f4f2644256fdeaf4fc5229bf98b778aafec
     volumes:
-      - ${PWD}/data/bitcoin:/data/.bitcoin
+      - ${PWD}/data/bitcoin:/home/monero/.bitmonero
     restart: unless-stopped
     stop_grace_period: 15m30s
     ports:
-      - "8332:8332" # rpc
-      - "8333:8333" # p2p
+      - "18081:18081" # rpc
+      - "18080:18080" # p2p
     networks:
       default:
-        ipv4_address: "10.21.0.4"
-  
+        ipv4_address: $APP_MONERO_IP
+        # ipv4_address: "10.21.0.4"
+
   server:
     build: .
     depends_on: [bitcoind]
     command: ["npm", "start"]
     restart: on-failure
     ports:
-      - "3005:3005"
+      - "8889:8889"
     volumes:
       - ${PWD}/data/app:/data # volume to persist advanced settings json
       - ${PWD}/data/bitcoin:/bitcoin/.bitcoin # volume to persist umbrel-bitcoin.conf and bitcoin.conf
     environment:
-      PORT: "3005"
-      BITCOIN_HOST: "bitcoind"
-      BITCOIN_P2P_PORT: 8333
-      BITCOIN_RPC_PORT: 8332
-      BITCOIN_DEFAULT_NETWORK: "regtest"
+      PORT: "8889"
+      MONERO_HOST: "monerod"
+      MONERO_P2P_PORT: 18080
+      MONERO_RPC_PORT: 18081
+      MONERO_DEFAULT_NETWORK: "regtest"
       RPC_USER: "umbrel"
       RPC_PASSWORD: "moneyprintergobrrr"
-      BITCOIN_RPC_HIDDEN_SERVICE: "somehiddenservice.onion"
-      BITCOIN_P2P_HIDDEN_SERVICE: "anotherhiddenservice.onion"
+      MONERO_RPC_HIDDEN_SERVICE: "somehiddenservice.onion"
+      MONERO_P2P_HIDDEN_SERVICE: "anotherhiddenservice.onion"
       DEVICE_DOMAIN_NAME: "test.local"
-      BITCOIND_IP: "10.21.0.4"
+      MONEROD_IP: "10.21.0.4"
       TOR_PROXY_IP: "10.21.0.3"
       TOR_PROXY_PORT: "9050"
       TOR_PROXY_CONTROL_PORT: "9051"

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const bitcoind = require('logic/bitcoind.js');
-const bitcoindService = require('services/bitcoind.js');
+const monerod = require('logic/monerod.js');
+const monerodService = require('services/monerod.js');
 const safeHandler = require('utils/safeHandler');
 
 const aggregates = {
@@ -14,7 +14,7 @@ const aggregates = {
 };
 
 const setAggregatesValues = async() => {
-  const {result: blockchainInfo} = await bitcoindService.getBlockChainInfo();
+  const {result: blockchainInfo} = await monerodService.getBlockChainInfo();
   const syncPercent = blockchainInfo.verificationprogress;
   
   // only start caching once sync is getting close to complete
@@ -29,12 +29,12 @@ const setAggregatesValues = async() => {
     const SEVEN_DAY_AS_BLOCKS = 1008;
 
     const ranges = await Promise.all([
-      bitcoind.getBlockRangeTransactionChunks(currentBlock - ONE_HOUR_AS_BLOCKS, currentBlock, 1), // 1hr
-      bitcoind.getBlockRangeTransactionChunks(currentBlock - SIX_HOURS_AS_BLOCKS, currentBlock, 6), // 6hr
-      bitcoind.getBlockRangeTransactionChunks(currentBlock - TWELVE_HOURS_AS_BLOCKS, currentBlock, 36), // 12hr
-      bitcoind.getBlockRangeTransactionChunks(currentBlock - ONE_DAY_AS_BLOCKS, currentBlock, 72), // 1d
-      bitcoind.getBlockRangeTransactionChunks(currentBlock - THREE_DAY_AS_BLOCKS, currentBlock, 144), // 3d
-      bitcoind.getBlockRangeTransactionChunks(currentBlock - SEVEN_DAY_AS_BLOCKS, currentBlock, 432) // 7d
+      monerod.getBlockRangeTransactionChunks(currentBlock - ONE_HOUR_AS_BLOCKS, currentBlock, 1), // 1hr
+      monerod.getBlockRangeTransactionChunks(currentBlock - SIX_HOURS_AS_BLOCKS, currentBlock, 6), // 6hr
+      monerod.getBlockRangeTransactionChunks(currentBlock - TWELVE_HOURS_AS_BLOCKS, currentBlock, 36), // 12hr
+      monerod.getBlockRangeTransactionChunks(currentBlock - ONE_DAY_AS_BLOCKS, currentBlock, 72), // 1d
+      monerod.getBlockRangeTransactionChunks(currentBlock - THREE_DAY_AS_BLOCKS, currentBlock, 144), // 3d
+      monerod.getBlockRangeTransactionChunks(currentBlock - SEVEN_DAY_AS_BLOCKS, currentBlock, 432) // 7d
     ]);
 
     aggregates['1hr'] = ranges[0];
