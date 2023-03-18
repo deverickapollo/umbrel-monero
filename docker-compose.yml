@@ -46,14 +46,14 @@ services:
 
   server:
     build: .
-    depends_on: [bitcoind]
+    depends_on: [monerod]
     command: ["npm", "start"]
     restart: on-failure
     ports:
       - "8889:8889"
     volumes:
       - ${PWD}/data/app:/data # volume to persist advanced settings json
-      - ${PWD}/data/bitcoin:/bitcoin/.bitcoin # volume to persist umbrel-bitcoin.conf and bitcoin.conf
+      - ${PWD}/data/monero:/home/monero/.bitmonero # volume to persist umbrel-bitcoin.conf and bitcoin.conf
     environment:
       PORT: "8889"
       MONERO_HOST: "monerod"
