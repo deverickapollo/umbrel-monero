@@ -31,9 +31,16 @@ On MacOS:
 - export NODE_OPTIONS=--openssl-legacy-provider    
   - Otherwise you will see  Building for production...Error: error:0308010C:digital envelope routines::unsupported
   - https://stackoverflow.com/questions/69692842/error-message-error0308010cdigital-envelope-routinesunsupported
+  - 
+### Development
 - npm run-script build:ui
 - npm run-script serve:ui
+- 
+### Production
 - npm run start
+
+#### Docker
+- docker-compose up 
   
 ## Getting started
 
