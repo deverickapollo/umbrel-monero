@@ -4,6 +4,7 @@ npm-debug.log
 /tls.cert
 *.log
 *.env
+*.DS_Store
 logs/
 *.bak
 lb_settings.json
@@ -12,3 +13,4 @@ coverage
 .todo
 data/
 .env.local
+ui/dist
