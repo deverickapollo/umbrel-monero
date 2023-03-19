@@ -2,7 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 
 import Layout from "@/layouts/Layout.vue";
-import Bitcoin from "@/views/Bitcoin.vue";
+import Monero from "@/views/Monero.vue";
 
 Vue.use(VueRouter);
 
@@ -13,8 +13,8 @@ const routes = [
     children: [
       {
         path: "",
-        name: "bitcoin",
-        component: Bitcoin,
+        name: "monero",
+        component: Monero,
         meta: { requiresAuth: false },
       }
     ]

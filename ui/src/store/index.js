@@ -3,7 +3,7 @@ import Vuex from "vuex";
 
 //Modules
 import system from "./modules/system";
-import bitcoin from "./modules/bitcoin";
+import monero from "./modules/monero";
 import user from "./modules/user";
 
 Vue.use(Vuex);
@@ -48,7 +48,7 @@ export default new Vuex.Store({
   getters,
   modules: {
     system,
-    bitcoin,
+    monero,
     user
   }
 });
