@@ -2,28 +2,28 @@ import API from "@/helpers/api";
 
 // Initial state
 const state = () => ({
-  bitcoinConfig: {}
+  moneroConfig: {}
 });
 
 // Functions to update the state directly
 const mutations = {
-  setBitcoinConfig(state, bitcoinConfig) {
-    state.bitcoinConfig = bitcoinConfig;
+  setMoneroConfig(state, moneroConfig) {
+    state.moneroConfig = moneroConfig;
   }
 };
 
 const actions = {
-  async getBitcoinConfig({ commit }) {
+  async getMoneroConfig({ commit }) {
     const existingConfig = await API.get(
-      `${process.env.VUE_APP_API_BASE_URL}/v1/bitcoind/system/bitcoin-config`
+      `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/system/monero-config`
     );
 
     if (existingConfig) {
-      commit("setBitcoinConfig", existingConfig);
+      commit("setMoneroConfig", existingConfig);
     }
   },
-  updateBitcoinConfig({ commit }, bitcoinConfig) {
-    commit("setBitcoinConfig", bitcoinConfig);
+  updateMoneroConfig({ commit }, moneroConfig) {
+    commit("setMoneroConfig", moneroConfig);
   }
 };
 

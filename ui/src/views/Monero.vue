@@ -15,13 +15,13 @@
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <circle cx="4" cy="4" r="4" :fill="`${isBitcoinCoreOperational ? '#00CD98' : '#F6B900'}`" />
+              <circle cx="4" cy="4" r="4" :fill="`${isMoneroCoreOperational ? '#00CD98' : '#F6B900'}`" />
             </svg>
-            <small v-if="isBitcoinCoreOperational" class="ml-1 text-success">Running</small>
+            <small v-if="isMoneroCoreOperational" class="ml-1 text-success">Running</small>
             <small v-else class="ml-1 text-warning">Starting</small>
-            <h3 class="d-block font-weight-bold mb-1">Bitcoin Node</h3>
+            <h3 class="d-block font-weight-bold mb-1">Monero Node</h3>
             <span class="d-block text-muted">{{
-              version ? `Bitcoin Core ${version}` : "..."
+              version ? `Monero Core ${version}` : "..."
             }}</span>
           </div>
         </div>
@@ -76,12 +76,12 @@
           </b-dropdown>
         </div>
       </div>
-      <b-alert :show="showReindexCompleteAlert" variant="warning">Reindexing is now complete. Turn off "Reindex blockchain" in <span class="open-settings" @click="() => $bvModal.show('advanced-settings-modal')">advanced settings</span> to prevent reindexing every time Bitcoin Node restarts.</b-alert>
+      <b-alert :show="showReindexCompleteAlert" variant="warning">Reindexing is now complete. Turn off "Reindex blockchain" in <span class="open-settings" @click="() => $bvModal.show('advanced-settings-modal')">advanced settings</span> to prevent reindexing every time Monero Node restarts.</b-alert>
 
     <b-alert :show="showReindexInProgressAlert" variant="info">Reindexing in progress...</b-alert>
 
     <b-alert :show="showRestartError" variant="danger" dismissible @dismissed="showRestartError=false">
-      Something went wrong while attempting to change the configuration of Bitcoin Node.
+      Something went wrong while attempting to change the configuration of Monero Node.
     </b-alert>
     </div>
 
@@ -186,7 +186,7 @@
     </b-modal>
     
     <b-modal id="advanced-settings-modal" size="lg" centered hide-footer scrollable>
-      <advanced-settings-modal :isSettingsDisabled="isRestartPending" @submit="saveSettingsAndRestartBitcoin" @clickRestoreDefaults="restoreDefaultSettingsAndRestartBitcoin"></advanced-settings-modal>
+      <advanced-settings-modal :isSettingsDisabled="isRestartPending" @submit="saveSettingsAndRestartMonero" @clickRestoreDefaults="restoreDefaultSettingsAndRestartMonero"></advanced-settings-modal>
     </b-modal>
   </div>
 </template>
@@ -214,21 +214,21 @@ export default {
   },
   computed: {
     ...mapState({
-      isBitcoinCoreOperational: state => state.bitcoin.operational,
-      syncPercent: state => state.bitcoin.percent,
-      blocks: state => state.bitcoin.blocks,
-      version: state => state.bitcoin.version,
-      currentBlock: state => state.bitcoin.currentBlock,
-      blockHeight: state => state.bitcoin.blockHeight,
-      stats: state => state.bitcoin.stats,
-      peers: state => state.bitcoin.peers,
-      rpc: state => state.bitcoin.rpc,
-      p2p: state => state.bitcoin.p2p,
-      reindex: state => state.user.bitcoinConfig.reindex,
-      network: state => state.user.bitcoinConfig.network,
-      pruned: state => state.bitcoin.pruned,
-      pruneTargetSizeGB: state => state.bitcoin.pruneTargetSizeGB,
-      torProxy: state => state.user.bitcoinConfig.torProxyForClearnet
+      isMoneroCoreOperational: state => state.monero.operational,
+      syncPercent: state => state.monero.percent,
+      blocks: state => state.monero.blocks,
+      version: state => state.monero.version,
+      currentBlock: state => state.monero.currentBlock,
+      blockHeight: state => state.monero.blockHeight,
+      stats: state => state.monero.stats,
+      peers: state => state.monero.peers,
+      rpc: state => state.monero.rpc,
+      p2p: state => state.monero.p2p,
+      reindex: state => state.user.moneroConfig.reindex,
+      network: state => state.user.moneroConfig.network,
+      pruned: state => state.monero.pruned,
+      pruneTargetSizeGB: state => state.monero.pruneTargetSizeGB,
+      torProxy: state => state.user.moneroConfig.torProxyForClearnet
     }),
     showReindexInProgressAlert() {
       return this.reindex && this.syncPercent !== 100 && !this.isRestartPending;
@@ -265,70 +265,70 @@ export default {
       if (n >= 1e15) return [Number(+(n / 1e15).toFixed(1)), "PB"];
     },
     fetchStats() {
-      this.$store.dispatch("bitcoin/getStats");
+      this.$store.dispatch("monero/getStats");
     },
     fetchPeers() {
-      this.$store.dispatch("bitcoin/getPeers");
+      this.$store.dispatch("monero/getPeers");
     },
     fetchConnectionDetails() {
       return Promise.all([
-        this.$store.dispatch("bitcoin/getP2PInfo"),
-        this.$store.dispatch("bitcoin/getRpcInfo")
+        this.$store.dispatch("monero/getP2PInfo"),
+        this.$store.dispatch("monero/getRpcInfo")
       ]);
     },
-    fetchBitcoinConfigSettings() {
-      this.$store.dispatch("user/getBitcoinConfig");
+    fetchMoneroConfigSettings() {
+      this.$store.dispatch("user/getMoneroConfig");
     },
-    async saveSettingsAndRestartBitcoin(bitcoinConfig) {
+    async saveSettingsAndRestartMonero(moneroConfig) {
       try {
         this.isRestartPending = true;
-        this.$store.dispatch("user/updateBitcoinConfig", bitcoinConfig);
+        this.$store.dispatch("user/updateMoneroConfig", moneroConfig);
   
         const response = await API.post(
-          `${process.env.VUE_APP_API_BASE_URL}/v1/bitcoind/system/update-bitcoin-config`,
-          { bitcoinConfig }
+          `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/system/update-monero-config`,
+          { moneroConfig }
         );
 
         if (response.data.success) {
-          // reload the page to reset all state and show loading view while bitcoin core restarts.
+          // reload the page to reset all state and show loading view while monero core restarts.
           this.$router.push({ query: { restart: "1" } });
           window.location.reload();
         } else {
-          this.fetchBitcoinConfigSettings();
+          this.fetchMoneroConfigSettings();
           this.showRestartError = true;
           this.isRestartPending = false;
         }  
       } catch (error) {
         console.error(error);
-        this.fetchBitcoinConfigSettings();
+        this.fetchMoneroConfigSettings();
         this.showRestartError = true;
         this.$bvModal.hide("advanced-settings-modal");
         this.isRestartPending = false;
       }
     },
-    async restoreDefaultSettingsAndRestartBitcoin() {
+    async restoreDefaultSettingsAndRestartMonero() {
       try {
         this.isRestartPending = true;
         
         const response = await API.post(
-          `${process.env.VUE_APP_API_BASE_URL}/v1/bitcoind/system/restore-default-bitcoin-config`
+          `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/system/restore-default-monero-config`
           );
         
-        // dispatch getBitcoinConfig after post request to avoid referencing default values in the store.
-        this.$store.dispatch("user/getBitcoinConfig");
+        // dispatch getMoneroConfig after post request to avoid referencing default values in the store.
+        this.$store.dispatch("user/getMoneroConfig");
   
         if (response.data.success) {
-          // reload the page to reset all state and show loading view while bitcoin core restarts.
+          // reload the page to reset all state and show loading view while monero core restarts.
           this.$router.push({ query: { restart: "1" } });
           window.location.reload();
         } else {
-          this.fetchBitcoinConfigSettings();
+          this.fetchMoneroConfigSettings();
           this.showRestartError = true;
           this.isRestartPending = false;
         }  
       } catch (error) {
         console.error(error);
-        this.fetchBitcoinConfigSettings();
+        this.fetchMoneroConfigSettings();
         this.showRestartError = true;
         this.$bvModal.hide("advanced-settings-modal");
         this.isRestartPending = false;
@@ -336,19 +336,19 @@ export default {
     }
   },
   async created() {
-    // fetch settings first because bitcoin core
+    // fetch settings first because monero core
     // is not operational if pruning is in progress
-    this.fetchBitcoinConfigSettings();
+    this.fetchMoneroConfigSettings();
 
-    // wait until bitcoin core is operational
+    // wait until monero is operational
     while (true) { /* eslint-disable-line */
-      await this.$store.dispatch("bitcoin/getStatus");
-      if (this.isBitcoinCoreOperational) {
+      await this.$store.dispatch("monero/getStatus");
+      if (this.isMoneroCoreOperational) {
         break;
       }
       await delay(1000);
     }
-    this.$store.dispatch("bitcoin/getVersion");
+    this.$store.dispatch("monero/getVersion");
     this.fetchStats();
     this.fetchPeers();
     this.fetchConnectionDetails();
