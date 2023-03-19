@@ -18,13 +18,11 @@ RUN yarn install --production
 # Copy project files and folders to the current working directory (i.e. '/app')
 COPY . .
 
-
-
+# Install UI dependencies and build UI 
 RUN yarn install:ui
 RUN export NODE_OPTIONS=--openssl-legacy-provider && yarn build:ui
 
-
-# Final image
+# Final Stage (Production) 
 FROM node:18-buster-slim AS monero-middleware
 
 # Copy built code from build stage to '/app' directory
