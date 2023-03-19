@@ -32,15 +32,15 @@ export default {
   },
   computed: {
     ...mapState({
-      blocks: state => state.bitcoin.blocks,
-      chartData: state => state.bitcoin.chartData,
-      isSynced: state => state.bitcoin.percent >= 99.99,
+      blocks: state => state.monero.blocks,
+      chartData: state => state.monero.chartData,
+      isSynced: state => state.monero.percent >= 99.99,
     })
   },
   methods: {
     getChartData() {
       if (this.isSynced) {
-        this.$store.dispatch("bitcoin/getChartData");
+        this.$store.dispatch("monero/getChartData");
       }
     },
   },

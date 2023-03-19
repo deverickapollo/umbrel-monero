@@ -7,7 +7,7 @@
       <b-alert variant="warning" show class="mb-3">
         <small>
           Be careful when changing the settings below as they may cause issues 
-          with other apps on your Umbrel that connect to your Bitcoin node. Only make 
+          with other apps on your Umbrel that connect to your Monero node. Only make 
           changes if you understand the potential effects on connected apps or 
           wallets.
         </small>
@@ -326,9 +326,9 @@ export default {
   },
   computed: {
     ...mapState({
-      bitcoinConfig: state => state.user.bitcoinConfig,
-      rpc: state => state.bitcoin.rpc,
-      p2p: state => state.bitcoin.p2p
+      moneroConfig: state => state.user.moneroConfig,
+      rpc: state => state.monero.rpc,
+      p2p: state => state.monero.p2p
     }),
     isTorProxyDisabled() {
       return !this.settings.clearnet || !this.settings.tor;
@@ -372,8 +372,8 @@ export default {
       }
     },
     setSettings() {
-      // deep clone bitcoinConfig in order to properly reset state if user hides modal instead of clicking the save and restart button
-      this.settings = cloneDeep(this.bitcoinConfig);
+      // deep clone moneroConfig in order to properly reset state if user hides modal instead of clicking the save and restart button
+      this.settings = cloneDeep(this.moneroConfig);
     },
     isOutgoingConnectionsValid() {
       return this.settings.clearnet || this.settings.tor || this.settings.i2p;
