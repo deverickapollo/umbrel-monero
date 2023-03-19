@@ -1,5 +1,5 @@
 # Build Stage
-FROM node:12-buster-slim AS umbrel-middleware-builder
+FROM node:18-buster-slim AS monero-middleware-builder
 
 # Install tools
 # RUN apt-get update \
@@ -18,14 +18,17 @@ RUN yarn install --production
 # Copy project files and folders to the current working directory (i.e. '/app')
 COPY . .
 
+
+
 RUN yarn install:ui
-RUN yarn build:ui
+RUN export NODE_OPTIONS=--openssl-legacy-provider && yarn build:ui
+
 
 # Final image
-FROM node:12-buster-slim AS umbrel-middleware
+FROM node:18-buster-slim AS monero-middleware
 
 # Copy built code from build stage to '/app' directory
-COPY --from=umbrel-middleware-builder /app /app
+COPY --from=monero-middleware-builder /app /app
 
 # Change directory to '/app' 
 WORKDIR /app
