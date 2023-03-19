@@ -4,7 +4,7 @@
   </a>
   <h1 align="center">Monero Node for Umbrel</h1>
   <p align="center">
-    Run a Monero node on your Umbrel personal server. An unofficial app by Deverick. Powered by Monero Core.
+    Run a Monero node on your Umbrel personal server. An unofficial app by Deverick. Powered by Monero.
     <br />
     <a href="https://getmonero.org"><strong>monero.org »</strong></a>
     <br />
@@ -33,6 +33,7 @@ On MacOS:
   - https://stackoverflow.com/questions/69692842/error-message-error0308010cdigital-envelope-routinesunsupported
 - npm run-script build:ui
 - npm run-script serve:ui
+- npm run start
   
 ## Getting started
 
