@@ -24,6 +24,16 @@
   </p>
 </p>
 
+## Building App
+
+On MacOS:
+
+- export NODE_OPTIONS=--openssl-legacy-provider    
+  - Otherwise you will see  Building for production...Error: error:0308010C:digital envelope routines::unsupported
+  - https://stackoverflow.com/questions/69692842/error-message-error0308010cdigital-envelope-routinesunsupported
+- npm run-script build:ui
+- npm run-script serve:ui
+  
 ## Getting started
 
 This app can be installed in one click via the Umbrel Community App Store.
