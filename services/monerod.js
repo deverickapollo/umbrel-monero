@@ -22,6 +22,8 @@ class MoneroDaemon {
   }
 }
 
+const genUtils = new RpcClient.GenUtils();
+
 const daemonController = new MoneroDaemon();
 
 // function promiseify(rpcObj, rpcFn, what) {
@@ -96,12 +98,16 @@ async function getTransaction(txHash) {
 }
 
 async function getBlockChainInfo() {
+  const info = await daemonController.daemon.getInfo();
+
   const blockChainInfo = {
     result: {
-      blocks: undefined, // current block
-      verificationprogress: undefined, // sync percent
+      difficulty: parseInt(info.state.difficulty),
+      sizeOnDisk: info.state.databaseSize,
+      blocks: info.state.height, // current block
+      verificationprogress: 100, // sync percent
       chain: undefined,
-      headers: undefined,
+      headers: 199,
       pruned: undefined,
       pruneTargetSize: undefined
     }
@@ -140,10 +146,9 @@ async function getMempoolInfo() {
 }
 
 async function getVersion() {
-  const versionResponse = await daemonController.daemon.getVersion();
-  console.log(versionResponse)
+  const info = await daemonController.daemon.getInfo();
 
-  return versionResponse;
+  return info.state.version;
 }
 
 async function getNetworkInfo() {

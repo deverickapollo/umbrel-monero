@@ -18,20 +18,23 @@ async function getConnectionsCount() {
   var i2pConnections = 0;
 
   peerInfo.result.forEach(function(peer) {
-    if (peer.inbound === false) {
+    if (peer.isIncoming === false) {
       outBoundConnections++;
     } else {
       inBoundConnections++;
     }
 
-    if (peer.network === "onion") {
-      torConnections++;
-    } else if (peer.network === "i2p") {
-      i2pConnections++;
-    } else {
-      // ipv4 and ipv6 are clearnet
-      clearnetConnections++;
-    }   
+    // TODO
+    // if (peer.type === "onion") {
+    //   torConnections++;
+    // } else if (peer.type === "i2p") {
+    //   i2pConnections++;
+    // } else {
+    //   // ipv4 and ipv6 are clearnet
+    //   clearnetConnections++;
+    // }   
+
+    clearnetConnections++;
   });
 
   const connections = {
@@ -116,13 +119,12 @@ async function getSyncStatus() {
 
 // TODO - consider using getNetworkInfo for info on proxy for ipv4 and ipv6
 async function getVersion() {
-  const thing = await monerodService.getVersion();
-
+  const version = await monerodService.getVersion();
 
   // Remove all non-digits or decimals.
-  const version = unformattedVersion.replace(/[^\d.]/g, '');
+  const formattedVersion = version.replace(/[^\d.]/g, '');
 
-  return {version: version}; // eslint-disable-line object-shorthand
+  return {version: formattedVersion}; // eslint-disable-line object-shorthand
 }
 
 async function getTransaction(txid) {
@@ -273,12 +275,29 @@ async function nodeStatusSummary() {
   const mempoolInfo = await monerodService.getMempoolInfo();
   const miningInfo = await monerodService.getMiningInfo();
 
-  return {
+  // console.log(blockchainInfo)
+console.log('stats', {
     difficulty: blockchainInfo.result.difficulty,
     size: blockchainInfo.result.sizeOnDisk,
     mempool: mempoolInfo.result.bytes,
     connections: networkInfo.result.connections,
     networkhashps: miningInfo.result.networkhashps
+  });
+
+  const fake = {
+    difficulty: 100,
+    size: 100,
+    mempool: 1000,
+    connections: 80,
+    networkhashps: 1000000
+  }
+
+  return {
+    difficulty: blockchainInfo.result.difficulty,
+    size: blockchainInfo.result.sizeOnDisk,
+    mempool: 1000000,
+    connections: 10,
+    networkhashps: 129831
   };
 }
 

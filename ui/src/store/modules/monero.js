@@ -56,6 +56,7 @@ const mutations = {
   },
 
   syncStatus(state, sync) {
+    console.log('sync', sync)
     state.percent = Number(toPrecision(parseFloat(sync.percent) * 100, 2));
     state.currentBlock = sync.currentBlock;
     state.blockHeight = sync.headerCount;
@@ -137,14 +138,14 @@ const actions = {
       commit("isOperational", status.operational);
 
       // if (status.operational) {
-      //   dispatch("getSync");
+      //   await dispatch("getSync");
       // }
     }
   },
 
   async getP2PInfo({ commit }) {
     const p2pInfo = await API.get(
-      `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/system/monero-p2p-connection-details`
+      `${process.env.VUE_APP_API_BASE_URL}h`
     );
 
     if (p2pInfo) {
@@ -167,6 +168,7 @@ const actions = {
       `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/info/sync`
     );
 
+    console.log('sync', sync)
     if (sync) {
       commit("syncStatus", sync);
     }
@@ -265,6 +267,7 @@ const actions = {
       `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/info/connections`
     );
 
+    console.log('peers', peers)
     if (peers) {
       commit("peers", peers);
     }
@@ -274,6 +277,8 @@ const actions = {
     const stats = await API.get(
       `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/info/stats`
     );
+
+    console.log('stats', stats)
 
     if (stats) {
       const peers = stats.connections;

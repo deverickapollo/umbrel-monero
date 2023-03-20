@@ -138,15 +138,15 @@ export default {
   },
   computed: {
     ...mapState({
-      isBitcoinCoreOperational: state => state.bitcoin.operational,
-      syncPercent: state => state.bitcoin.percent,
-      blocks: state => state.bitcoin.blocks
+      isBitcoinCoreOperational: state => state.monero.operational,
+      syncPercent: state => state.monero.percent,
+      blocks: state => state.monero.blocks
     })
   },
   methods: {
     async fetchBlocks() {
       // don't poll if bitcoin core isn't yet running
-      if (!this.isBitcoinCoreOperational) {
+      if (!this.isMoneroCoreOperational) {
         return;
       }
       //prevent multiple polls if previous poll already in progress
@@ -154,7 +154,7 @@ export default {
         return;
       }
       this.pollInProgress = true;
-      await this.$store.dispatch("bitcoin/getBlocks");
+      await this.$store.dispatch("monero/getBlocks");
       this.pollInProgress = false;
     },
     poller(syncPercent) {
