@@ -4,7 +4,6 @@ const MonerodError = require('models/errors.js').MonerodError;
 async function getBlockCount() {
   const blockCount = await monerodService.getBlockCount();
 
-  console.log(blockCount)
   return {blockCount: blockCount.result};
 }
 
@@ -51,12 +50,14 @@ async function getConnectionsCount() {
 
 async function getStatus() {
   try {
-    console.log('getting status')
     const info = await monerodService.getBlockChainInfo();
 
-    console.log('info', info);
+    if (info) {
+      return {operational: true};
+    } else {
+      return {operational: false};
+    }
 
-    return {operational: true};
   } catch (error) {
     if (error instanceof MonerodError) {
       return {operational: false};
@@ -275,22 +276,13 @@ async function nodeStatusSummary() {
   const mempoolInfo = await monerodService.getMempoolInfo();
   const miningInfo = await monerodService.getMiningInfo();
 
-  // console.log(blockchainInfo)
-console.log('stats', {
-    difficulty: blockchainInfo.result.difficulty,
-    size: blockchainInfo.result.sizeOnDisk,
-    mempool: mempoolInfo.result.bytes,
-    connections: networkInfo.result.connections,
-    networkhashps: miningInfo.result.networkhashps
-  });
-
-  const fake = {
-    difficulty: 100,
-    size: 100,
-    mempool: 1000,
-    connections: 80,
-    networkhashps: 1000000
-  }
+// console.log('stats', {
+//     difficulty: blockchainInfo.result.difficulty,
+//     size: blockchainInfo.result.sizeOnDisk,
+//     mempool: mempoolInfo.result.bytes,
+//     connections: networkInfo.result.connections,
+//     networkhashps: miningInfo.result.networkhashps
+//   });
 
   return {
     difficulty: blockchainInfo.result.difficulty,
