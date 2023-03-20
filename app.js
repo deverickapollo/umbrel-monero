@@ -7,6 +7,7 @@ const path = require('path');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const environment = process.env.NODE_ENV;
 
 // Keep requestCorrelationId middleware as the first middleware. Otherwise we risk losing logs.
 const requestCorrelationMiddleware = require('middlewares/requestCorrelationId.js'); // eslint-disable-line id-length
@@ -21,20 +22,20 @@ const system = require('routes/v1/monerod/system.js');
 const ping = require('routes/ping.js');
 const app = express();
 
-
-
 // Handles CORS
 app.use(cors());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(requestCorrelationMiddleware);
 app.use(camelCaseReqMiddleware);
 app.use(morgan(logger.morganConfiguration));
 
-app.use('/', express.static('./ui/dist'));
+if (environment !== 'development') {
+  app.use(express.static(path.join(__dirname, 'public')));
+  app.use('/', express.static('./ui/dist'));
+}
 
 app.use('/v1/monerod/info', monerod);
 app.use('/v1/monerod/info', charts);
