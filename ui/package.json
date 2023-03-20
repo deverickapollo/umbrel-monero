@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
+    "serve:dev": "export NODE_OPTIONS=--openssl-legacy-provider && VUE_APP_API_BASE_URL=http://localhost:8889 vue-cli-service serve",
     "build": "vue-cli-service build --mode production",
     "lint": "vue-cli-service lint"
   },
