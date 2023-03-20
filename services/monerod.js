@@ -9,6 +9,13 @@ const MONEROD_RPC_PASSWORD = process.env.RPC_PASSWORD;
 
 const MONEROD_IP = `http://${MONEROD_HOST}:${MONEROD_RPC_PORT}`;
 
+
+/**
+ * RPC/Monero Daemon Resources
+ * https://www.getmonero.org/resources/developer-guides/daemon-rpc.html
+ * https://moneroecosystem.org/monero-javascript/MoneroDaemon.html
+ */
+
 class MoneroDaemon {
   constructor(config) {
     this.config = config;
@@ -17,7 +24,9 @@ class MoneroDaemon {
 
   async init() {
     this.daemon = await RpcClient.connectToDaemonRpc({
-      uri: 'http://192.168.29.236:18081',
+      uri: MONEROD_IP,
+      username: MONEROD_RPC_USER,
+      password: MONEROD_RPC_PASSWORD
     });
   }
 }
@@ -124,8 +133,6 @@ async function getPeerInfo() {
 
 async function getBlockCount() {
   return await daemonController.daemon.getInfo();
-
-  // return promiseify(rpcClient, rpcClient.getHeight, 'block count');
 }
 
 async function getMempoolInfo() {
