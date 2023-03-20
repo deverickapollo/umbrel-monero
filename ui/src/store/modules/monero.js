@@ -130,7 +130,10 @@ const actions = {
       `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/info/status`
     );
 
+    console.log('status', status)
+
     if (status) {
+      console.log('status operational', status)
       commit("isOperational", status.operational);
 
       // if (status.operational) {

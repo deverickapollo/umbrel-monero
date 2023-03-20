@@ -4,6 +4,7 @@ const MonerodError = require('models/errors.js').MonerodError;
 async function getBlockCount() {
   const blockCount = await monerodService.getBlockCount();
 
+  console.log(blockCount)
   return {blockCount: blockCount.result};
 }
 
@@ -47,7 +48,10 @@ async function getConnectionsCount() {
 
 async function getStatus() {
   try {
-    await monerodService.help();
+    console.log('getting status')
+    const info = await monerodService.getBlockChainInfo();
+
+    console.log('info', info);
 
     return {operational: true};
   } catch (error) {
@@ -112,8 +116,8 @@ async function getSyncStatus() {
 
 // TODO - consider using getNetworkInfo for info on proxy for ipv4 and ipv6
 async function getVersion() {
-  const networkInfo = await monerodService.getNetworkInfo();
-  const unformattedVersion = networkInfo.result.subversion;
+  const thing = await monerodService.getVersion();
+
 
   // Remove all non-digits or decimals.
   const version = unformattedVersion.replace(/[^\d.]/g, '');
