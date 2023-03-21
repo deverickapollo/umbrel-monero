@@ -63,6 +63,7 @@ const mutations = {
     state.pruned = sync.pruned;
     state.pruneTargetSizeGB = Math.round(sync.pruneTargetSize / BYTES_PER_GB);
 
+    // TODO sync.status and 'calibrating' seem to be unused
     if (sync.status === "calibrating") {
       state.calibrating = true;
     } else {

@@ -106,23 +106,31 @@ async function getTransaction(txHash) {
   return {result: hash};
 }
 
-async function getBlockChainInfo() {
-  const info = await daemonController.daemon.getInfo();
+function getSyncPercentage(height, targetHeight) {
+  if (targetHeight > height) {
+    return Number(((height / targetHeight)).toFixed(4));
+  }
 
-  const blockChainInfo = {
+  return 1;
+}
+
+async function getBlockChainInfo() {
+  const {state} = await daemonController.daemon.getInfo();
+
+  const info = {
     result: {
-      difficulty: parseInt(info.state.difficulty),
-      sizeOnDisk: info.state.databaseSize,
-      blocks: info.state.height, // current block
-      verificationprogress: 100, // sync percent
-      chain: undefined,
-      headers: 199,
-      pruned: undefined,
-      pruneTargetSize: undefined
+      chain: RpcClient.MoneroNetworkType.toString(state.networkType),
+      blocks: state.height,
+      headers: state.height,
+      difficulty: parseInt(state.difficulty),
+      sizeOnDisk: state.databaseSize,
+      verificationprogress: getSyncPercentage(state.height, state.targetHeight),
+      pruned: false, // TODO implement after monero-js implements
+      pruneTargetSize: 0 // TODO
     }
   };
 
-  return blockChainInfo;
+  return info;
 }
 
 async function getPeerInfo() {
