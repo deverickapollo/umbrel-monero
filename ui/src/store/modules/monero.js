@@ -142,7 +142,7 @@ const actions = {
 
   async getP2PInfo({ commit }) {
     const p2pInfo = await API.get(
-      `${process.env.VUE_APP_API_BASE_URL}h`
+      `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/system/monero-p2p-connection-details`
     );
 
     if (p2pInfo) {
