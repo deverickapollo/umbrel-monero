@@ -129,7 +129,7 @@
               </div>
             </div>
             <small class="w-sm-75 d-block text-muted mt-1">
-              Broadcast your node to the Bitcoin network to help other nodes 
+              Broadcast your node to the Monero network to help other nodes 
               access the blockchain. You may need to set up port forwarding on 
               your router to allow incoming connections from clearnet-only peers.
             </small>
@@ -155,7 +155,7 @@
             </div>
             <small class="w-sm-75 d-block text-muted mt-1">
               Choose the size of the UTXO set to store in RAM. A larger cache can 
-              speed up the initial synchronization of your Bitcoin node, but after 
+              speed up the initial synchronization of your Monero node, but after 
               the initial sync is complete, a larger cache value does not significantly 
               improve performance and may use more RAM than needed.
             </small>
@@ -180,7 +180,7 @@
               </div>
             </div>
             <small class="w-sm-75 d-block text-muted mt-1">
-              Allow any transaction in the mempool of your Bitcoin node to be replaced with
+              Allow any transaction in the mempool of your Monero node to be replaced with
               a newer version of the same transaction that includes a higher fee.
             </small>
           </div>
@@ -242,7 +242,7 @@
               </div>
             </div>
             <small class="w-sm-75 d-block text-muted mt-1">
-              Rebuild the database index used by your Bitcoin node. This can 
+              Rebuild the database index used by your Monero node. This can 
               be useful if the index becomes corrupted.
             </small>
           </div>
@@ -267,9 +267,9 @@
             </div>
           </div>
           <small class="w-sm-75 d-block text-muted mt-1">
-            Choose which network you want your Bitcoin node to connect to. 
+            Choose which network you want your Monero node to connect to. 
             If you change the network, restart your Umbrel to make sure any 
-            apps connected to your Bitcoin node continue to work properly.
+            apps connected to your Monero node continue to work properly.
           </small>
         </div>
 
@@ -294,7 +294,7 @@
           </b-col>
           <b-col cols="12" lg="6">
             <b-button class="mt-2 mt-lg-0" variant="success" type="submit" block :disabled="isSettingsDisabled">
-              Save and Restart Bitcoin Node</b-button
+              Save and Restart Monero Node</b-button
             >
           </b-col>
         </b-row>

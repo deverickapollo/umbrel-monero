@@ -138,14 +138,14 @@ export default {
   },
   computed: {
     ...mapState({
-      isBitcoinCoreOperational: state => state.monero.operational,
+      isMoneroCoreOperational: state => state.monero.operational,
       syncPercent: state => state.monero.percent,
       blocks: state => state.monero.blocks
     })
   },
   methods: {
     async fetchBlocks() {
-      // don't poll if bitcoin core isn't yet running
+      // don't poll if monero core isn't yet running
       if (!this.isMoneroCoreOperational) {
         return;
       }

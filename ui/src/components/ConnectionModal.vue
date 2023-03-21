@@ -1,4 +1,4 @@
-<template v-slot:modal-header="{ close }" title="Connect to Bitcoin Node">
+<template v-slot:modal-header="{ close }" title="Connect to Monero Node">
   <div
     class="px-2 px-sm-3 pt-2 d-flex flex-column justify-content-between w-100 mt-n4"
   >
