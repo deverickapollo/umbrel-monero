@@ -195,7 +195,7 @@ const memoizedGetFormattedBlock = () => {
       cache[blockHeight] = {
         hash: block.hash,
         height: block.height,
-        numTransactions: block.tx.length,
+        numTransactions: block.numTxs,
         confirmations: block.confirmations,
         time: block.time,
         size: block.size,
@@ -212,6 +212,7 @@ const initializedMemoizedGetFormattedBlock = memoizedGetFormattedBlock();
 
 async function getBlockRangeTransactionChunks(fromHeight, toHeight, blocksPerChunk) {
   const {blocks} = await getBlocks(fromHeight, toHeight);
+
   const chunks = [];
   blocks.forEach((block, index) => {
     const chunkIndex = Math.floor(index / blocksPerChunk);
@@ -284,6 +285,7 @@ async function nodeStatusSummary() {
 //     networkhashps: miningInfo.result.networkhashps
 //   });
 
+  // TODO implement this
   return {
     difficulty: blockchainInfo.result.difficulty,
     size: blockchainInfo.result.sizeOnDisk,

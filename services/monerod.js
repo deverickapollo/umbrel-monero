@@ -95,9 +95,20 @@ async function getBlockHash(height) {
 }
 
 async function getBlock(hash) {
-  const blockHash = await daemonController.daemon.getBlockByHash(hash);
+  const {state} = await daemonController.daemon.getBlockByHash(hash);
 
-  return {result: blockHash};
+
+  const block = {
+    hash: state.hash,
+    height: state.height,
+    numTxs: state.numTxs,
+    confirmations: 100, // TODO implement,
+    time: state.timestamp,
+    size: state.size,
+    previousblockhash: state.prevHash
+  };
+
+  return {result: block};
 }
 
 async function getTransaction(txHash) {
@@ -161,7 +172,9 @@ async function getPeerInfo() {
 }
 
 async function getBlockCount() {
-  return await daemonController.daemon.getInfo();
+  const {state} = await daemonController.daemon.getInfo();
+
+  return state.height;
 }
 
 async function getMempoolInfo() {
@@ -178,6 +191,9 @@ async function getMempoolInfo() {
 
   const pool = await daemonController.daemon.getTxPool();
 
+  // TODO implement this
+
+
   return {result: pool};
 }
 
@@ -187,6 +203,7 @@ async function getVersion() {
   return info.state.version;
 }
 
+// TODO implement
 async function getNetworkInfo() {
   const {daemon} = daemonController;
   const hardForkInfoData = {
