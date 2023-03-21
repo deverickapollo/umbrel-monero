@@ -1,5 +1,6 @@
 const RpcClient = require('monero-javascript');
 const camelizeKeys = require('camelize-keys');
+const GenUtils = require('monero-javascript/src/main/js/common/GenUtils');
 const MonerodError = require('models/errors.js').MonerodError;
 
 const MONEROD_RPC_PORT = process.env.RPC_PORT || 18081; // eslint-disable-line no-magic-numbers, max-len
@@ -8,7 +9,6 @@ const MONEROD_RPC_USER = process.env.RPC_USER;
 const MONEROD_RPC_PASSWORD = process.env.RPC_PASSWORD;
 
 const MONEROD_IP = `http://${MONEROD_HOST}:${MONEROD_RPC_PORT}`;
-
 
 /**
  * RPC/Monero Daemon Resources
@@ -126,9 +126,30 @@ async function getBlockChainInfo() {
 }
 
 async function getPeerInfo() {
+  // const peerInfo = {
+  //   result: {
+  //     [{
+  //       syncedHeaders,
+  //       isIncoming,
+  //       addrlocal
+  //     }]
+  //   }
+  // }
+
   const peers = await daemonController.daemon.getPeers();
 
-  return {result: peers};
+  let mappedPeers = [];
+
+  if (peers && peers.length > 0) {
+    mappedPeers = peers.map(({state}) => ({
+      addrLocal: state.address,
+      type: state.type,
+      syncedHeaders: state.height,
+      isIncoming: state.isIncoming,
+    }));
+  }
+
+  return {result: mappedPeers};
 }
 
 async function getBlockCount() {
@@ -177,7 +198,7 @@ async function getNetworkInfo() {
   };
 
   const blah = await daemon.getPeers();
-  
+
   hardForkInfoData.connections = blah ? blah.length : 0;
 
   // const hardForkInfo = daemonController.daemon.getInfo();
@@ -201,6 +222,7 @@ async function getNetworkInfo() {
 
 function getMiningInfo() {
   const blockHeader = daemonController.daemon.getLastBlockHeader();
+
   // const blockHeight = blockHeader.height;
   // const difficulty = blockHeader.difficulty;
   // const hashrate = difficulty / blockHeader.timestamp;
