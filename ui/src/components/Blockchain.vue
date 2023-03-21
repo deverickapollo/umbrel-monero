@@ -50,9 +50,9 @@
                     {{ block.numTransactions.toLocaleString() }}
                     transaction{{ block.numTransactions !== 1 ? "s" : "" }}
                   </small>
-                  <!-- <small class="text-muted" v-if="block.size">
+                  <small class="text-muted" v-if="block.size">
                     <span>&bull; {{ Math.round(block.size / 1000) }} KB</span>
-                  </small>-->
+                  </small>
                 </div>
               </div>
               <small
@@ -181,8 +181,10 @@ export default {
     }
   },
   created() {
-    //immediately fetch blocks on first load
-    this.fetchBlocks();
+    //immediately fetch blocks on first load - timeout to fix race condition on initial load
+    setTimeout(async () => {
+      await this.fetchBlocks();
+    }, 500);
 
     //then start polling
     this.poller(this.syncPercent);
