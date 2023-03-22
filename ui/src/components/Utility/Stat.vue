@@ -15,7 +15,7 @@
             <CountUp
               :value="{
                 endVal: numberValue,
-                decimalPlaces: hasDecimals ? 5 : 0
+                decimalPlaces: hasDecimals ? 2 : 0
               }"
               :suffix="numberSuffix"
               countOnLoad

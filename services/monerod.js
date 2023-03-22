@@ -126,16 +126,21 @@ function getSyncPercentage(height, targetHeight) {
 }
 
 async function getBlockChainInfo() {
-  const {state} = await daemonController.daemon.getInfo();
+  const {state: infoState} = await daemonController.daemon.getInfo();
+  // const miningInfo = await daemonController.daemon.getTxPoolStats();
+
+  // console.log(miningInfo.getBytesTotal())
 
   const info = {
     result: {
-      chain: RpcClient.MoneroNetworkType.toString(state.networkType),
-      blocks: state.height,
-      headers: state.height,
-      difficulty: parseInt(state.difficulty),
-      sizeOnDisk: state.databaseSize,
-      verificationprogress: getSyncPercentage(state.height, state.targetHeight),
+      chain: RpcClient.MoneroNetworkType.toString(infoState.networkType),
+      blocks: infoState.height,
+      headers: infoState.height,
+      difficulty: parseInt(infoState.difficulty),
+      sizeOnDisk: infoState.databaseSize,
+      numOutgoingConnections: infoState.numOutgoingConnections,
+      numTxsPool: infoState.numTxsPool,
+      verificationprogress: getSyncPercentage(infoState.height, infoState.targetHeight),
       pruned: false, // TODO implement after monero-js implements
       pruneTargetSize: 0 // TODO
     }
@@ -257,20 +262,8 @@ function getMiningInfo() {
   // const fee_amount = blockHeader.fee_amount;
 
   return {result: {
-    networkhashps: blockHeader.difficulty
-  }};
-}
-async function help() {
-  // TODO: missing from the library, but can add it not sure how to package.
-  // rpc.uptime(function (err, res) {
-  //     if (err) {
-  //         deferred.reject({status: 'offline'});
-  //     } else {
-  //         deferred.resolve({status: 'online'});
-  //     }
-  // });
-  await daemonController.daemon.getInfo();
-}
+    networkhashps: parseInt(blockHeader.difficulty) /120
+  }};}
 
 async function stop() {
   await daemonController.daemon.stop();
@@ -287,6 +280,5 @@ module.exports = {
   getMempoolInfo,
   getNetworkInfo,
   getVersion,
-  help,
   stop,
 };

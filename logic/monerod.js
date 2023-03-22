@@ -257,41 +257,30 @@ async function getBlockHash(height) {
   };
 }
 
-async function nodeStatusDump() {
-  const blockchainInfo = await monerodService.getBlockChainInfo();
-  const networkInfo = await monerodService.getNetworkInfo();
-  const mempoolInfo = await monerodService.getMempoolInfo();
-  const miningInfo = await monerodService.getMiningInfo();
+// unused function
+// async function nodeStatusDump() {
+//   const blockchainInfo = await monerodService.getBlockChainInfo();
+//   const networkInfo = await monerodService.getNetworkInfo();
+//   const mempoolInfo = await monerodService.getMempoolInfo();
+//   const miningInfo = await monerodService.getMiningInfo();
 
-  return {
-    blockchain_info: blockchainInfo.result,
-    network_info: networkInfo.result,
-    mempool: mempoolInfo.result,
-    mining_info: miningInfo.result
-  };
-}
+//   return {
+//     blockchain_info: blockchainInfo.result,
+//     network_info: networkInfo.result,
+//     mempool: mempoolInfo.result,
+//     mining_info: miningInfo.result
+//   };
+// }
 
 async function nodeStatusSummary() {
   const blockchainInfo = await monerodService.getBlockChainInfo();
-  const networkInfo = await monerodService.getNetworkInfo();
-  const mempoolInfo = await monerodService.getMempoolInfo();
-  const miningInfo = await monerodService.getMiningInfo();
 
-// console.log('stats', {
-//     difficulty: blockchainInfo.result.difficulty,
-//     size: blockchainInfo.result.sizeOnDisk,
-//     mempool: mempoolInfo.result.bytes,
-//     connections: networkInfo.result.connections,
-//     networkhashps: miningInfo.result.networkhashps
-//   });
-
-  // TODO implement this
   return {
     difficulty: blockchainInfo.result.difficulty,
     size: blockchainInfo.result.sizeOnDisk,
-    mempool: 1000000,
-    connections: 10,
-    networkhashps: 129831
+    mempool: blockchainInfo.result.numTxsPool,
+    connections: blockchainInfo.result.numOutgoingConnections,
+    networkhashps: blockchainInfo.result.difficulty /120 //TODO review bigint conversions
   };
 }
 
@@ -313,7 +302,6 @@ module.exports = {
   getStatus,
   getSyncStatus,
   getVersion,
-  nodeStatusDump,
   nodeStatusSummary,
   stop
 };

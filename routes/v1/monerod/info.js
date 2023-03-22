@@ -1,23 +1,26 @@
 const express = require('express');
 const router = express.Router();
-const networkLogic = require('logic/network.js');
 const monerod = require('logic/monerod.js');
 const safeHandler = require('utils/safeHandler');
+// const networkLogic = require('logic/network.js');
 
-router.get('/mempool', safeHandler((req, res) =>
-  monerod.getMempoolInfo()
-    .then(mempool => res.json(mempool.result))
-));
+// // unused by UI
+// router.get('/mempool', safeHandler((req, res) =>
+//   monerod.getMempoolInfo()
+//     .then(mempool => res.json(mempool.result))
+// ));
 
-router.get('/addresses', safeHandler((req, res) =>
-  networkLogic.getMonerodAddresses()
-    .then(addresses => res.json(addresses))
-));
+// // unused by UI
+// router.get('/addresses', safeHandler((req, res) =>
+//   networkLogic.getMonerodAddresses()
+//     .then(addresses => res.json(addresses))
+// ));
 
-router.get('/blockcount', safeHandler((req, res) =>
-  monerod.getBlockCount()
-    .then(blockCount => res.json(blockCount))
-));
+// // unused by UI
+// router.get('/blockcount', safeHandler((req, res) =>
+//   monerod.getBlockCount()
+//     .then(blockCount => res.json(blockCount))
+// ));
 
 router.get('/connections', safeHandler((req, res) =>
   monerod.getConnectionsCount()
@@ -39,10 +42,11 @@ router.get('/version', safeHandler((req, res) =>
     .then(version => res.json(version))
 ));
 
-router.get('/statsDump', safeHandler((req, res) =>
-  monerod.nodeStatusDump()
-    .then(statusdump => res.json(statusdump))
-));
+// unused by UI
+// router.get('/statsDump', safeHandler((req, res) =>
+//   monerod.nodeStatusDump()
+//     .then(statusdump => res.json(statusdump))
+// ));
 
 router.get('/stats', safeHandler((req, res) =>
   monerod.nodeStatusSummary()
@@ -80,9 +84,10 @@ router.get('/blocks', safeHandler((req, res) => {
 }
 ));
 
-router.get('/txid/:id', safeHandler((req, res) =>
-  monerod.getTransaction(req.params.id)
-    .then(txhash => res.json(txhash))
-));
+// unused by UI
+// router.get('/txid/:id', safeHandler((req, res) =>
+//   monerod.getTransaction(req.params.id)
+//     .then(txhash => res.json(txhash))
+// ));
 
 module.exports = router;
