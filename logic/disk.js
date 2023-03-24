@@ -13,11 +13,8 @@ const DEFAULT_ADVANCED_SETTINGS = {
   tor: true,
   i2p: true,
   incomingConnections: false,
-  cacheSizeMB: 450,
-  prune: {
-    enabled: false,
-    pruneSizeGB: 300,
-  },
+  dbSyncMode: false,
+  prune: false,
   reindex: false,
   network: constants.MONERO_DEFAULT_NETWORK
 }
