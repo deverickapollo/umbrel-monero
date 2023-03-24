@@ -184,7 +184,7 @@ export default {
     //immediately fetch blocks on first load - timeout to fix race condition on initial load
     setTimeout(async () => {
       await this.fetchBlocks();
-    }, 500);
+    }, 1000);
 
     //then start polling
     this.poller(this.syncPercent);

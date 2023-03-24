@@ -232,7 +232,7 @@ async function getBlocks(fromHeight, toHeight) {
   const blocks = [];
 
   // loop from 'to height' till 'from Height'
-  for (let currentHeight = toHeight; currentHeight >= fromHeight; currentHeight--) {
+  for (let currentHeight = toHeight - 1; currentHeight >= fromHeight; currentHeight--) {
     // terminate loop if we reach the genesis block
     if (currentHeight === 0) {
       break;
@@ -242,7 +242,7 @@ async function getBlocks(fromHeight, toHeight) {
       const formattedBlock = await initializedMemoizedGetFormattedBlock(currentHeight);
       blocks.push(formattedBlock);
     } catch(e) {
-      console.error('Error memoizing formatted blocks')
+      console.error('Error memoizing formatted blocks');
     }
   }
 

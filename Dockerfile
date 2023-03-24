@@ -20,7 +20,7 @@ COPY . .
 
 # Install UI dependencies and build UI 
 RUN yarn install:ui
-RUN export NODE_OPTIONS=--openssl-legacy-provider && yarn build:ui
+RUN yarn build:ui
 
 # Final Stage (Production) 
 FROM node:18-buster-slim AS monero-middleware
