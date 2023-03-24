@@ -292,8 +292,7 @@ export default {
       networks: [
         { value: "main", text: "mainnet" },
         { value: "test", text: "testnet" },
-        { value: "signet", text: "signet" },
-        { value: "regtest", text: "regtest" }
+        { value: "stagenet", text: "stagenet" }
       ],
       maxPruneSizeGB: 300,
       showOutgoingConnectionsError: false
