@@ -166,31 +166,6 @@
           <div>
             <div class="d-flex justify-content-between align-items-center">
               <div class="w-75">
-                <label class="mb-0" for="mempool">
-                  <p class="font-weight-bold mb-0">Replace-By-Fee (RBF) for All Transactions</p>
-                </label>
-              </div>
-              <div>
-                <toggle-switch
-                  id="mempool"
-                  class="align-self-center"
-                  :on="settings.mempoolFullRbf"
-                  @toggle="status => (settings.mempoolFullRbf = status)"
-                ></toggle-switch>
-              </div>
-            </div>
-            <small class="w-sm-75 d-block text-muted mt-1">
-              Allow any transaction in the mempool of your Monero node to be replaced with
-              a newer version of the same transaction that includes a higher fee.
-            </small>
-          </div>
-
-          <hr class="advanced-settings-divider" />
-
-
-          <div>
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="w-75">
                 <label class="mb-0" for="prune-old-blocks">
                   <p class="font-weight-bold mb-0">Prune Old Blocks</p>
                 </label>
