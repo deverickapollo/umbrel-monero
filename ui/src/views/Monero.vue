@@ -266,19 +266,35 @@ export default {
       if (n >= 1e15) return [Number(+(n / 1e15).toFixed(1)), "PB"];
     },
     fetchStats() {
-      this.$store.dispatch("monero/getStats");
+      try {
+        this.$store.dispatch("monero/getStats");
+       } catch (error) {
+         console.error("Error fetching stats:", error);
+       }
     },
     fetchPeers() {
-      this.$store.dispatch("monero/getPeers");
+      try {
+        this.$store.dispatch("monero/getPeers");
+       } catch (error) {
+         console.error("Error fetching peers:", error);
+       }
     },
     fetchConnectionDetails() {
-      return Promise.all([
-        this.$store.dispatch("monero/getP2PInfo"),
-        this.$store.dispatch("monero/getRpcInfo")
-      ]);
+      try {
+        return Promise.all([
+          this.$store.dispatch("monero/getP2PInfo"),
+          this.$store.dispatch("monero/getRpcInfo"),
+        ]);
+       } catch (error) {
+         console.error("Error fetching connection details:", error);
+       }
     },
     fetchMoneroConfigSettings() {
-      this.$store.dispatch("user/getMoneroConfig");
+      try {
+        this.$store.dispatch("user/getMoneroConfig");
+       } catch (error) {
+         console.error("Error fetching Monero config settings:", error);
+       }
     },
     async saveSettingsAndRestartMonero(moneroConfig) {
       try {
@@ -307,6 +323,7 @@ export default {
         this.isRestartPending = false;
       }
     },
+    // Restore default settings and restart Monero
     async restoreDefaultSettingsAndRestartMonero() {
       try {
         this.isRestartPending = true;
