@@ -7,7 +7,7 @@ module.exports = {
   MONERO_RPC_HIDDEN_SERVICE: process.env.MONERO_RPC_HIDDEN_SERVICE,
   MONERO_RPC_USER: process.env.MONERO_RPC_USER || 'monero',
   MONERO_RPC_PASSWORD: process.env.MONERO_RPC_PASSWORD || 'monero',
-  DEVICE_DOMAIN_NAME: process.env.DEVICE_DOMAIN_NAME,
+  DEVICE_DOMAIN_NAME: process.env.DEVICE_DOMAIN_NAME || 'monero.local',
   JSON_STORE_FILE: process.env.JSON_STORE_FILE || "./data/MONERO-config.json",
   UMBREL_MONERO_CONF_FILEPATH: process.env.UMBREL_MONERO_CONF_FILE || "./data/umbrel-monero.conf",
   MONERO_CONF_FILEPATH: process.env.MONERO_CONF_FILE || "./data/monero.conf",
@@ -21,5 +21,6 @@ module.exports = {
   TOR_PROXY_CONTROL_PORT: process.env.TOR_PROXY_CONTROL_PORT,
   TOR_PROXY_CONTROL_PASSWORD: process.env.TOR_PROXY_CONTROL_PASSWORD,
   I2P_DAEMON_IP: process.env.I2P_DAEMON_IP,
-  I2P_DAEMON_PORT: process.env.I2P_DAEMON_PORT
+  I2P_DAEMON_PORT: process.env.I2P_DAEMON_PORT,
+  CACHE_LIMIT: process.env.CACHE_LIMIT || 1100
 };

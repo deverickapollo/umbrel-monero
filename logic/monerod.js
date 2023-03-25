@@ -171,7 +171,8 @@ const memoizedGetFormattedBlock = () => {
     // cache cleanup
     // 6 blocks/hr * 24 hrs/day * 7 days = 1008 blocks over 7 days
     // plus some wiggle room in case weird difficulty adjustment or period of faster blocks
-    const CACHE_LIMIT = 1100;
+    // Make CACHE_LIMIT configurable
+    const CACHE_LIMIT = process.env.CACHE_LIMIT || 1100;
     while(Object.keys(cache).length > CACHE_LIMIT) {
       const cacheItemToDelete = Object.keys(cache)[0];
       delete cache[cacheItemToDelete];
