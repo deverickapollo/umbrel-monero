@@ -72,7 +72,7 @@
                   ></label
                 >
                 <input-copy
-                  v-if="rpc.torAddress"
+                  v-if="rpc.torAddress || rpc.localAddress"
                   class="mb-2"
                   size="sm"
                   :value="chosenMode === 'rpcTor' ? rpc.torAddress : rpc.localAddress"
@@ -111,12 +111,18 @@
                 >Monero P2P Address (Host)</small
               ></label
             >
-            <div v-if="p2p.torAddress">
+            <div>
               <input-copy
+                v-if="p2p.torAddress || p2p.localAddress"
                 class="mb-2"
                 size="sm"
                 :value="chosenMode === 'p2pTor' ? p2p.torAddress : p2p.localAddress"
               ></input-copy>
+              <span
+                class="loading-placeholder loading-placeholder-lg mt-1"
+                style="width: 100%;"
+                v-else
+              ></span>
             </div>
             <label class="mb-1 d-block"
               ><small class="font-weight-bold"
