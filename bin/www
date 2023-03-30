@@ -16,7 +16,6 @@ const constants = require('../utils/const');
 /**
  * Get port from environment and store in Express.
  */
-// Refactor: This port is used by bitcoin core, not monerod
 var port = normalizePort(process.env.PORT || '8889');
 app.set('port', port);
 
