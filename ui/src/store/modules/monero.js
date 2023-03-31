@@ -63,6 +63,7 @@ const mutations = {
     state.pruned = sync.pruned;
     state.pruneTargetSizeGB = Math.round(sync.pruneTargetSize / BYTES_PER_GB);
 
+    // TODO sync.status and 'calibrating' seem to be unused
     if (sync.status === "calibrating") {
       state.calibrating = true;
     } else {
@@ -125,7 +126,7 @@ const mutations = {
 
 // Functions to get data from the API
 const actions = {
-  async getStatus({ commit }) {
+  async getStatus({ commit, dispatch }) {
     const status = await API.get(
       `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/info/status`
     );
@@ -133,9 +134,9 @@ const actions = {
     if (status) {
       commit("isOperational", status.operational);
 
-      // if (status.operational) {
-      //   dispatch("getSync");
-      // }
+      if (status.operational) {
+        await dispatch("getSync");
+      }
     }
   },
 

@@ -32,17 +32,17 @@ services:
     user: "1000:1000"
     restart: on-failure
     stop_grace_period: 1m
+    command: --rpc-bind-ip=0.0.0.0 --confirm-external-bind --rpc-bind-port=18081 --hide-my-port --prune-blockchain --enable-dns-blocklist
     image: sethsimmons/simple-monerod:latest
-    entrypoint: monerod --rpc-bind-ip=0.0.0.0 --confirm-external-bind --rpc-bind-port=18089 --non-interactive --hide-my-port --prune-blockchain --enable-dns-blocklist
+    # entrypoint: monerod --rpc-bind-ip=0.0.0.0 --confirm-external-bind --rpc-bind-port=18081 --non-interactive --hide-my-port --prune-blockchain --enable-dns-blocklist
     ports:
       - "18080:18080"
-      - "18089:18089"
+      - "18081:18081"
     expose:
       - "18080"
-      - "18089"
+      - "18081"
     volumes:
       - ${PWD}/data/xmr_data:/home/monero/.bitmonero
-      # - ${APP_DATA_DIR}/data/xmr_data:/home/monero/.bitmonero
     networks:
       default:
         ipv4_address: "10.21.0.4"
@@ -57,23 +57,23 @@ services:
       - "8889:8889"
     volumes:
       - ${PWD}/data/app:/data # volume to persist advanced settings json
-      - ${PWD}/data/monero:/home/monero/.bitmonero # volume to persist umbrel-monero.conf and monero.conf
+      - ${PWD}/data/xmr_data:/monero/.monero # volume to persist umbrel-monero.conf and monero.conf
     environment:
       PORT: "8889"
       MONERO_HOST: "monerod"
       MONERO_P2P_PORT: 18080
-      MONERO_RPC_PORT: 18089
-      MONERO_DEFAULT_NETWORK: "regtest"
-      RPC_USER: "umbrel"
-      RPC_PASSWORD: "moneyprintergobrrr"
+      MONERO_RPC_PORT: 18081
+      MONERO_DEFAULT_NETWORK: "mainnet"
+      RPC_USER: "monero"
+      RPC_PASSWORD: "monero"
       MONERO_RPC_HIDDEN_SERVICE: "somehiddenservice.onion"
       MONERO_P2P_HIDDEN_SERVICE: "anotherhiddenservice.onion"
-      DEVICE_DOMAIN_NAME: "test.local"
+      DEVICE_DOMAIN_NAME: "monero.local"
       MONEROD_IP: "10.21.0.4"
       TOR_PROXY_IP: "10.21.0.3"
       TOR_PROXY_PORT: "9050"
       TOR_PROXY_CONTROL_PORT: "9051"
-      TOR_PROXY_CONTROL_PASSWORD: "umbrelisneat"
+      TOR_PROXY_CONTROL_PASSWORD: "moneroisprivate"
       I2P_DAEMON_IP: "10.21.0.2"
       I2P_DAEMON_PORT: "7656"
     networks:

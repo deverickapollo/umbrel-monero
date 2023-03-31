@@ -17,20 +17,23 @@ async function getConnectionsCount() {
   var i2pConnections = 0;
 
   peerInfo.result.forEach(function(peer) {
-    if (peer.inbound === false) {
+    if (peer.isIncoming === false) {
       outBoundConnections++;
     } else {
       inBoundConnections++;
     }
 
-    if (peer.network === "onion") {
-      torConnections++;
-    } else if (peer.network === "i2p") {
-      i2pConnections++;
-    } else {
-      // ipv4 and ipv6 are clearnet
-      clearnetConnections++;
-    }   
+    // TODO
+    // if (peer.type === "onion") {
+    //   torConnections++;
+    // } else if (peer.type === "i2p") {
+    //   i2pConnections++;
+    // } else {
+    //   // ipv4 and ipv6 are clearnet
+    //   clearnetConnections++;
+    // }   
+
+    clearnetConnections++;
   });
 
   const connections = {
@@ -47,9 +50,14 @@ async function getConnectionsCount() {
 
 async function getStatus() {
   try {
-    await monerodService.help();
+    const info = await monerodService.getBlockChainInfo();
 
-    return {operational: true};
+    if (info) {
+      return {operational: true};
+    } else {
+      return {operational: false};
+    }
+
   } catch (error) {
     if (error instanceof MonerodError) {
       return {operational: false};
@@ -81,13 +89,13 @@ async function getMempoolInfo() {
 async function getLocalSyncInfo() {
   const info = await monerodService.getBlockChainInfo();
 
-  var blockChainInfo = info.result;
-  var chain = blockChainInfo.chain;
-  var blockCount = blockChainInfo.blocks;
-  var headerCount = blockChainInfo.headers;
-  var percent = blockChainInfo.verificationprogress;
-  var pruned = blockChainInfo.pruned;
-  var pruneTargetSize = blockChainInfo.pruneTargetSize;
+  const blockChainInfo = info.result;
+  const chain = blockChainInfo.chain;
+  const blockCount = blockChainInfo.blocks;
+  const headerCount = blockChainInfo.headers;
+  const percent = blockChainInfo.verificationprogress;
+  const pruned = blockChainInfo.pruned;
+  const pruneTargetSize = blockChainInfo.pruneTargetSize;
 
   return {
     chain,
@@ -112,13 +120,12 @@ async function getSyncStatus() {
 
 // TODO - consider using getNetworkInfo for info on proxy for ipv4 and ipv6
 async function getVersion() {
-  const networkInfo = await monerodService.getNetworkInfo();
-  const unformattedVersion = networkInfo.result.subversion;
+  const version = await monerodService.getVersion();
 
   // Remove all non-digits or decimals.
-  const version = unformattedVersion.replace(/[^\d.]/g, '');
+  const formattedVersion = version.replace(/[^\d.]/g, '');
 
-  return {version: version}; // eslint-disable-line object-shorthand
+  return {version: formattedVersion}; // eslint-disable-line object-shorthand
 }
 
 async function getTransaction(txid) {
@@ -164,7 +171,8 @@ const memoizedGetFormattedBlock = () => {
     // cache cleanup
     // 6 blocks/hr * 24 hrs/day * 7 days = 1008 blocks over 7 days
     // plus some wiggle room in case weird difficulty adjustment or period of faster blocks
-    const CACHE_LIMIT = 1100;
+    // Make CACHE_LIMIT configurable
+    const CACHE_LIMIT = process.env.CACHE_LIMIT || 1100;
     while(Object.keys(cache).length > CACHE_LIMIT) {
       const cacheItemToDelete = Object.keys(cache)[0];
       delete cache[cacheItemToDelete];
@@ -188,7 +196,7 @@ const memoizedGetFormattedBlock = () => {
       cache[blockHeight] = {
         hash: block.hash,
         height: block.height,
-        numTransactions: block.tx.length,
+        numTransactions: block.numTxs,
         confirmations: block.confirmations,
         time: block.time,
         size: block.size,
@@ -205,6 +213,7 @@ const initializedMemoizedGetFormattedBlock = memoizedGetFormattedBlock();
 
 async function getBlockRangeTransactionChunks(fromHeight, toHeight, blocksPerChunk) {
   const {blocks} = await getBlocks(fromHeight, toHeight);
+
   const chunks = [];
   blocks.forEach((block, index) => {
     const chunkIndex = Math.floor(index / blocksPerChunk);
@@ -224,7 +233,7 @@ async function getBlocks(fromHeight, toHeight) {
   const blocks = [];
 
   // loop from 'to height' till 'from Height'
-  for (let currentHeight = toHeight; currentHeight >= fromHeight; currentHeight--) {
+  for (let currentHeight = toHeight - 1; currentHeight >= fromHeight; currentHeight--) {
     // terminate loop if we reach the genesis block
     if (currentHeight === 0) {
       break;
@@ -234,7 +243,7 @@ async function getBlocks(fromHeight, toHeight) {
       const formattedBlock = await initializedMemoizedGetFormattedBlock(currentHeight);
       blocks.push(formattedBlock);
     } catch(e) {
-      console.error('Error memoizing formatted blocks')
+      console.error('Error memoizing formatted blocks');
     }
   }
 
@@ -249,32 +258,30 @@ async function getBlockHash(height) {
   };
 }
 
-async function nodeStatusDump() {
-  const blockchainInfo = await monerodService.getBlockChainInfo();
-  const networkInfo = await monerodService.getNetworkInfo();
-  const mempoolInfo = await monerodService.getMempoolInfo();
-  const miningInfo = await monerodService.getMiningInfo();
+// unused function
+// async function nodeStatusDump() {
+//   const blockchainInfo = await monerodService.getBlockChainInfo();
+//   const networkInfo = await monerodService.getNetworkInfo();
+//   const mempoolInfo = await monerodService.getMempoolInfo();
+//   const miningInfo = await monerodService.getMiningInfo();
 
-  return {
-    blockchain_info: blockchainInfo.result,
-    network_info: networkInfo.result,
-    mempool: mempoolInfo.result,
-    mining_info: miningInfo.result
-  };
-}
+//   return {
+//     blockchain_info: blockchainInfo.result,
+//     network_info: networkInfo.result,
+//     mempool: mempoolInfo.result,
+//     mining_info: miningInfo.result
+//   };
+// }
 
 async function nodeStatusSummary() {
   const blockchainInfo = await monerodService.getBlockChainInfo();
-  const networkInfo = await monerodService.getNetworkInfo();
-  const mempoolInfo = await monerodService.getMempoolInfo();
-  const miningInfo = await monerodService.getMiningInfo();
 
   return {
     difficulty: blockchainInfo.result.difficulty,
     size: blockchainInfo.result.sizeOnDisk,
-    mempool: mempoolInfo.result.bytes,
-    connections: networkInfo.result.connections,
-    networkhashps: miningInfo.result.networkhashps
+    mempool: blockchainInfo.result.numTxsPool,
+    connections: blockchainInfo.result.numOutgoingConnections,
+    networkhashps: blockchainInfo.result.difficulty /120 //TODO review bigint conversions
   };
 }
 
@@ -296,7 +303,6 @@ module.exports = {
   getStatus,
   getSyncStatus,
   getVersion,
-  nodeStatusDump,
   nodeStatusSummary,
   stop
 };

@@ -50,9 +50,9 @@
                     {{ block.numTransactions.toLocaleString() }}
                     transaction{{ block.numTransactions !== 1 ? "s" : "" }}
                   </small>
-                  <!-- <small class="text-muted" v-if="block.size">
+                  <small class="text-muted" v-if="block.size">
                     <span>&bull; {{ Math.round(block.size / 1000) }} KB</span>
-                  </small>-->
+                  </small>
                 </div>
               </div>
               <small
@@ -138,15 +138,15 @@ export default {
   },
   computed: {
     ...mapState({
-      isBitcoinCoreOperational: state => state.bitcoin.operational,
-      syncPercent: state => state.bitcoin.percent,
-      blocks: state => state.bitcoin.blocks
+      isMoneroCoreOperational: state => state.monero.operational,
+      syncPercent: state => state.monero.percent,
+      blocks: state => state.monero.blocks
     })
   },
   methods: {
     async fetchBlocks() {
-      // don't poll if bitcoin core isn't yet running
-      if (!this.isBitcoinCoreOperational) {
+      // don't poll if monero core isn't yet running
+      if (!this.isMoneroCoreOperational) {
         return;
       }
       //prevent multiple polls if previous poll already in progress
@@ -154,7 +154,7 @@ export default {
         return;
       }
       this.pollInProgress = true;
-      await this.$store.dispatch("bitcoin/getBlocks");
+      await this.$store.dispatch("monero/getBlocks");
       this.pollInProgress = false;
     },
     poller(syncPercent) {
@@ -181,8 +181,10 @@ export default {
     }
   },
   created() {
-    //immediately fetch blocks on first load
-    this.fetchBlocks();
+    //immediately fetch blocks on first load - timeout to fix race condition on initial load
+    setTimeout(async () => {
+      await this.fetchBlocks();
+    }, 1000);
 
     //then start polling
     this.poller(this.syncPercent);

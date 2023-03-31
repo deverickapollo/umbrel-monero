@@ -1,7 +1,7 @@
 #!/opt/homebrew/bin/bash bash
 
 CORE_PORT=18080
-CORE_RPCPORT=18089
+CORE_RPCPORT=18081
 
 arguments=""
 for env in "${!CORE_@}"
@@ -12,4 +12,4 @@ do
   arguments="${arguments} -${lowercase_flag,,}=${!env}"
 done
 echo $arguments
-# -port=18080 -rpcport=18089
+# -port=18080 -rpcport=18081

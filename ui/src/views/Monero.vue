@@ -159,6 +159,7 @@
                     title="Hashrate"
                     :value="abbreviateHashRate(stats.hashrate)[0]"
                     :suffix="abbreviateHashRate(stats.hashrate)[1]"
+                    hasDecimals
                     showPercentChange
                   ></stat>
                 </b-col>
@@ -250,7 +251,7 @@ export default {
       if (n < 1e3) return [Number(n.toFixed(1)), "H/s"];
       if (n >= 1e3 && n < 1e6) return [Number((n / 1e3).toFixed(1)), "kH/s"];
       if (n >= 1e6 && n < 1e9) return [Number((n / 1e6).toFixed(1)), "MH/s"];
-      if (n >= 1e9 && n < 1e12) return [Number((n / 1e9).toFixed(1)), "GH/s"];
+      if (n >= 1e9 && n < 1e12) return [Number((n / 1e9).toFixed(2)), "GH/s"];
       if (n >= 1e12 && n < 1e15) return [Number((n / 1e12).toFixed(1)), "TH/s"];
       if (n >= 1e15 && n < 1e18) return [Number((n / 1e15).toFixed(1)), "PH/s"];
       if (n >= 1e18 && n < 1e21) return [Number((n / 1e18).toFixed(1)), "EH/s"];
@@ -265,19 +266,35 @@ export default {
       if (n >= 1e15) return [Number(+(n / 1e15).toFixed(1)), "PB"];
     },
     fetchStats() {
-      this.$store.dispatch("monero/getStats");
+      try {
+        this.$store.dispatch("monero/getStats");
+       } catch (error) {
+         console.error("Error fetching stats:", error);
+       }
     },
     fetchPeers() {
-      this.$store.dispatch("monero/getPeers");
+      try {
+        this.$store.dispatch("monero/getPeers");
+       } catch (error) {
+         console.error("Error fetching peers:", error);
+       }
     },
     fetchConnectionDetails() {
-      return Promise.all([
-        this.$store.dispatch("monero/getP2PInfo"),
-        this.$store.dispatch("monero/getRpcInfo")
-      ]);
+      try {
+        return Promise.all([
+          this.$store.dispatch("monero/getP2PInfo"),
+          this.$store.dispatch("monero/getRpcInfo"),
+        ]);
+       } catch (error) {
+         console.error("Error fetching connection details:", error);
+       }
     },
     fetchMoneroConfigSettings() {
-      this.$store.dispatch("user/getMoneroConfig");
+      try {
+        this.$store.dispatch("user/getMoneroConfig");
+       } catch (error) {
+         console.error("Error fetching Monero config settings:", error);
+       }
     },
     async saveSettingsAndRestartMonero(moneroConfig) {
       try {
@@ -306,6 +323,7 @@ export default {
         this.isRestartPending = false;
       }
     },
+    // Restore default settings and restart Monero
     async restoreDefaultSettingsAndRestartMonero() {
       try {
         this.isRestartPending = true;

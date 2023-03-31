@@ -129,7 +129,7 @@
               </div>
             </div>
             <small class="w-sm-75 d-block text-muted mt-1">
-              Broadcast your node to the Bitcoin network to help other nodes 
+              Broadcast your node to the Monero network to help other nodes 
               access the blockchain. You may need to set up port forwarding on 
               your router to allow incoming connections from clearnet-only peers.
             </small>
@@ -140,59 +140,8 @@
           <div>
             <div class="d-flex justify-content-between align-items-center">
               <div class="w-75">
-                <label class="mb-0" for="cache-size">
-                  <p class="font-weight-bold mb-0">Cache Size (MB)</p>
-                </label>
-              </div>
-              <div class="">
-                <b-form-input
-                  class="advanced-settings-input"
-                  id="cache-size"
-                  type="number"
-                  v-model="settings.cacheSizeMB"
-                ></b-form-input>
-              </div>
-            </div>
-            <small class="w-sm-75 d-block text-muted mt-1">
-              Choose the size of the UTXO set to store in RAM. A larger cache can 
-              speed up the initial synchronization of your Bitcoin node, but after 
-              the initial sync is complete, a larger cache value does not significantly 
-              improve performance and may use more RAM than needed.
-            </small>
-          </div>
-
-          <hr class="advanced-settings-divider" />
-
-          <div>
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="w-75">
-                <label class="mb-0" for="mempool">
-                  <p class="font-weight-bold mb-0">Replace-By-Fee (RBF) for All Transactions</p>
-                </label>
-              </div>
-              <div>
-                <toggle-switch
-                  id="mempool"
-                  class="align-self-center"
-                  :on="settings.mempoolFullRbf"
-                  @toggle="status => (settings.mempoolFullRbf = status)"
-                ></toggle-switch>
-              </div>
-            </div>
-            <small class="w-sm-75 d-block text-muted mt-1">
-              Allow any transaction in the mempool of your Bitcoin node to be replaced with
-              a newer version of the same transaction that includes a higher fee.
-            </small>
-          </div>
-
-          <hr class="advanced-settings-divider" />
-
-
-          <div>
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="w-75">
                 <label class="mb-0" for="prune-old-blocks">
-                  <p class="font-weight-bold mb-0">Prune Old Blocks</p>
+                  <p class="font-weight-bold mb-0">Prune Blocks</p>
                 </label>
               </div>
               <div>
@@ -206,48 +155,39 @@
             </div>
             <small class="w-sm-75 d-block text-muted mt-1">
               Save storage space by pruning (deleting) old blocks and keeping only 
-              a limited copy of the blockchain. Use the slider to choose the size 
-              of the blockchain you want to store. It may take some time for your 
+              a limited copy of the blockchain. It may take some time for your 
               node to be online after you turn on pruning. If you turn off pruning 
               after turning it on, you'll need to download the entire blockchain 
               again.
             </small>
-            <prune-slider
-              id="prune-old-blocks"
-              class="mt-3 mb-3"
-              :minValue="1"
-              :maxValue="maxPruneSizeGB"
-              :startingValue="settings.prune.pruneSizeGB"
-              :disabled="!settings.prune.enabled"
-              @change="value => (settings.prune.pruneSizeGB = value)"
-            ></prune-slider>
           </div>
 
           <hr class="advanced-settings-divider" />
 
-          <!-- <div>
+
+          <div>
             <div class="d-flex justify-content-between align-items-center">
               <div class="w-75">
-                <label class="mb-0" for="reindex-blockchain">
-                  <p class="font-weight-bold mb-0">Reindex Blockchain</p>
+                <label class="mb-0" for="dbSyncMode">
+                  <p class="font-weight-bold mb-0">DB Sync Mode</p>
                 </label>
               </div>
-              <div>
-                <toggle-switch
-                  id="reindex-blockchain"
-                  class="align-self-center"
-                  :on="settings.reindex"
-                  @toggle="status => (settings.reindex = status)"
-                ></toggle-switch>
+              <div class="">
+                <b-form-select
+                  id="dbSyncMode"
+                  v-model="settings.dbSyncMode"
+                  :options="dbSyncMode"
+                ></b-form-select>
               </div>
             </div>
             <small class="w-sm-75 d-block text-muted mt-1">
-              Rebuild the database index used by your Bitcoin node. This can 
-              be useful if the index becomes corrupted.
+              Configure database synchronization mode for your node.
+              Adjusting these settings can help you optimize the performance of your Monero node, 
+              particularly during the initial blockchain synchronization and ongoing block validation.
             </small>
           </div>
 
-          <hr class="advanced-settings-divider" /> -->
+          <hr class="advanced-settings-divider" />
 
           <div>
             <div class="d-flex justify-content-between align-items-center">
@@ -267,12 +207,38 @@
             </div>
           </div>
           <small class="w-sm-75 d-block text-muted mt-1">
-            Choose which network you want your Bitcoin node to connect to. 
+            Choose which network you want your Monero node to connect to. 
             If you change the network, restart your Umbrel to make sure any 
-            apps connected to your Bitcoin node continue to work properly.
+            apps connected to your Monero node continue to work properly.
           </small>
         </div>
 
+          
+          <!-- <div>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="w-75">
+                <label class="mb-0" for="reindex-blockchain">
+                  <p class="font-weight-bold mb-0">Reindex Blockchain</p>
+                </label>
+              </div>
+              <div>
+                <toggle-switch
+                  id="reindex-blockchain"
+                  class="align-self-center"
+                  :on="settings.reindex"
+                  @toggle="status => (settings.reindex = status)"
+                ></toggle-switch>
+              </div>
+            </div>
+            <small class="w-sm-75 d-block text-muted mt-1">
+              Rebuild the database index used by your Monero node. This can 
+              be useful if the index becomes corrupted.
+            </small>
+          </div>
+
+          <hr class="advanced-settings-divider" /> -->
+
+          
         <!-- template overlay with empty div to show an overlay with no spinner -->
         <template #overlay>
           <div></div>
@@ -294,7 +260,7 @@
           </b-col>
           <b-col cols="12" lg="6">
             <b-button class="mt-2 mt-lg-0" variant="success" type="submit" block :disabled="isSettingsDisabled">
-              Save and Restart Bitcoin Node</b-button
+              Save and Restart Monero Node</b-button
             >
           </b-col>
         </b-row>
@@ -308,19 +274,21 @@ import cloneDeep from "lodash.clonedeep";
 
 import { mapState } from "vuex";
 import ToggleSwitch from "./Utility/ToggleSwitch.vue";
-import PruneSlider from "./PruneSlider.vue";
 
 export default {
   data() {
     return {
       settings: {},
+      dbSyncMode: [
+        { value: "fastest", text: "fastest" },
+        { value: "fast", text: "fast" },
+        { value: "safe", text: "safe" }
+      ],
       networks: [
         { value: "main", text: "mainnet" },
         { value: "test", text: "testnet" },
-        { value: "signet", text: "signet" },
-        { value: "regtest", text: "regtest" }
+        { value: "stagenet", text: "stagenet" }
       ],
-      maxPruneSizeGB: 300,
       showOutgoingConnectionsError: false
     };
   },
@@ -357,8 +325,7 @@ export default {
     this.setSettings();
   },
   components: {
-    ToggleSwitch,
-    PruneSlider
+    ToggleSwitch
   },
   methods: {
     submit() {

@@ -85,6 +85,5 @@ function getMostValidatedIP(peerInfo) {
 }
 
 module.exports = {
-  // getMonerodAddresses,
   getMonerodAddresses,
 };

@@ -1,5 +1,5 @@
 # Build Stage
-FROM node:18-buster-slim AS monero-middleware-builder
+FROM node:19-bullseye-slim AS monero-middleware-builder
 
 # Install tools
 # RUN apt-get update \
@@ -20,10 +20,10 @@ COPY . .
 
 # Install UI dependencies and build UI 
 RUN yarn install:ui
-RUN export NODE_OPTIONS=--openssl-legacy-provider && yarn build:ui
+RUN yarn build:ui
 
 # Final Stage (Production) 
-FROM node:18-buster-slim AS monero-middleware
+FROM node:19-bullseye-slim AS monero-middleware
 
 # Copy built code from build stage to '/app' directory
 COPY --from=monero-middleware-builder /app /app
@@ -31,5 +31,5 @@ COPY --from=monero-middleware-builder /app /app
 # Change directory to '/app' 
 WORKDIR /app
 
-EXPOSE 8998
+EXPOSE 3006
 CMD [ "yarn", "start" ]

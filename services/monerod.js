@@ -1,5 +1,6 @@
-const RpcClient = require("monero-javascript");
+const RpcClient = require('monero-javascript');
 const camelizeKeys = require('camelize-keys');
+const GenUtils = require('monero-javascript/src/main/js/common/GenUtils');
 const MonerodError = require('models/errors.js').MonerodError;
 
 const MONEROD_RPC_PORT = process.env.RPC_PORT || 18081; // eslint-disable-line no-magic-numbers, max-len
@@ -9,144 +10,297 @@ const MONEROD_RPC_PASSWORD = process.env.RPC_PASSWORD;
 
 const MONEROD_IP = `http://${MONEROD_HOST}:${MONEROD_RPC_PORT}`;
 
-//await is only valid in async functions and the top level bodies of modules
-//https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await
+/**
+ * RPC/Monero Daemon Resources
+ * https://www.getmonero.org/resources/developer-guides/daemon-rpc.html
+ * https://moneroecosystem.org/monero-javascript/MoneroDaemon.html
+ */
 
-const rpcClient = new RpcClient.connectToDaemonRpc({
-  uri: MONEROD_IP,
-  username: MONEROD_RPC_USER,
-  password: MONEROD_RPC_PASSWORD
-});
+class MoneroDaemon {
+  constructor(config) {
+    this.config = config;
+    (async() => await this.init())();
+  }
 
-
-
-function promiseify(rpcObj, rpcFn, what) {
-  return new Promise((resolve, reject) => {
+  async init() {
     try {
-      rpcFn.call(rpcObj, (err, info) => {
-        if (err) {
-          reject(new MonerodError(`Unable to obtain ${what}`, err));
-        } else {
-          resolve(camelizeKeys(info, '_'));
-        }
+      this.daemon = await RpcClient.connectToDaemonRpc({
+        uri: MONEROD_IP,
+        username: MONEROD_RPC_USER,
+        password: MONEROD_RPC_PASSWORD
       });
-    } catch (error) {
-      reject(error);
+    } catch (err) {
+      throw new MonerodError('Unable to obtain connect to Monero daemon.', err);
     }
-  });
+  }
 }
 
-function promiseifyParam(rpcObj, rpcFn, param, what) {
-  return new Promise((resolve, reject) => {
-    try {
-      rpcFn.call(rpcObj, param, (err, info) => {
-        if (err) {
-          reject(new MonerodError(`Unable to obtain ${what}`, err));
-        } else {
-          resolve(camelizeKeys(info, '_'));
-        }
-      });
-    } catch (error) {
-      reject(error);
+const daemonController = new MoneroDaemon();
+
+// function promiseify(rpcObj, rpcFn, what) {
+//   return new Promise((resolve, reject) => {
+//     try {
+//       rpcFn.call(rpcObj, (err, info) => {
+//         if (err) {
+//           reject(new MonerodError(`Unable to obtain ${what}`, err));
+//         } else {
+//           resolve(camelizeKeys(info, '_'));
+//         }
+//       });
+//     } catch (error) {
+//       reject(error);
+//     }
+//   });
+// }
+
+// function promiseifyParam(rpcObj, rpcFn, param, what) {
+//   return new Promise((resolve, reject) => {
+//     try {
+//       rpcFn.call(rpcObj, param, (err, info) => {
+//         if (err) {
+//           reject(new MonerodError(`Unable to obtain ${what}`, err));
+//         } else {
+//           resolve(camelizeKeys(info, '_'));
+//         }
+//       });
+//     } catch (error) {
+//       reject(error);
+//     }
+//   });
+// }
+
+// function promiseifyParamTwo(rpcObj, rpcFn, param1, param2, what) {
+//   return new Promise((resolve, reject) => {
+//     try {
+//       rpcFn.call(rpcObj, param1, param2, (err, info) => {
+//         if (err) {
+//           reject(new MonerodError(`Unable to obtain ${what}`, err));
+//         } else {
+//           resolve(camelizeKeys(info, '_'));
+//         }
+//       });
+//     } catch (error) {
+//       reject(error);
+//     }
+//   });
+// }
+
+
+// function getBestBlockHash() {
+//   return promiseify(rpcClient, rpcClient.getLastBlockHeader, 'best block hash');
+// }
+
+async function getBlockHash(height) {
+  try {
+    const heightData = await daemonController.daemon.getBlockHash(height);
+
+    return {result: heightData};
+  } catch (err) {
+    throw new MonerodError('Unable to obtain getBlockHash from Daemon', err);
+  }
+}
+
+async function getBlock(hash) {
+  try {
+    const {state} = await daemonController.daemon.getBlockByHash(hash);
+
+    const block = {
+      hash: state.hash,
+      height: state.height,
+      numTxs: state.numTxs,
+      confirmations: 100, // TODO implement,
+      time: state.timestamp,
+      size: state.size,
+      previousblockhash: state.prevHash
+    };
+
+    return {result: block};
+  } catch (err) {
+    throw new MonerodError('Unable to obtain getBlock from Daemon', err);
+  }
+}
+
+async function getTransaction(txHash) {
+  try {
+    const hash = await daemonController.daemon.getTx(txHash);
+
+    return {result: hash};
+  } catch (err) {
+    throw new MonerodError('Unable to obtain getTransaction from Daemon', err);
+  }
+}
+
+function getSyncPercentage(height, targetHeight) {
+  if (targetHeight > height) {
+    return Number(((height / targetHeight)).toFixed(4));
+  }
+
+  return 1;
+}
+
+async function getBlockChainInfo() {
+  try {
+    const {state: infoState} = await daemonController.daemon.getInfo();
+
+    // TODO: UI should show bytes in pool, not tx #s.  txpoolstats call is currently broken
+    // const miningInfo = await daemonController.daemon.getTxPoolStats();
+
+    // console.log(miningInfo.getBytesTotal())
+
+    const info = {
+      result: {
+        chain: RpcClient.MoneroNetworkType.toString(infoState.networkType),
+        blocks: infoState.height,
+        headers: infoState.height,
+        difficulty: parseInt(infoState.difficulty),
+        sizeOnDisk: infoState.databaseSize,
+        numOutgoingConnections: infoState.numOutgoingConnections,
+        numTxsPool: infoState.numTxsPool,
+        verificationprogress: getSyncPercentage(infoState.height, infoState.targetHeight),
+        pruned: true, // TODO implement after monero-js implements
+        pruneTargetSize: 0 // TODO
+      }
+    };
+
+    return info;
+  } catch (err) {
+    throw new MonerodError('Unable to obtain getBlockChainInfo from Daemon', err);
+  }
+}
+
+async function getPeerInfo() {
+  try {
+    const peers = await daemonController.daemon.getPeers();
+
+    let mappedPeers = [];
+
+    if (peers && peers.length > 0) {
+      mappedPeers = peers.map(({state}) => ({
+        addrLocal: state.address,
+        type: state.type,
+        syncedHeaders: state.height,
+        isIncoming: state.isIncoming,
+      }));
     }
-  });
+
+    return {result: mappedPeers};
+  } catch (err) {
+    throw new MonerodError('Unable to obtain getPeerInfo from Daemon', err);
+  }
 }
 
-function promiseifyParamTwo(rpcObj, rpcFn, param1, param2, what) {
-  return new Promise((resolve, reject) => {
-    try {
-      rpcFn.call(rpcObj, param1, param2, (err, info) => {
-        if (err) {
-          reject(new MonerodError(`Unable to obtain ${what}`, err));
-        } else {
-          resolve(camelizeKeys(info, '_'));
-        }
-      });
-    } catch (error) {
-      reject(error);
-    }
-  });
+async function getBlockCount() {
+  try {
+    const {state} = await daemonController.daemon.getInfo();
+
+    return state.height;
+  } catch (err) {
+    throw new MonerodError('Unable to obtain getBlockCount from Daemon', err);
+  }
 }
 
-function getBestBlockHash() {
-  return promiseify(rpcClient, rpcClient.getLastBlockHeader, 'best block hash');
+// TODO implement this
+async function getMempoolInfo() {
+  try {
+    // const info = {
+    //   result: {
+    //     size: 4524,
+    //     bytes: 2071293,
+    //     usage: 6141256,
+    //     maxmempool: 20000000,
+    //     mempoolminfee: 0.00000001,
+    //     minrelaytxfee: 0.00000001,
+    //   }
+    // }
+
+    const pool = await daemonController.daemon.getTxPool();
+
+    return {result: pool};
+  } catch (err) {
+    throw new MonerodError('Unable to obtain getMempoolInfo from Daemon', err);
+  }
 }
 
-function getBlockHash(height) {
-  return promiseifyParam(rpcClient, rpcClient.getBlockHash, height, 'block height');
+async function getVersion() {
+  try {
+    const info = await daemonController.daemon.getInfo();
+
+    return info.state.version;
+  } catch (err) {
+    throw new MonerodError('Unable to obtain getVersion from Daemon', err);
+  }
 }
 
-function getBlock(hash) {
-  return promiseifyParam(rpcClient, rpcClient.getBlockByHash, hash, 'block info');
+// TODO implement
+async function getNetworkInfo() {
+  try {
+    const {daemon} = daemonController;
+    const hardForkInfoData = {
+      connections: undefined, // peers
+      localAddresses: undefined,
+      hardForkInfo: undefined,
+      blockHeader: undefined,
+      blockHeight: undefined,
+      version: undefined,
+      height: undefined,
+      difficulty: undefined,
+      hashrate: undefined,
+      tx_count: undefined,
+      fee_per_kb: undefined,
+      fee_address: undefined,
+      fee_amount: undefined
+    };
+
+    const blah = await daemon.getPeers();
+
+    hardForkInfoData.connections = blah ? blah.length : 0;
+
+    // const hardForkInfo = daemonController.daemon.getInfo();
+    // const blockHeader = daemonController.daemon.getLastBlockHeader();
+    // const blockHeight = blockHeader.height;
+    // const version = hardForkInfo.version;
+    // const height = blockHeight;
+    // const difficulty = hardForkInfo.difficulty;
+    // const hashrate = hardForkInfo.difficulty / blockHeader.timestamp;
+    // const tx_count = hardForkInfo.tx_count;
+    // const fee_per_kb = hardForkInfo.fee_address;
+    // const fee_address = hardForkInfo.fee_address;
+    // const fee_amount = hardForkInfo.fee_amount;
+    return {
+      result: {
+        hardForkInfoData
+      }
+    };
+  } catch (err) {
+    throw new MonerodError('Unable to obtain getNetworkInfo from Daemon', err);
+  }
 }
 
-function getTransaction(txHash) {
-  return promiseifyParamTwo(rpcClient, rpcClient.getTx, txHash, 1, 'transaction info');
-}
+// Unused function
+// function getMiningInfo() {
+//   try {
+//     const blockHeader = daemonController.daemon.getLastBlockHeader();
 
-function getBlockChainInfo() {
-  return promiseify(rpcClient, rpcClient.get_info, 'blockchain info');
-}
+//     // const blockHeight = blockHeader.height;
+//     // const difficulty = blockHeader.difficulty;
+//     // const hashrate = difficulty / blockHeader.timestamp;
+//     // const tx_count = blockHeader.tx_count;
+//     // const fee_per_kb = blockHeader.fee_per_kb;
+//     // const fee_address = blockHeader.fee_address;
+//     // const fee_amount = blockHeader.fee_amount;
+//     return {result: {
+//       networkhashps: parseInt(blockHeader.difficulty) / 120
+//     }};
+//   } catch (err) {
+//     throw new MonerodError('Unable to obtain getMiningInfo from Daemon', err);
+//   }
+// }
 
-function getPeerInfo() {
-  return promiseify(rpcClient, rpcClient.getPeers, 'peer info');
-}
-
-function getBlockCount() {
-  return promiseify(rpcClient, rpcClient.getHeight, 'block count');
-}
-
-function getMempoolInfo() {
-  return promiseify(rpcClient, rpcClient.get_txpool, 'get mempool info');
-}
-
-function getNetworkInfo() {
-  const hardForkInfo = daemon.getHardForkInfo();
-  const blockHeader = daemon.getLastBlockHeader();
-  const blockHeight = blockHeader.height;
-  const version = hardForkInfo.version
-  const height = blockHeight
-  const difficulty = hardForkInfo.difficulty
-  const hashrate = hardForkInfo.difficulty / blockHeader.timestamp
-  const tx_count = hardForkInfo.tx_count
-  const fee_per_kb = hardForkInfo.fee_address
-  const fee_address = hardForkInfo.fee_address
-  const fee_amount = hardForkInfo.fee_amount
-
-  return promiseify(rpcClient, rpcClient.getNetworkInfo, 'network info');
-}
-
-function getMiningInfo() {
-  const blockHeader = daemon.getLastBlockHeader();
-  const blockHeight = blockHeader.height;
-  const difficulty = blockHeader.difficulty;
-  const hashrate = difficulty / blockHeader.timestamp;
-  const tx_count = blockHeader.tx_count;
-  const fee_per_kb = blockHeader.fee_per_kb;
-  const fee_address = blockHeader.fee_address;
-  const fee_amount = blockHeader.fee_amount;
-
-  return promiseify(rpcClient, rpcClient.getMiningInfo, 'mining info');
-}
-function help() {
-  // TODO: missing from the library, but can add it not sure how to package.
-  // rpc.uptime(function (err, res) {
-  //     if (err) {
-  //         deferred.reject({status: 'offline'});
-  //     } else {
-  //         deferred.resolve({status: 'online'});
-  //     }
-  // });
-  return promiseify(rpcClient, rpcClient.help, 'help data');
-}
-
-function stop() {
-  return promiseify(rpcClient, rpcClient.stop, 'stop');
+async function stop() {
+  await daemonController.daemon.stop();
 }
 
 module.exports = {
-  getMiningInfo,
-  getBestBlockHash,
   getBlockHash,
   getBlock,
   getTransaction,
@@ -155,6 +309,6 @@ module.exports = {
   getPeerInfo,
   getMempoolInfo,
   getNetworkInfo,
-  help,
+  getVersion,
   stop,
 };
