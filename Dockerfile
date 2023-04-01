@@ -1,11 +1,6 @@
 # Build Stage
 FROM node:19-bullseye-slim AS monero-middleware-builder
 
-# Install tools
-# RUN apt-get update \
-#     && apt-get install -y build-essential \
-#     && apt-get install -y python3
-
 # Create app directory
 WORKDIR /app
 
