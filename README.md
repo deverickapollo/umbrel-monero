@@ -4,7 +4,7 @@
   </a>
   <h1 align="center">Monero Node for Umbrel</h1>
   <p align="center">
-    Run a Monero node on your Umbrel personal server. An unofficial app by Deverick. Powered by Monero.
+    Run a Monero node on your Umbrel personal server. An unofficial app by @deverickapollo and @CryptoGrampy
     <br />
     <a href="https://getmonero.org"><strong>monero.org »</strong></a>
     <br />
@@ -24,18 +24,10 @@
   </p>
 </p>
 
-## Building App
-
-On MacOS:
-
-- export NODE_OPTIONS=--openssl-legacy-provider    
-  - Otherwise you will see  Building for production...Error: error:0308010C:digital envelope routines::unsupported
-  - https://stackoverflow.com/questions/69692842/error-message-error0308010cdigital-envelope-routinesunsupported
-  - 
 ### Development
-- npm run-script build:ui
-- npm run-script serve:ui
-- 
+
+- MONERO_HOST=192.168.1.13 MONEROD_RPC_PORT=18081 yarn start:all:dev
+  
 ### Production
 - npm run start
 
