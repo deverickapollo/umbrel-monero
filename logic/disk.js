@@ -101,7 +101,7 @@ function settingsToMultilineConfString(settings) {
   // prune
   if (settings.prune.enabled) {
     umbrelMoneroConfig.push("# Reduce disk space requirements to this many MiB by enabling pruning (deleting) of old blocks. This mode is incompatible with -txindex and -coinstatsindex. WARNING: Reverting this setting requires re-downloading the entire blockchain. (default: 0 = disable pruning blocks, 1 = allow manual pruning via RPC, greater than or equal to 550 = automatically prune blocks to stay under target size in MiB).");
-    umbrelMoneroConfig.push(`prune=${Math.round(settings.prune.pruneSizeGB * GB_TO_MiB)}`);
+    umbrelMoneroConfig.push(`prune=true`);
   }
   
   // reindex
