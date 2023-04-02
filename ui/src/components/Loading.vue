@@ -2,7 +2,7 @@
   <div
     class="d-flex flex-column align-items-center justify-content-center min-vh100 p-2"
   >
-    <img alt="Umbrel" src="@/assets/icon.svg" class="mb-5 logo" />
+    <img alt="Umbrel" src="@/assets/community-monero-app-icon.svg" class="mb-5 logo" />
 
     <!-- <b-spinner class="my-4" variant="primary"></b-spinner> -->
     <small v-if="isRestarting" class="text-muted mb-3">Restarting...</small>
