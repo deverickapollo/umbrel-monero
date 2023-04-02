@@ -8,7 +8,7 @@ WORKDIR /app
 COPY yarn.lock package.json ./
 
 # Install dependencies
-RUN yarn install --production
+RUN yarn install --production --network-timeout 300000
 
 # Copy project files and folders to the current working directory (i.e. '/app')
 COPY . .
