@@ -1,11 +1,6 @@
 # Build Stage
 FROM node:19-bullseye-slim AS monero-middleware-builder
 
-# Install tools
-# RUN apt-get update \
-#     && apt-get install -y build-essential \
-#     && apt-get install -y python3
-
 # Create app directory
 WORKDIR /app
 
@@ -13,7 +8,7 @@ WORKDIR /app
 COPY yarn.lock package.json ./
 
 # Install dependencies
-RUN yarn install --production
+RUN yarn install --production --network-timeout 300000
 
 # Copy project files and folders to the current working directory (i.e. '/app')
 COPY . .
