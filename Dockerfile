@@ -1,5 +1,5 @@
 # Build Stage
-FROM node:19-alpinem AS monero-middleware-builder
+FROM node:19-alpine AS monero-middleware-builder
 
 # Create app directory
 WORKDIR /app
