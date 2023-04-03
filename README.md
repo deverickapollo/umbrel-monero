@@ -32,6 +32,9 @@
 - npm run start
 
 #### Docker
+
+To build:
+- docker buildx build --platform linux/arm64 -f ./Dockerfile-copy --tag umbrel-monero/monero-frontend:v1.0.0 --load .
 - docker-compose up 
   
 ## Getting started
