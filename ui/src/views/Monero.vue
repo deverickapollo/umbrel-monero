@@ -36,7 +36,7 @@
             <b-icon icon="plus" aria-hidden="true"></b-icon>
             Connect
           </b-button>
- 
+
           <b-dropdown
             class="ml-3"
             variant="link"
@@ -82,7 +82,7 @@
 
     <b-alert :show="showRestartError" variant="danger" dismissible @dismissed="showRestartError=false">
       Something went wrong while attempting to change the configuration of Monero Node.
-    </b-alert>
+      </b-alert>
     </div>
 
     <b-row class="row-eq-height">
@@ -152,6 +152,11 @@
                     :value="abbreviateSize(stats.mempool)[0]"
                     :suffix="abbreviateSize(stats.mempool)[1]"
                     showPercentChange
+                    :showPopover="true"
+                    popoverId="mempool-popover"
+                    :popoverContent="[
+                      `Transaction Count: ${stats.mempoolTransactions}`
+                    ]"
                   ></stat>
                 </b-col>
                 <b-col col cols="6" md="3">
@@ -185,7 +190,7 @@
     <b-modal id="connect-modal" size="lg" centered hide-footer>
       <connection-modal></connection-modal>
     </b-modal>
-    
+
     <b-modal id="advanced-settings-modal" size="lg" centered hide-footer scrollable>
       <advanced-settings-modal :isSettingsDisabled="isRestartPending" @submit="saveSettingsAndRestartMonero" @clickRestoreDefaults="restoreDefaultSettingsAndRestartMonero"></advanced-settings-modal>
     </b-modal>
@@ -268,16 +273,16 @@ export default {
     fetchStats() {
       try {
         this.$store.dispatch("monero/getStats");
-       } catch (error) {
-         console.error("Error fetching stats:", error);
-       }
+      } catch (error) {
+        console.error("Error fetching stats:", error);
+      }
     },
     fetchPeers() {
       try {
         this.$store.dispatch("monero/getPeers");
-       } catch (error) {
-         console.error("Error fetching peers:", error);
-       }
+      } catch (error) {
+        console.error("Error fetching peers:", error);
+      }
     },
     fetchConnectionDetails() {
       try {
@@ -285,22 +290,22 @@ export default {
           this.$store.dispatch("monero/getP2PInfo"),
           this.$store.dispatch("monero/getRpcInfo"),
         ]);
-       } catch (error) {
-         console.error("Error fetching connection details:", error);
-       }
+      } catch (error) {
+        console.error("Error fetching connection details:", error);
+      }
     },
     fetchMoneroConfigSettings() {
       try {
         this.$store.dispatch("user/getMoneroConfig");
-       } catch (error) {
-         console.error("Error fetching Monero config settings:", error);
-       }
+      } catch (error) {
+        console.error("Error fetching Monero config settings:", error);
+      }
     },
     async saveSettingsAndRestartMonero(moneroConfig) {
       try {
         this.isRestartPending = true;
         this.$store.dispatch("user/updateMoneroConfig", moneroConfig);
-  
+
         const response = await API.post(
           `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/system/update-monero-config`,
           { moneroConfig }
@@ -314,7 +319,7 @@ export default {
           this.fetchMoneroConfigSettings();
           this.showRestartError = true;
           this.isRestartPending = false;
-        }  
+        }
       } catch (error) {
         console.error(error);
         this.fetchMoneroConfigSettings();
@@ -327,14 +332,14 @@ export default {
     async restoreDefaultSettingsAndRestartMonero() {
       try {
         this.isRestartPending = true;
-        
+
         const response = await API.post(
           `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/system/restore-default-monero-config`
-          );
-        
+        );
+
         // dispatch getMoneroConfig after post request to avoid referencing default values in the store.
         this.$store.dispatch("user/getMoneroConfig");
-  
+
         if (response.data.success) {
           // reload the page to reset all state and show loading view while monero core restarts.
           this.$router.push({ query: { restart: "1" } });
@@ -343,7 +348,7 @@ export default {
           this.fetchMoneroConfigSettings();
           this.showRestartError = true;
           this.isRestartPending = false;
-        }  
+        }
       } catch (error) {
         console.error(error);
         this.fetchMoneroConfigSettings();

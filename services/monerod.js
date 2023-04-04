@@ -1,6 +1,4 @@
 const RpcClient = require('monero-javascript');
-const camelizeKeys = require('camelize-keys');
-const GenUtils = require('monero-javascript/src/main/js/common/GenUtils');
 const MonerodError = require('models/errors.js').MonerodError;
 
 const MONEROD_RPC_PORT = process.env.RPC_PORT || 18081; // eslint-disable-line no-magic-numbers, max-len
@@ -27,7 +25,7 @@ class MoneroDaemon {
       this.daemon = await RpcClient.connectToDaemonRpc({
         uri: MONEROD_IP,
         username: MONEROD_RPC_USER,
-        password: MONEROD_RPC_PASSWORD
+        password: MONEROD_RPC_PASSWORD,
       });
     } catch (err) {
       throw new MonerodError('Unable to obtain connect to Monero daemon.', err);
@@ -85,7 +83,6 @@ const daemonController = new MoneroDaemon();
 //   });
 // }
 
-
 // function getBestBlockHash() {
 //   return promiseify(rpcClient, rpcClient.getLastBlockHeader, 'best block hash');
 // }
@@ -111,7 +108,7 @@ async function getBlock(hash) {
       confirmations: 100, // TODO implement,
       time: state.timestamp,
       size: state.size,
-      previousblockhash: state.prevHash
+      previousblockhash: state.prevHash,
     };
 
     return {result: block};
@@ -132,7 +129,8 @@ async function getTransaction(txHash) {
 
 function getSyncPercentage(height, targetHeight) {
   if (targetHeight > height) {
-    return Number(((height / targetHeight)).toFixed(4));
+    // eslint-disable-next-line no-magic-numbers
+    return Number((height / targetHeight).toFixed(4));
   }
 
   return 1;
@@ -142,29 +140,33 @@ async function getBlockChainInfo() {
   try {
     const {state: infoState} = await daemonController.daemon.getInfo();
 
-    // TODO: UI should show bytes in pool, not tx #s.  txpoolstats call is currently broken
-    // const miningInfo = await daemonController.daemon.getTxPoolStats();
-
-    // console.log(miningInfo.getBytesTotal())
+    const miningInfo = await daemonController.daemon.getTxPoolStats();
 
     const info = {
       result: {
         chain: RpcClient.MoneroNetworkType.toString(infoState.networkType),
         blocks: infoState.height,
         headers: infoState.height,
-        difficulty: parseInt(infoState.difficulty),
+        difficulty: parseInt(infoState.difficulty, 10),
         sizeOnDisk: infoState.databaseSize,
         numOutgoingConnections: infoState.numOutgoingConnections,
-        numTxsPool: infoState.numTxsPool,
-        verificationprogress: getSyncPercentage(infoState.height, infoState.targetHeight),
+        mempoolBytes: miningInfo.getBytesTotal(),
+        mempoolTransactions: miningInfo.getNumTxs(),
+        verificationprogress: getSyncPercentage(
+          infoState.height,
+          infoState.targetHeight
+        ),
         pruned: true, // TODO implement after monero-js implements
-        pruneTargetSize: 0 // TODO
-      }
+        pruneTargetSize: 0, // TODO
+      },
     };
 
     return info;
   } catch (err) {
-    throw new MonerodError('Unable to obtain getBlockChainInfo from Daemon', err);
+    throw new MonerodError(
+      'Unable to obtain getBlockChainInfo from Daemon',
+      err
+    );
   }
 }
 
@@ -248,7 +250,7 @@ async function getNetworkInfo() {
       tx_count: undefined,
       fee_per_kb: undefined,
       fee_address: undefined,
-      fee_amount: undefined
+      fee_amount: undefined,
     };
 
     const blah = await daemon.getPeers();
@@ -268,8 +270,8 @@ async function getNetworkInfo() {
     // const fee_amount = hardForkInfo.fee_amount;
     return {
       result: {
-        hardForkInfoData
-      }
+        hardForkInfoData,
+      },
     };
   } catch (err) {
     throw new MonerodError('Unable to obtain getNetworkInfo from Daemon', err);
