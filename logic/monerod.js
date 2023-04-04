@@ -279,9 +279,10 @@ async function nodeStatusSummary() {
   return {
     difficulty: blockchainInfo.result.difficulty,
     size: blockchainInfo.result.sizeOnDisk,
-    mempool: blockchainInfo.result.numTxsPool,
+    mempool: blockchainInfo.result.mempoolBytes,
+    mempoolTransactions: blockchainInfo.result.mempoolTransactions,
     connections: blockchainInfo.result.numOutgoingConnections,
-    networkhashps: blockchainInfo.result.difficulty /120 //TODO review bigint conversions
+    networkhashps: blockchainInfo.result.difficulty / 120 // TODO review bigint conversions
   };
 }
 

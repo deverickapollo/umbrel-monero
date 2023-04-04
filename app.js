@@ -30,9 +30,12 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(requestCorrelationMiddleware);
 app.use(camelCaseReqMiddleware);
-app.use(morgan(logger.morganConfiguration));
 
-if (environment !== 'development') {
+if (environment === 'development') {
+  app.use(morgan('dev', logger.morganConfiguration));
+
+} else {
+  app.use(morgan('combined', logger.morganConfiguration));
   app.use(express.static(path.join(__dirname, 'public')));
   app.use('/', express.static('./ui/dist'));
 }

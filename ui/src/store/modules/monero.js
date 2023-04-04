@@ -35,6 +35,7 @@ const state = () => ({
   stats: {
     peers: -1,
     mempool: -1,
+    mempoolTransactions: -1,
     hashrate: -1,
     blockchainSize: -1
   },
@@ -88,6 +89,7 @@ const mutations = {
   setStats(state, stats) {
     state.stats.peers = stats.peers;
     state.stats.mempool = stats.mempool;
+    state.stats.mempoolTransactions = stats.mempoolTransactions;
     state.stats.blockchainSize = stats.blockchainSize;
     state.stats.hashrate = stats.hashrate;
   },
@@ -211,12 +213,12 @@ const actions = {
     if (!currentBlock || currentBlock < 144) {
       return;
     }
-    
+
     // get last 144 blocks (~24 hours)
     const lastDaysBlocks = await API.get(
       `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/info/blocks?from=${currentBlock - 143}&to=${currentBlock}`
     );
-    
+
     // exit if we don't get the blocks for some reason
     if (!lastDaysBlocks || !lastDaysBlocks.blocks || !lastDaysBlocks.blocks.length) {
       return;
@@ -241,7 +243,7 @@ const actions = {
         transactionsInCurrentChunk = 0;
       }
     }
-    
+
     // sort by ascending timestamps and update state
     chartData.sort((a, b) => a[0] - b[0]);
 
@@ -276,12 +278,14 @@ const actions = {
     if (stats) {
       const peers = stats.connections;
       const mempool = stats.mempool;
+      const mempoolTransactions = stats.mempoolTransactions;
       const hashrate = stats.networkhashps;
       const blockchainSize = stats.size;
 
       commit("setStats", {
         peers,
         mempool,
+        mempoolTransactions,
         hashrate,
         blockchainSize
       });
