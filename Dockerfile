@@ -1,5 +1,5 @@
 # Build Stage
-FROM node:19-bullseye-slim AS monero-middleware-builder
+FROM node:19-alpine AS monero-middleware-builder
 
 # Create app directory
 WORKDIR /app
@@ -18,7 +18,7 @@ RUN yarn install:ui
 RUN yarn build:ui
 
 # Final Stage (Production) 
-FROM node:19-bullseye-slim AS monero-middleware
+FROM node:19-alpine AS monero-middleware
 
 # Copy built code from build stage to '/app' directory
 COPY --from=monero-middleware-builder /app /app
