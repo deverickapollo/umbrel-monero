@@ -1,9 +1,9 @@
 /* eslint-disable max-len,id-length */
 /* globals requester, reset */
 const sinon = require('sinon');
-const bitcoindMocks = require('../../../mocks/bitcoind.js');
+const monerodMocks = require('../../../mocks/monerod.js');
 
-describe('v1/bitcoind/info endpoint', () => {
+describe('v1/monerod/info endpoint', () => {
   let token;
 
   before(async() => {
@@ -13,16 +13,16 @@ describe('v1/bitcoind/info endpoint', () => {
   });
 
   describe('/addresses GET', function() {
-    let bitcoindRPCGetPeerInfo;
-    let bitcoindRPCGetNetworkInfo;
+    let monerodRPCGetPeerInfo;
+    let monerodRPCGetNetworkInfo;
 
     afterEach(() => {
-      bitcoindRPCGetPeerInfo.restore();
-      bitcoindRPCGetNetworkInfo.restore();
+      monerodRPCGetPeerInfo.restore();
+      monerodRPCGetNetworkInfo.restore();
     });
 
     it('should respond for an IPv4 address', done => {
-      bitcoindRPCGetPeerInfo = sinon.stub(require('bitcoind-rpc').prototype, 'getPeerInfo').callsFake(callback => callback(undefined, {
+      monerodRPCGetPeerInfo = sinon.stub(require('monero-javascript').prototype, 'getPeerInfo').callsFake(callback => callback(undefined, {
         result:
           [
             {
@@ -30,10 +30,10 @@ describe('v1/bitcoind/info endpoint', () => {
             }
           ]
       }));
-      bitcoindRPCGetNetworkInfo = sinon.stub(require('bitcoind-rpc').prototype, 'getNetworkInfo')
-        .callsFake(callback => callback(undefined, bitcoindMocks.getNetworkInfoWithoutTor()));
+      monerodRPCGetNetworkInfo = sinon.stub(require('monero-javascript').prototype, 'getNetworkInfo')
+        .callsFake(callback => callback(undefined, monerodMocks.getNetworkInfoWithoutTor()));
       requester
-        .get('/v1/bitcoind/info/addresses')
+        .get('/v1/monerod/info/addresses')
         .set('authorization', `JWT ${token}`)
         .end((err, res) => {
           if (err) {
@@ -48,7 +48,7 @@ describe('v1/bitcoind/info endpoint', () => {
     });
 
     it('should respond for an IPv6 address', done => {
-      bitcoindRPCGetPeerInfo = sinon.stub(require('bitcoind-rpc').prototype, 'getPeerInfo').callsFake(callback => callback(undefined, {
+      monerodRPCGetPeerInfo = sinon.stub(require('monero-javascript').prototype, 'getPeerInfo').callsFake(callback => callback(undefined, {
         result:
           [
             {
@@ -56,10 +56,10 @@ describe('v1/bitcoind/info endpoint', () => {
             }
           ]
       }));
-      bitcoindRPCGetNetworkInfo = sinon.stub(require('bitcoind-rpc').prototype, 'getNetworkInfo')
-        .callsFake(callback => callback(undefined, bitcoindMocks.getNetworkInfoWithoutTor()));
+      monerodRPCGetNetworkInfo = sinon.stub(require('monero-javascript').prototype, 'getNetworkInfo')
+        .callsFake(callback => callback(undefined, monerodMocks.getNetworkInfoWithoutTor()));
       requester
-        .get('/v1/bitcoind/info/addresses')
+        .get('/v1/monerod/info/addresses')
         .set('authorization', `JWT ${token}`)
         .end((err, res) => {
           if (err) {
@@ -75,7 +75,7 @@ describe('v1/bitcoind/info endpoint', () => {
 
     it('should 401 without a valid token', done => {
       requester
-        .get('/v1/bitcoind/info/addresses')
+        .get('/v1/monerod/info/addresses')
         .set('authorization', 'JWT invalid')
         .end((err, res) => {
           if (err) {
@@ -87,9 +87,9 @@ describe('v1/bitcoind/info endpoint', () => {
     });
 
     it('should 500 on error', done => {
-      bitcoindRPCGetPeerInfo = sinon.stub(require('bitcoind-rpc').prototype, 'getPeerInfo').callsFake(callback => callback('error', {}));
+      monerodRPCGetPeerInfo = sinon.stub(require('monero-javascript').prototype, 'getPeerInfo').callsFake(callback => callback('error', {}));
       requester
-        .get('/v1/bitcoind/info/addresses')
+        .get('/v1/monerod/info/addresses')
         .set('authorization', `JWT ${token}`)
         .end((err, res) => {
           if (err) {
@@ -104,16 +104,16 @@ describe('v1/bitcoind/info endpoint', () => {
   });
 
   describe('/blockCount GET', function() {
-    let bitcoindRPCGetBlockCount;
+    let monerodRPCGetBlockCount;
 
     afterEach(() => {
-      bitcoindRPCGetBlockCount.restore();
+      monerodRPCGetBlockCount.restore();
     });
 
     it('should respond with blockCount', done => {
-      bitcoindRPCGetBlockCount = sinon.stub(require('bitcoind-rpc').prototype, 'getBlockCount').callsFake(callback => callback(undefined, {result: 515055}));
+      monerodRPCGetBlockCount = sinon.stub(require('monero-javascript').prototype, 'getBlockCount').callsFake(callback => callback(undefined, {result: 515055}));
       requester
-        .get('/v1/bitcoind/info/blockcount')
+        .get('/v1/monerod/info/blockcount')
         .set('authorization', `JWT ${token}`)
         .end((err, res) => {
           if (err) {
@@ -129,7 +129,7 @@ describe('v1/bitcoind/info endpoint', () => {
 
     it('should 401 without a valid token', done => {
       requester
-        .get('/v1/bitcoind/info/blockcount')
+        .get('/v1/monerod/info/blockcount')
         .set('authorization', 'JWT invalid')
         .end((err, res) => {
           if (err) {
@@ -141,9 +141,9 @@ describe('v1/bitcoind/info endpoint', () => {
     });
 
     it('should 500 on error', done => {
-      bitcoindRPCGetBlockCount = sinon.stub(require('bitcoind-rpc').prototype, 'getBlockCount').callsFake(callback => callback('error', {}));
+      monerodRPCGetBlockCount = sinon.stub(require('monero-javascript').prototype, 'getBlockCount').callsFake(callback => callback('error', {}));
       requester
-        .get('/v1/bitcoind/info/blockcount')
+        .get('/v1/monerod/info/blockcount')
         .set('authorization', `JWT ${token}`)
         .end((err, res) => {
           if (err) {
@@ -158,14 +158,14 @@ describe('v1/bitcoind/info endpoint', () => {
   });
 
   describe('/connections GET', function() {
-    let bitcoindRPCGetPeerInfo;
+    let monerodRPCGetPeerInfo;
 
     afterEach(() => {
-      bitcoindRPCGetPeerInfo.restore();
+      monerodRPCGetPeerInfo.restore();
     });
 
     it('should respond with connections', done => {
-      bitcoindRPCGetPeerInfo = sinon.stub(require('bitcoind-rpc').prototype, 'getPeerInfo')
+      monerodRPCGetPeerInfo = sinon.stub(require('monero-javascript').prototype, 'getPeerInfo')
         .callsFake(callback => callback(undefined, {
           result: [
             {
@@ -180,7 +180,7 @@ describe('v1/bitcoind/info endpoint', () => {
           ]
         }));
       requester
-        .get('/v1/bitcoind/info/connections')
+        .get('/v1/monerod/info/connections')
         .set('authorization', `JWT ${token}`)
         .end((err, res) => {
           if (err) {
@@ -196,12 +196,12 @@ describe('v1/bitcoind/info endpoint', () => {
     });
 
     it('should respond with zero connections', done => {
-      bitcoindRPCGetPeerInfo = sinon.stub(require('bitcoind-rpc').prototype, 'getPeerInfo')
+      monerodRPCGetPeerInfo = sinon.stub(require('monero-javascript').prototype, 'getPeerInfo')
         .callsFake(callback => callback(undefined, {
           result: []
         }));
       requester
-        .get('/v1/bitcoind/info/connections')
+        .get('/v1/monerod/info/connections')
         .set('authorization', `JWT ${token}`)
         .end((err, res) => {
           if (err) {
@@ -218,7 +218,7 @@ describe('v1/bitcoind/info endpoint', () => {
 
     it('should 401 without a valid token', done => {
       requester
-        .get('/v1/bitcoind/info/connections')
+        .get('/v1/monerod/info/connections')
         .set('authorization', 'JWT invalid')
         .end((err, res) => {
           if (err) {
@@ -230,9 +230,9 @@ describe('v1/bitcoind/info endpoint', () => {
     });
 
     it('should 500 on error', done => {
-      bitcoindRPCGetPeerInfo = sinon.stub(require('bitcoind-rpc').prototype, 'getPeerInfo').callsFake(callback => callback('error', {}));
+      monerodRPCGetPeerInfo = sinon.stub(require('monero-javascript').prototype, 'getPeerInfo').callsFake(callback => callback('error', {}));
       requester
-        .get('/v1/bitcoind/info/connections')
+        .get('/v1/monerod/info/connections')
         .set('authorization', `JWT ${token}`)
         .end((err, res) => {
           if (err) {
@@ -247,16 +247,16 @@ describe('v1/bitcoind/info endpoint', () => {
   });
 
   describe('/status GET', function() {
-    let bitcoindRPCGetHelp;
+    let monerodRPCGetHelp;
 
     afterEach(() => {
-      bitcoindRPCGetHelp.restore();
+      monerodRPCGetHelp.restore();
     });
 
     it('should respond operational true', done => {
-      bitcoindRPCGetHelp = sinon.stub(require('bitcoind-rpc').prototype, 'help').callsFake(callback => callback(undefined, {}));
+      monerodRPCGetHelp = sinon.stub(require('monero-javascript').prototype, 'help').callsFake(callback => callback(undefined, {}));
       requester
-        .get('/v1/bitcoind/info/status')
+        .get('/v1/monerod/info/status')
         .set('authorization', `JWT ${token}`)
         .end((err, res) => {
           if (err) {
@@ -272,7 +272,7 @@ describe('v1/bitcoind/info endpoint', () => {
 
     it('should 401 without a valid token', done => {
       requester
-        .get('/v1/bitcoind/info/status')
+        .get('/v1/monerod/info/status')
         .set('authorization', 'JWT invalid')
         .end((err, res) => {
           if (err) {
@@ -284,9 +284,9 @@ describe('v1/bitcoind/info endpoint', () => {
     });
 
     it('should respond operational false on error', done => {
-      bitcoindRPCGetHelp = sinon.stub(require('bitcoind-rpc').prototype, 'help').callsFake(callback => callback('error', {}));
+      monerodRPCGetHelp = sinon.stub(require('monero-javascript').prototype, 'help').callsFake(callback => callback('error', {}));
       requester
-        .get('/v1/bitcoind/info/status')
+        .get('/v1/monerod/info/status')
         .set('authorization', `JWT ${token}`)
         .end((err, res) => {
           if (err) {
@@ -302,23 +302,23 @@ describe('v1/bitcoind/info endpoint', () => {
   });
 
   describe('/sync GET', function() {
-    let bitcoindRPCGetPeerInfo;
-    let bitcoindRPCGetBlockChainInfo;
+    let monerodRPCGetPeerInfo;
+    let monerodRPCGetBlockChainInfo;
 
     afterEach(() => {
-      bitcoindRPCGetPeerInfo.restore();
+      monerodRPCGetPeerInfo.restore();
 
-      if (bitcoindRPCGetBlockChainInfo) {
-        bitcoindRPCGetBlockChainInfo.restore();
+      if (monerodRPCGetBlockChainInfo) {
+        monerodRPCGetBlockChainInfo.restore();
       }
     });
 
     it('should respond with local info if no peers', done => {
-      bitcoindRPCGetPeerInfo = sinon.stub(require('bitcoind-rpc').prototype, 'getPeerInfo')
+      monerodRPCGetPeerInfo = sinon.stub(require('monero-javascript').prototype, 'getPeerInfo')
         .callsFake(callback => callback(undefined, {
           result: []
         }));
-      bitcoindRPCGetBlockChainInfo = sinon.stub(require('bitcoind-rpc').prototype, 'getBlockchainInfo')
+      monerodRPCGetBlockChainInfo = sinon.stub(require('monero-javascript').prototype, 'getBlockchainInfo')
         .callsFake(callback => callback(undefined, {
           result: {
             blocks: 515055,
@@ -326,7 +326,7 @@ describe('v1/bitcoind/info endpoint', () => {
           }
         }));
       requester
-        .get('/v1/bitcoind/info/sync')
+        .get('/v1/monerod/info/sync')
         .set('authorization', `JWT ${token}`)
         .end((err, res) => {
           if (err) {
@@ -344,7 +344,7 @@ describe('v1/bitcoind/info endpoint', () => {
     });
 
     it('should respond with local info if one peer without headers', done => {
-      bitcoindRPCGetPeerInfo = sinon.stub(require('bitcoind-rpc').prototype, 'getPeerInfo')
+      monerodRPCGetPeerInfo = sinon.stub(require('monero-javascript').prototype, 'getPeerInfo')
         .callsFake(callback => callback(undefined, {
           result: [
             {
@@ -352,7 +352,7 @@ describe('v1/bitcoind/info endpoint', () => {
             },
           ]
         }));
-      bitcoindRPCGetBlockChainInfo = sinon.stub(require('bitcoind-rpc').prototype, 'getBlockchainInfo')
+      monerodRPCGetBlockChainInfo = sinon.stub(require('monero-javascript').prototype, 'getBlockchainInfo')
         .callsFake(callback => callback(undefined, {
           result: {
             blocks: 515055,
@@ -360,7 +360,7 @@ describe('v1/bitcoind/info endpoint', () => {
           }
         }));
       requester
-        .get('/v1/bitcoind/info/sync')
+        .get('/v1/monerod/info/sync')
         .set('authorization', `JWT ${token}`)
         .end((err, res) => {
           if (err) {
@@ -378,7 +378,7 @@ describe('v1/bitcoind/info endpoint', () => {
     });
 
     it('should respond with peer data if active peers ahead of local', done => {
-      bitcoindRPCGetPeerInfo = sinon.stub(require('bitcoind-rpc').prototype, 'getPeerInfo')
+      monerodRPCGetPeerInfo = sinon.stub(require('monero-javascript').prototype, 'getPeerInfo')
         .callsFake(callback => callback(undefined, {
           result: [
             {
@@ -389,7 +389,7 @@ describe('v1/bitcoind/info endpoint', () => {
             }
           ]
         }));
-      bitcoindRPCGetBlockChainInfo = sinon.stub(require('bitcoind-rpc').prototype, 'getBlockchainInfo')
+      monerodRPCGetBlockChainInfo = sinon.stub(require('monero-javascript').prototype, 'getBlockchainInfo')
         .callsFake(callback => callback(undefined, {
           result: {
             blocks: 515035,
@@ -397,7 +397,7 @@ describe('v1/bitcoind/info endpoint', () => {
           }
         }));
       requester
-        .get('/v1/bitcoind/info/sync')
+        .get('/v1/monerod/info/sync')
         .set('authorization', `JWT ${token}`)
         .end((err, res) => {
           if (err) {
@@ -415,7 +415,7 @@ describe('v1/bitcoind/info endpoint', () => {
     });
 
     it('should respond with local data if active peers behind local', done => {
-      bitcoindRPCGetPeerInfo = sinon.stub(require('bitcoind-rpc').prototype, 'getPeerInfo')
+      monerodRPCGetPeerInfo = sinon.stub(require('monero-javascript').prototype, 'getPeerInfo')
         .callsFake(callback => callback(undefined, {
           result: [
             {
@@ -426,7 +426,7 @@ describe('v1/bitcoind/info endpoint', () => {
             }
           ]
         }));
-      bitcoindRPCGetBlockChainInfo = sinon.stub(require('bitcoind-rpc').prototype, 'getBlockchainInfo')
+      monerodRPCGetBlockChainInfo = sinon.stub(require('monero-javascript').prototype, 'getBlockchainInfo')
         .callsFake(callback => callback(undefined, {
           result: {
             blocks: 515035,
@@ -434,7 +434,7 @@ describe('v1/bitcoind/info endpoint', () => {
           }
         }));
       requester
-        .get('/v1/bitcoind/info/sync')
+        .get('/v1/monerod/info/sync')
         .set('authorization', `JWT ${token}`)
         .end((err, res) => {
           if (err) {
@@ -453,7 +453,7 @@ describe('v1/bitcoind/info endpoint', () => {
 
     it('should 401 without a valid token', done => {
       requester
-        .get('/v1/bitcoind/info/sync')
+        .get('/v1/monerod/info/sync')
         .set('authorization', 'JWT invalid')
         .end((err, res) => {
           if (err) {
@@ -465,9 +465,9 @@ describe('v1/bitcoind/info endpoint', () => {
     });
 
     it('should 500 on getPeerInfo error', done => {
-      bitcoindRPCGetPeerInfo = sinon.stub(require('bitcoind-rpc').prototype, 'getPeerInfo').callsFake(callback => callback('error', {}));
+      monerodRPCGetPeerInfo = sinon.stub(require('monero-javascript').prototype, 'getPeerInfo').callsFake(callback => callback('error', {}));
       requester
-        .get('/v1/bitcoind/info/sync')
+        .get('/v1/monerod/info/sync')
         .set('authorization', `JWT ${token}`)
         .end((err, res) => {
           if (err) {
@@ -481,7 +481,7 @@ describe('v1/bitcoind/info endpoint', () => {
     });
 
     it('should 500 on getBlockchainInfo error', done => {
-      bitcoindRPCGetPeerInfo = sinon.stub(require('bitcoind-rpc').prototype, 'getPeerInfo')
+      monerodRPCGetPeerInfo = sinon.stub(require('monero-javascript').prototype, 'getPeerInfo')
         .callsFake(callback => callback(undefined, {
           result: [
             {
@@ -489,10 +489,10 @@ describe('v1/bitcoind/info endpoint', () => {
             }
           ]
         }));
-      bitcoindRPCGetBlockChainInfo = sinon.stub(require('bitcoind-rpc').prototype, 'getBlockchainInfo')
+      monerodRPCGetBlockChainInfo = sinon.stub(require('monero-javascript').prototype, 'getBlockchainInfo')
         .callsFake(callback => callback('error', {}));
       requester
-        .get('/v1/bitcoind/info/sync')
+        .get('/v1/monerod/info/sync')
         .set('authorization', `JWT ${token}`)
         .end((err, res) => {
           if (err) {
@@ -507,21 +507,21 @@ describe('v1/bitcoind/info endpoint', () => {
   });
 
   describe('/version GET', function() {
-    let bitcoindRPCGetNetworkInfo;
+    let monerodRPCGetNetworkInfo;
 
     afterEach(() => {
-      bitcoindRPCGetNetworkInfo.restore();
+      monerodRPCGetNetworkInfo.restore();
     });
 
     it('should respond with a valid version', done => {
-      bitcoindRPCGetNetworkInfo = sinon.stub(require('bitcoind-rpc').prototype, 'getNetworkInfo').callsFake(callback => callback(undefined, {
+      monerodRPCGetNetworkInfo = sinon.stub(require('monero-javascript').prototype, 'getNetworkInfo').callsFake(callback => callback(undefined, {
         result:
           {
             subversion: '/Satoshi:0.17.0/'
           }
       }));
       requester
-        .get('/v1/bitcoind/info/version')
+        .get('/v1/monerod/info/version')
         .set('authorization', `JWT ${token}`)
         .end((err, res) => {
           if (err) {
@@ -537,7 +537,7 @@ describe('v1/bitcoind/info endpoint', () => {
 
     it('should 401 without a valid token', done => {
       requester
-        .get('/v1/bitcoind/info/version')
+        .get('/v1/monerod/info/version')
         .set('authorization', 'JWT invalid')
         .end((err, res) => {
           if (err) {
@@ -549,9 +549,9 @@ describe('v1/bitcoind/info endpoint', () => {
     });
 
     it('should 500 on error', done => {
-      bitcoindRPCGetNetworkInfo = sinon.stub(require('bitcoind-rpc').prototype, 'getNetworkInfo').callsFake(callback => callback('error', {}));
+      monerodRPCGetNetworkInfo = sinon.stub(require('monero-javascript').prototype, 'getNetworkInfo').callsFake(callback => callback('error', {}));
       requester
-        .get('/v1/bitcoind/info/version')
+        .get('/v1/monerod/info/version')
         .set('authorization', `JWT ${token}`)
         .end((err, res) => {
           if (err) {
