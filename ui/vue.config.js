@@ -12,5 +12,11 @@ module.exports = {
         return args;
       });
     }
+  },
+  devServer: {
+    port: 8889
+  },
+  configureWebpack: {
+    devtool: 'source-map'
   }
 };
