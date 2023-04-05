@@ -26,7 +26,7 @@
 
 ### Development
 
-- MONERO_HOST=192.168.1.13 MONEROD_RPC_PORT=18081 yarn start:all:dev
+- MONERO_HOST=your-monerod-ip MONEROD_RPC_PORT=18081 npm run start:all:dev
   
 ### Production
 - npm run start
