@@ -4,18 +4,18 @@ FROM node:19-alpine AS monero-middleware-builder
 # Create app directory
 WORKDIR /app
 
-# Copy 'yarn.lock' and 'package.json'
-COPY yarn.lock package.json ./
+# Copy 'package-lock.json' and 'package.json'
+COPY package-lock.json package.json ./
 
 # Install dependencies
-RUN yarn install --production --network-timeout 300000
+RUN npm install --production --fetch-timeout 300000
 
 # Copy project files and folders to the current working directory (i.e. '/app')
 COPY . .
 
 # Install UI dependencies and build UI 
-RUN yarn install:ui
-RUN yarn build:ui
+RUN npm run install:ui
+RUN npm run build:ui
 
 # Final Stage (Production) 
 FROM node:19-alpine AS monero-middleware
@@ -27,4 +27,4 @@ COPY --from=monero-middleware-builder /app /app
 WORKDIR /app
 
 EXPOSE 3006
-CMD [ "yarn", "start" ]
+CMD [ "npm", "start" ]
