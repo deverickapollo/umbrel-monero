@@ -4,11 +4,11 @@ FROM node:19-alpine AS monero-middleware-builder
 # Create app directory
 WORKDIR /app
 
-# Copy 'yarn.lock' and 'package.json'
-COPY yarn.lock package.json ./
+# Copy 'package.json'
+COPY package.json ./
 
 # Install dependencies
-RUN yarn install --production --network-timeout 300000
+RUN npm install --only=production --verbose --unsafe-perm=true 
 
 # Copy project files and folders to the current working directory (i.e. '/app')
 COPY . .
