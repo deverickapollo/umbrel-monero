@@ -37,7 +37,7 @@ const state = () => ({
     mempool: -1,
     mempoolTransactions: -1,
     hashrate: -1,
-    blockchainSize: -1
+    blockchainSize: -1,
   },
   peers: {
     total: 0,
@@ -45,9 +45,9 @@ const state = () => ({
     outbound: 0,
     clearnet: 0,
     tor: 0,
-    i2p: 0
+    i2p: 0,
   },
-  chartData: []
+  chartData: [],
 });
 
 // Functions to update the state directly
@@ -76,7 +76,7 @@ const mutations = {
     const mergedBlocks = [...blocks, ...state.blocks];
     // remove duplicate blocks
     const uniqueBlocks = mergedBlocks.filter(
-      (v, i, a) => a.findIndex(t => t.height === v.height) === i
+      (v, i, a) => a.findIndex((t) => t.height === v.height) === i
     );
     // limit to latest 6 blocks
     state.blocks = [...uniqueBlocks.slice(0, 6)];
@@ -123,14 +123,14 @@ const mutations = {
 
   setChartData(state, chartData) {
     state.chartData = chartData;
-  }
+  },
 };
 
 // Functions to get data from the API
 const actions = {
   async getStatus({ commit, dispatch }) {
     const status = await API.get(
-      `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/info/status`
+      `${import.meta.env.VITE_APP_API_BASE_URL}/v1/monerod/info/status`
     );
 
     if (status) {
@@ -144,7 +144,9 @@ const actions = {
 
   async getP2PInfo({ commit }) {
     const p2pInfo = await API.get(
-      `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/system/monero-p2p-connection-details`
+      `${
+        import.meta.env.VITE_APP_API_BASE_URL
+      }/v1/monerod/system/monero-p2p-connection-details`
     );
 
     if (p2pInfo) {
@@ -154,7 +156,9 @@ const actions = {
 
   async getRpcInfo({ commit }) {
     const rpcInfo = await API.get(
-      `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/system/monero-rpc-connection-details`
+      `${
+        import.meta.env.VITE_APP_API_BASE_URL
+      }/v1/monerod/system/monero-rpc-connection-details`
     );
 
     if (rpcInfo) {
@@ -164,7 +168,7 @@ const actions = {
 
   async getSync({ commit }) {
     const sync = await API.get(
-      `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/info/sync`
+      `${import.meta.env.VITE_APP_API_BASE_URL}/v1/monerod/info/sync`
     );
 
     if (sync) {
@@ -191,7 +195,9 @@ const actions = {
 
     //TODO: Fetch only new blocks
     const latestFiveBlocks = await API.get(
-      `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/info/blocks?from=${currentBlock - 3}&to=${currentBlock}`
+      `${
+        import.meta.env.VITE_APP_API_BASE_URL
+      }/v1/monerod/info/blocks?from=${currentBlock - 3}&to=${currentBlock}`
     );
 
     if (!latestFiveBlocks.blocks) {
@@ -202,8 +208,7 @@ const actions = {
     commit("setBlocks", latestFiveBlocks.blocks);
   },
 
-  async getChartData({dispatch, state, commit}) {
-
+  async getChartData({ dispatch, state, commit }) {
     // get the latest block height
     await dispatch("getSync");
 
@@ -216,11 +221,17 @@ const actions = {
 
     // get last 144 blocks (~24 hours)
     const lastDaysBlocks = await API.get(
-      `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/info/blocks?from=${currentBlock - 143}&to=${currentBlock}`
+      `${
+        import.meta.env.VITE_APP_API_BASE_URL
+      }/v1/monerod/info/blocks?from=${currentBlock - 143}&to=${currentBlock}`
     );
 
     // exit if we don't get the blocks for some reason
-    if (!lastDaysBlocks || !lastDaysBlocks.blocks || !lastDaysBlocks.blocks.length) {
+    if (
+      !lastDaysBlocks ||
+      !lastDaysBlocks.blocks ||
+      !lastDaysBlocks.blocks.length
+    ) {
       return;
     }
 
@@ -252,7 +263,7 @@ const actions = {
 
   async getVersion({ commit }) {
     const version = await API.get(
-      `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/info/version`
+      `${import.meta.env.VITE_APP_API_BASE_URL}/v1/monerod/info/version`
     );
 
     if (version) {
@@ -262,7 +273,7 @@ const actions = {
 
   async getPeers({ commit }) {
     const peers = await API.get(
-      `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/info/connections`
+      `${import.meta.env.VITE_APP_API_BASE_URL}/v1/monerod/info/connections`
     );
 
     if (peers) {
@@ -272,7 +283,7 @@ const actions = {
 
   async getStats({ commit }) {
     const stats = await API.get(
-      `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/info/stats`
+      `${import.meta.env.VITE_APP_API_BASE_URL}/v1/monerod/info/stats`
     );
 
     if (stats) {
@@ -287,17 +298,17 @@ const actions = {
         mempool,
         mempoolTransactions,
         hashrate,
-        blockchainSize
+        blockchainSize,
       });
     }
-  }
+  },
 };
 
 const getters = {
   status(state) {
     const data = {
       class: "loading",
-      text: "Loading..."
+      text: "Loading...",
     };
 
     if (state.operational) {
@@ -306,7 +317,7 @@ const getters = {
     }
 
     return data;
-  }
+  },
 };
 
 export default {
@@ -314,5 +325,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

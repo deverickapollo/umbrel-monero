@@ -7,11 +7,11 @@
     "lint": "eslint",
     "start": "node ./bin/www",
     "start:server:dev": "NODE_ENV=development node --watch ./bin/www",
-    "start:ui:dev": "cd ui && npm run serve:dev",
+    "start:ui:dev": "cd ui && npm run dev",
     "start:all:dev": "npm-run-all --parallel start:server:dev start:ui:dev",
     "install:ui": "cd ui && npm install --fetch-timeout 1000000",
     "build:ui": "cd ui && npm run build",
-    "serve:ui": "cd ui && npm run serve",
+    "serve:ui": "cd ui && npm run dev",
     "test": "mocha --file test.setup 'test/**/*.js'",
     "coverage": "nyc --all mocha --file test.setup 'test/**/*.js'",
     "postcoverage": "codecov"

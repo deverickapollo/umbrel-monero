@@ -5,8 +5,8 @@ const state = () => ({
   version: "",
   api: {
     operational: false,
-    version: ""
-  }
+    version: "",
+  },
 });
 
 // Functions to update the state directly
@@ -16,18 +16,18 @@ const mutations = {
   },
   setApi(state, api) {
     state.api = api;
-  }
+  },
 };
 
 // Functions to get data from the API
 const actions = {
   async getApi({ commit }) {
-    const api = await API.get(`${process.env.VUE_APP_API_BASE_URL}/ping`);
+    const api = await API.get(`${import.meta.env.VITE_APP_API_BASE_URL}/ping`);
     commit("setApi", {
       operational: !!(api && api.version),
-      version: api && api.version ? api.version : ""
+      version: api && api.version ? api.version : "",
     });
-  }
+  },
 };
 
 const getters = {};
@@ -37,5 +37,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

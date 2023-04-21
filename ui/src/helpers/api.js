@@ -26,7 +26,7 @@ axios.interceptors.response.use(
     // Return the same 401 back if user is trying to login with incorrect password
     if (
       error.config.url ===
-      `${process.env.VUE_APP_MANAGER_API_URL}/v1/account/login`
+      `${import.meta.env.VUE_APP_MANAGER_API_URL}/v1/account/login`
     ) {
       return Promise.reject(error);
     }
@@ -34,7 +34,7 @@ axios.interceptors.response.use(
     // Logout user if token refresh didn't work
     if (
       error.config.url ===
-      `${process.env.VUE_APP_MANAGER_API_URL}/v1/account/refresh`
+      `${import.meta.env.VUE_APP_MANAGER_API_URL}/v1/account/refresh`
     ) {
       store.dispatch("user/logout");
       return Promise.reject(error);
@@ -56,10 +56,10 @@ axios.interceptors.response.use(
       return new Promise((resolve, reject) => {
         axios
           .request(config)
-          .then(response => {
+          .then((response) => {
             resolve(response);
           })
-          .catch(error => {
+          .catch((error) => {
             reject(error);
           });
       });
@@ -81,7 +81,7 @@ const API = {
 
         const requestOptions = {
           method: "get",
-          url
+          url,
         };
 
         response = (await axios(requestOptions, data)).data;
@@ -90,7 +90,7 @@ const API = {
         responseTime[url] = (endTime.getTime() - startTime.getTime()) / 1000;
       } catch (error) {
         // Only display error messages in the browser console
-        if (process.browser) {
+        if (window) {
           console.error(error);
         }
 
@@ -108,7 +108,7 @@ const API = {
     const requestOptions = {
       method: "post",
       url,
-      data
+      data,
     };
 
     return axios(requestOptions);
@@ -119,7 +119,7 @@ const API = {
     const requestOptions = {
       method: "delete",
       url,
-      data
+      data,
     };
 
     return axios(requestOptions);
@@ -139,7 +139,7 @@ const API = {
         const requestOptions = {
           method: "get",
           url,
-          responseType: "blob"
+          responseType: "blob",
         };
 
         response = (await axios(requestOptions, data)).data;
@@ -198,7 +198,7 @@ const API = {
     }
 
     return duration;
-  }
+  },
 };
 
 export default API;

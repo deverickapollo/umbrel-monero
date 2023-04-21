@@ -2,20 +2,20 @@ import API from "@/helpers/api";
 
 // Initial state
 const state = () => ({
-  moneroConfig: {}
+  moneroConfig: {},
 });
 
 // Functions to update the state directly
 const mutations = {
   setMoneroConfig(state, moneroConfig) {
     state.moneroConfig = moneroConfig;
-  }
+  },
 };
 
 const actions = {
   async getMoneroConfig({ commit }) {
     const existingConfig = await API.get(
-      `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/system/monero-config`
+      `${import.meta.env.VITE_APP_API_BASE_URL}/v1/monerod/system/monero-config`
     );
 
     if (existingConfig) {
@@ -24,7 +24,7 @@ const actions = {
   },
   updateMoneroConfig({ commit }, moneroConfig) {
     commit("setMoneroConfig", moneroConfig);
-  }
+  },
 };
 
 const getters = {};
@@ -34,5 +34,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

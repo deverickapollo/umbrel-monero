@@ -21,11 +21,8 @@
               countOnLoad
             />
           </h3>
-          <span class="text-muted" style="margin-left: 0.5rem;">{{
-            suffix
-          }}</span>
-
-        <div class="ml-1">
+          <span class="text-muted" style="margin-left: 0.5rem">{{ suffix }}</span>
+          <div class="ml-1">
             <b-popover
               v-if="showPopover"
               :target="popoverId"
@@ -35,21 +32,17 @@
               <p v-for="content in popoverContent" :key="content" class="m-0">{{ content }}</p>
             </b-popover>
 
-            <b-icon
-              v-if="showPopover"
+            <i
               :id="popoverId"
-              icon="info-circle"
-              size="lg"
+              v-if="showPopover"
+              class="bi bi-info-circle text-muted"
               style="cursor: pointer"
-              class="text-muted"
-            ></b-icon>
-          </div>
+            ></i>
 
+          </div>
         </div>
       </div>
-      <div
-        v-if="(showNumericChange || showPercentChange) && change.value !== 0"
-      >
+      <div v-if="(showNumericChange || showPercentChange) && change.value !== 0">
         <svg
           width="12"
           height="13"
@@ -78,28 +71,27 @@
             'text-muted': change.value === 0
           }"
         >
-          {{ change.value >= 0 ? "+" : "" }}{{ change.value
-          }}{{ change.suffix }}
+          {{ change.value >= 0 ? '+' : '' }}{{ change.value }}{{ change.suffix }}
         </span>
       </div>
       <div class="d-block" v-else>
-        <span style="opacity: 0;">.</span>
+        <span style="opacity: 0">.</span>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import CountUp from "@/components/Utility/CountUp";
+import CountUp from '@/components/Utility/CountUp.vue'
 
-const abbreviate = n => {
-  if (n < 1e2) return [Number(n), ""];
-  if (n >= 1e2 && n < 1e3) return [Number(n.toFixed(1)), ""];
-  if (n >= 1e3 && n < 1e6) return [Number((n / 1e3).toFixed(1)), "K"];
-  if (n >= 1e6 && n < 1e9) return [Number((n / 1e6).toFixed(1)), "M"];
-  if (n >= 1e9 && n < 1e12) return [Number((n / 1e9).toFixed(1)), "B"];
-  if (n >= 1e12) return [Number(+(n / 1e12).toFixed(1)), "T"];
-};
+const abbreviate = (n) => {
+  if (n < 1e2) return [Number(n), '']
+  if (n >= 1e2 && n < 1e3) return [Number(n.toFixed(1)), '']
+  if (n >= 1e3 && n < 1e6) return [Number((n / 1e3).toFixed(1)), 'K']
+  if (n >= 1e6 && n < 1e9) return [Number((n / 1e6).toFixed(1)), 'M']
+  if (n >= 1e9 && n < 1e12) return [Number((n / 1e9).toFixed(1)), 'B']
+  if (n >= 1e12) return [Number(+(n / 1e12).toFixed(1)), 'T']
+}
 
 export default {
   props: {
@@ -128,7 +120,7 @@ export default {
     },
     popoverId: {
       type: String,
-      default: ""
+      default: ''
     },
     popoverContent: {
       type: Array,
@@ -138,16 +130,16 @@ export default {
   computed: {
     numberValue() {
       if (!this.abbreviateValue) {
-        return this.value;
+        return this.value
       } else {
-        return abbreviate(this.value)[0];
+        return abbreviate(this.value)[0]
       }
     },
     numberSuffix() {
       if (!this.abbreviateValue) {
-        return "";
+        return ''
       } else {
-        return abbreviate(this.value)[1];
+        return abbreviate(this.value)[1]
       }
     }
   },
@@ -155,9 +147,9 @@ export default {
     return {
       change: {
         value: 0,
-        suffix: ""
+        suffix: ''
       }
-    };
+    }
   },
   methods: {},
   watch: {
@@ -166,26 +158,26 @@ export default {
         if (oldValue <= 0) {
           this.change = {
             value: 0,
-            suffix: ""
-          };
+            suffix: ''
+          }
         } else {
           if (!this.abbreviateValue) {
             this.change = {
               value: newValue - oldValue,
-              suffix: ""
-            };
+              suffix: ''
+            }
           } else {
             //because fn abbreviate doesn't work with negative numbers
             if (newValue - oldValue < 0) {
               this.change = {
                 value: abbreviate(oldValue - newValue)[0] * -1,
                 suffix: abbreviate(oldValue - newValue)[1]
-              };
+              }
             } else {
               this.change = {
                 value: abbreviate(newValue - oldValue)[0],
                 suffix: abbreviate(newValue - oldValue)[1]
-              };
+              }
             }
           }
         }
@@ -193,13 +185,13 @@ export default {
         if (oldValue <= 0) {
           this.change = {
             value: 0,
-            suffix: "%"
-          };
+            suffix: '%'
+          }
         } else {
           this.change = {
             value: Math.round(((newValue - oldValue) * 100) / oldValue),
-            suffix: "%"
-          };
+            suffix: '%'
+          }
         }
       }
     }
@@ -207,7 +199,7 @@ export default {
   components: {
     CountUp
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

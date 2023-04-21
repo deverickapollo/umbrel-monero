@@ -138,10 +138,10 @@ export default {
   },
   computed: {
     ...mapState({
-      isMoneroCoreOperational: state => state.monero.operational,
-      syncPercent: state => state.monero.percent,
-      blocks: state => state.monero.blocks
-    })
+      isMoneroCoreOperational: (state) => state.monero.operational,
+      syncPercent: (state) => state.monero.percent,
+      blocks: (state) => state.monero.blocks,
+    }),
   },
   methods: {
     async fetchBlocks() {
@@ -178,7 +178,7 @@ export default {
     },
     blockReadableTime(timestamp) {
       return moment(timestamp * 1000).format("MMMM D, h:mm:ss a");
-    }
+    },
   },
   created() {
     //immediately fetch blocks on first load - timeout to fix race condition on initial load
@@ -193,19 +193,19 @@ export default {
     syncPercent(newPercent) {
       // reset polling time depending upon sync %
       this.poller(newPercent);
-    }
+    },
   },
-  beforeDestroy() {
+  beforeUnmount() {
     window.clearInterval(this.polling);
   },
   props: {
     numBlocks: {
       type: Number,
-      default: 5
-    }
+      default: 5,
+    },
   },
 
-  components: {}
+  components: {},
 };
 </script>
 
@@ -395,7 +395,7 @@ export default {
 
 //animations
 
-.blockchain-enter {
+.blockchain-enter-from {
   opacity: 0;
   transform: translateY(2rem);
   .blockchain-block-icon {
@@ -433,7 +433,7 @@ export default {
     }
   }
 }
-.blockchain-leave {
+.blockchain-leave-to {
   opacity: 1;
 }
 .blockchain-leave-to {

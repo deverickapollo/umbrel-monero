@@ -31,17 +31,17 @@ export default {
   props: {
     size: {
       type: Number,
-      default: 200
+      default: 200,
     },
     level: {
       type: String,
-      default: "H"
+      default: "H",
     },
     value: String,
     showLogo: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   data() {
     return {};
@@ -49,8 +49,8 @@ export default {
   computed: {},
   methods: {},
   components: {
-    QrcodeVue
-  }
+    QrcodeVue,
+  },
 };
 </script>
 
@@ -63,7 +63,7 @@ export default {
   }
 }
 
-.qr-logo-popup-enter {
+.qr-logo-popup-enter-from {
   &.qr-logo {
     transform: translate3d(-50%, -50%, 0) scale(0);
     opacity: 0;

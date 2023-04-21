@@ -15,7 +15,6 @@
         </div>
       </div>
       <loading v-else-if="loading" :progress="loadingProgress"> </loading>
-      <!-- component matched by the route will render here -->
       <router-view v-else></router-view>
     </transition>
   </div>
@@ -27,7 +26,7 @@
 
 <script>
 import { mapState } from "vuex";
-import Loading from "@/components/Loading";
+import Loading from "@/components/Loading.vue";
 
 export default {
   name: "App",
@@ -107,7 +106,7 @@ export default {
       immediate: true
     }
   },
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener("resize", this.updateViewPortHeightCSS);
     window.clearInterval(this.loadingInterval);
   },

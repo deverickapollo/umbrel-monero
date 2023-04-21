@@ -4,7 +4,7 @@
     :class="autoWidth ? 'd-inline-flex auto-width mx-1' : 'd-flex'"
     :style="{
       width: autoWidth ? `${(10 + value.toString().length) * 8}px` : width,
-      maxWidth: '100%'
+      maxWidth: '100%',
     }"
     :size="size ? size : 'sm'"
   >
@@ -13,7 +13,7 @@
       type="text"
       class="copy-input"
       readonly
-      v-model="value"
+      v-model="propValue"
     ></b-form-input>
 
     <b-input-group-append class="copy-icon-btn" @click="copyText">
@@ -61,7 +61,8 @@ export default {
   },
   data() {
     return {
-      isCopied: false
+      isCopied: false,
+      propValue: undefined
     };
   },
   methods: {
@@ -85,6 +86,7 @@ export default {
   watch: {
     value: function() {
       this.isCopied = false;
+      this.propValue = this.value;
     }
   }
 };

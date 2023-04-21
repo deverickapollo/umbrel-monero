@@ -48,7 +48,7 @@ export default {
     const that = this;
     that.create();
   },
-  beforeDestroy() {
+  beforeUnmount() {
     const that = this;
     that.destroy();
   },
