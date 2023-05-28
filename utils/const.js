@@ -9,7 +9,7 @@ module.exports = {
   MONERO_RPC_USER: process.env.MONERO_RPC_USER || 'monero',
   MONERO_RPC_PASSWORD: process.env.MONERO_RPC_PASSWORD || 'monero',
   DEVICE_DOMAIN_NAME: process.env.DEVICE_DOMAIN_NAME,
-  JSON_STORE_FILE: process.env.JSON_STORE_FILE || "/data/app/monero-config.json",
+  JSON_STORE_FILE: process.env.JSON_STORE_FILE || "/data/monero-config.json",
   UMBREL_MONERO_CONF_FILEPATH: process.env.UMBREL_MONERO_CONF_FILE || "/monero/.monero/umbrel-monero.conf",
   MONERO_CONF_FILEPATH: process.env.MONERO_CONF_FILE || "/monero/.monero/monero.conf",
   MONERO_INITIALIZE_WITH_CLEARNET_OVER_TOR: process.env.MONERO_INITIALIZE_WITH_CLEARNET_OVER_TOR === 'true',

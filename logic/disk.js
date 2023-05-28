@@ -1,7 +1,7 @@
 // const fs = require("fs");
 const path = require("path");
 const constants = require("utils/const.js");
-const diskService = require("services/disk");
+const diskService = require("services/disk.js");
 
 // TODO - consider moving these unit conversions to utils/const.js
 const GB_TO_MiB = 953.674;
