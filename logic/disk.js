@@ -13,81 +13,27 @@ const DEFAULT_ADVANCED_SETTINGS = {
   tor: true,
   i2p: true,
   incomingConnections: false,
-  dbSyncMode: false,
+  dbSyncMode: constants.MONERO_SYNC_MODE,
   prune: false,
   reindex: false,
   network: constants.MONERO_DEFAULT_NETWORK
 }
 
-async function getJsonStore() {
-  try {
-    const jsonStore = await diskService.readJsonFile(constants.JSON_STORE_FILE);
-    return { ...DEFAULT_ADVANCED_SETTINGS, ...jsonStore };
-  } catch (error) {
-    return DEFAULT_ADVANCED_SETTINGS;
-  }
-}
-
-async function applyCustomMoneroConfig(moneroConfig) {
-  await applyMoneroConfig(moneroConfig, false);
-}
-
-async function applyDefaultMoneroConfig() {
-  await applyMoneroConfig(DEFAULT_ADVANCED_SETTINGS, true);
-}
-
-async function applyMoneroConfig(moneroConfig, shouldOverwriteExistingFile) {
-  await Promise.all([
-    updateJsonStore(moneroConfig),
-    generateUmbrelMoneroConfig(moneroConfig),
-    generateMoneroConfig(shouldOverwriteExistingFile),
-  ]);
-}
-
-// There's a race condition here if you do two updates in parallel but it's fine for our current use case
-async function updateJsonStore(newProps) {
-  const jsonStore = await getJsonStore();
-  return diskService.writeJsonFile(constants.JSON_STORE_FILE, {
-    ...jsonStore,
-    ...newProps
-  });
-}
-
-// creates umbrel-monero.conf
-function generateUmbrelMoneroConfig(settings) {
-  const confString = settingsToMultilineConfString(settings);
-  return diskService.writePlainTextFile(constants.UMBREL_MONERO_CONF_FILEPATH, confString);
-}
-
-// creates monero.conf with includeconf=umbrel-monero.conf
-async function generateMoneroConfig(shouldOverwriteExistingFile = false) {
-  const baseName = path.basename(constants.UMBREL_MONERO_CONF_FILEPATH);
-  const includeConfString = `# Load additional configuration file, relative to the data directory.\nincludeconf=${baseName}`;
-
-  const fileExists = await diskService.fileExists(constants.MONERO_CONF_FILEPATH);
-
-  // if monero.conf does not exist or should be overwritten, create it with includeconf=umbrel-monero.conf
-  if (!fileExists || shouldOverwriteExistingFile) {
-    return await diskService.writePlainTextFile(constants.MONERO_CONF_FILEPATH, includeConfString);
-  }
-
-  const existingConfContents = await diskService.readUtf8File(constants.MONERO_CONF_FILEPATH);
-  
-  // if monero.conf exists but does not include includeconf=umbrel-monero.conf, add includeconf=umbrel-monero.conf to the top of the file
-  if (!existingConfContents.includes(includeConfString)) {
-    return await diskService.writePlainTextFile(constants.MONERO_CONF_FILEPATH, `${includeConfString}\n${existingConfContents}`);
-  }
-
-  // do nothing if monero.conf exists and contains includeconf=umbrel-monero.conf
-}
 
 function settingsToMultilineConfString(settings) {
   const umbrelMoneroConfig = [];
 
   // [CHAIN]
   umbrelMoneroConfig.push("# [chain]"); 
-  if (settings.network !== 'main') {
-    umbrelMoneroConfig.push(`chain=${settings.network}`)
+  if (settings.network !== 'mainnet') {
+    //Check if set to testnet or stagenet
+    if (settings.network === 'testnet') {
+      umbrelMoneroConfig.push(`testnet=1`);
+    } else if (settings.network === 'stagenet') {
+      umbrelMoneroConfig.push(`stagenet=1`);
+    }else{
+      umbrelMoneroConfig.push(`testnet=0`)
+    }
   }
 
   // [CORE]
@@ -158,6 +104,70 @@ function settingsToMultilineConfString(settings) {
 
   return umbrelMoneroConfig.join('\n');
 }
+
+async function getJsonStore() {
+  try {
+    const jsonStore = await diskService.readJsonFile(constants.JSON_STORE_FILE);
+    return { ...DEFAULT_ADVANCED_SETTINGS, ...jsonStore };
+  } catch (error) {
+    return DEFAULT_ADVANCED_SETTINGS;
+  }
+}
+
+// There's a race condition here if you do two updates in parallel but it's fine for our current use case
+async function updateJsonStore(newProps) {
+  const jsonStore = await getJsonStore();
+  return diskService.writeJsonFile(constants.JSON_STORE_FILE, {
+    ...jsonStore,
+    ...newProps
+  });
+}
+// creates umbrel-monero.conf
+function generateUmbrelMoneroConfig(settings) {
+  const confString = settingsToMultilineConfString(settings);
+  return diskService.writePlainTextFile(constants.UMBREL_MONERO_CONF_FILEPATH, confString);
+}
+
+// creates monero.conf with include-conf=umbrel-monero.conf
+async function generateMoneroConfig(shouldOverwriteExistingFile = false) {
+  const baseName = path.basename(constants.UMBREL_MONERO_CONF_FILEPATH);
+  const includeConfString = `# Load additional configuration file, relative to the data directory.\ninclude-conf=${baseName}`;
+
+  const fileExists = await diskService.fileExists(constants.MONERO_CONF_FILEPATH);
+
+  // if monero.conf does not exist or should be overwritten, create it with include-conf=umbrel-monero.conf
+  if (!fileExists || shouldOverwriteExistingFile) {
+    return await diskService.writePlainTextFile(constants.MONERO_CONF_FILEPATH, includeConfString);
+  }
+
+  const existingConfContents = await diskService.readUtf8File(constants.MONERO_CONF_FILEPATH);
+  
+  // if monero.conf exists but does not include include-conf=umbrel-monero.conf, add include-conf=umbrel-monero.conf to the top of the file
+  if (!existingConfContents.includes(includeConfString)) {
+    return await diskService.writePlainTextFile(constants.MONERO_CONF_FILEPATH, `${includeConfString}\n${existingConfContents}`);
+  }
+
+  // do nothing if monero.conf exists and contains include-conf=umbrel-monero.conf
+}
+
+async function applyMoneroConfig(moneroConfig, shouldOverwriteExistingFile) {
+  await Promise.all([
+    updateJsonStore(moneroConfig),
+    generateUmbrelMoneroConfig(moneroConfig),
+    generateMoneroConfig(shouldOverwriteExistingFile),
+  ]);
+}
+
+async function applyCustomMoneroConfig(moneroConfig) {
+  await applyMoneroConfig(moneroConfig, false);
+}
+
+async function applyDefaultMoneroConfig() {
+  await applyMoneroConfig(DEFAULT_ADVANCED_SETTINGS, true);
+}
+
+
+
 
 module.exports = {
   getJsonStore,

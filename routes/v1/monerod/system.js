@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const systemLogic = require('logic/system.js');
-const diskLogic = require('logic/disk');
+const diskLogic = require('logic/disk.js');
 const monerodLogic = require('logic/monerod.js');
 const safeHandler = require('utils/safeHandler');
 

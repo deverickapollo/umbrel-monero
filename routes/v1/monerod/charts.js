@@ -21,12 +21,12 @@ const setAggregatesValues = async() => {
   if (syncPercent > 0.98) { 
     const currentBlock = blockchainInfo.blocks;
     
-    const ONE_HOUR_AS_BLOCKS = 6;
-    const SIX_HOURS_AS_BLOCKS = 36;
-    const TWELVE_HOURS_AS_BLOCKS = 72;
-    const ONE_DAY_AS_BLOCKS = 144;
-    const THREE_DAY_AS_BLOCKS = 432;
-    const SEVEN_DAY_AS_BLOCKS = 1008;
+    const ONE_HOUR_AS_BLOCKS = 30;
+    const SIX_HOURS_AS_BLOCKS = 180;
+    const TWELVE_HOURS_AS_BLOCKS = 360;
+    const ONE_DAY_AS_BLOCKS = 720;
+    const THREE_DAY_AS_BLOCKS = 2160;
+    const SEVEN_DAY_AS_BLOCKS = 5040;
 
     const ranges = await Promise.all([
       monerod.getBlockRangeTransactionChunks(currentBlock - ONE_HOUR_AS_BLOCKS, currentBlock, 1), // 1hr

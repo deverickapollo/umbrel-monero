@@ -209,14 +209,14 @@ const actions = {
 
     const currentBlock = state.currentBlock;
 
-    // check if atleast 144 blocks exist
-    if (!currentBlock || currentBlock < 144) {
+    // check if atleast 180 blocks exist
+    if (!currentBlock || currentBlock < 180) {
       return;
     }
 
-    // get last 144 blocks (~24 hours)
+    // get last 180 blocks (~24 hours)
     const lastDaysBlocks = await API.get(
-      `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/info/blocks?from=${currentBlock - 143}&to=${currentBlock}`
+      `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/info/blocks?from=${currentBlock - 179}&to=${currentBlock}`
     );
 
     // exit if we don't get the blocks for some reason
