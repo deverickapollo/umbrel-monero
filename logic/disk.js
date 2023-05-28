@@ -128,10 +128,10 @@ function generateUmbrelMoneroConfig(settings) {
   return diskService.writePlainTextFile(constants.UMBREL_MONERO_CONF_FILEPATH, confString);
 }
 
-// creates monero.conf with include-conf=umbrel-monero.conf
+// creates monero.conf with --config-file=umbrel-monero.conf
 async function generateMoneroConfig(shouldOverwriteExistingFile = false) {
   const baseName = path.basename(constants.UMBREL_MONERO_CONF_FILEPATH);
-  const includeConfString = `# Load additional configuration file, relative to the data directory.\ninclude-conf=${baseName}`;
+  const includeConfString = `# Load additional configuration file, relative to the data directory.\n--config-file=${baseName}`;
 
   const fileExists = await diskService.fileExists(constants.MONERO_CONF_FILEPATH);
 
