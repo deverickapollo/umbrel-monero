@@ -10,8 +10,8 @@ const MB_TO_MiB = 0.953674;
 const DEFAULT_ADVANCED_SETTINGS = {
   clearnet: true,
   torProxyForClearnet: false,
-  tor: true,
-  i2p: true,
+  tor: false,
+  i2p: false,
   incomingConnections: false,
   dbSyncMode: constants.MONERO_SYNC_MODE,
   prune: false,
