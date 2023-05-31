@@ -119,7 +119,7 @@
                   <p class="font-weight-bold mb-0">Incoming Connections</p>
                 </label>
               </div>
-              <div class="">
+              <div>
                 <toggle-switch
                   id="allow-incoming-connections"
                   class="align-self-center"
@@ -148,8 +148,8 @@
                 <toggle-switch
                   id="prune-old-blocks"
                   class="align-self-center"
-                  :on="settings.prune.enabled"
-                  @toggle="status => (settings.prune.enabled = status)"
+                  :on="settings.prune"
+                  @toggle="status => (settings.prune = status)"
                 ></toggle-switch>
               </div>
             </div>
