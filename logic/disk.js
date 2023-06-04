@@ -53,13 +53,13 @@ function settingsToMultilineConfString(settings) {
   if (settings.dnsBlockList) {
     umbrelMoneroConfig.push("");
     umbrelMoneroConfig.push("# Block list to use for DNS blocking");
-    umbrelMoneroConfig.push(`block-dns=true`);
+    umbrelMoneroConfig.push(`enable-dns-blocklist`);
   }
   //Salvage DB
   if (settings.dbSalvage) {
     umbrelMoneroConfig.push("");
     umbrelMoneroConfig.push('# Salvage the blockchain database if it is corrupted.');
-    umbrelMoneroConfig.push('dbSalvage=true');  
+    umbrelMoneroConfig.push('db-salvage');  
   }
 
 
