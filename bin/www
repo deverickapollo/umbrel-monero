@@ -121,8 +121,8 @@ async function onListening() {
   debug('Listening on ' + bind);
   console.log('Listening on ' + bind);
 
-  // if umbrel-monero.conf does not exist, create default monero config files and restart monerod.
-  if (! await diskService.fileExists(constants.UMBREL_MONERO_CONF_FILEPATH)) {
+  // if bitmonero.conf does not exist, create default monero config files and restart monerod.
+  if (! await diskService.fileExists(constants.MONERO_CONF_FILEPATH)) {
     createConfFilesAndRestartMonerod();
   }
 }

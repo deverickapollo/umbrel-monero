@@ -23,7 +23,7 @@ router.get('/monero-config', safeHandler(async(req, res) => {
   return res.json(moneroConfig);
 }));
 
-// updateJsonStore / generateUmbrelMoneroConfig / generateMoneroConfig are all called through these routes below so that even if user closes the browser prematurely, the backend will complete the update.
+// updateJsonStore / generateMoneroConfig are all called through these routes below so that even if user closes the browser prematurely, the backend will complete the update.
 
 router.post('/update-monero-config', safeHandler(async(req, res) => {
   // store old moneroConfig in memory to revert to in case of errors setting new config and restarting monerod

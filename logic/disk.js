@@ -46,7 +46,7 @@ function settingsToMultilineConfString(settings) {
   if (settings.prune) {
     umbrelMoneroConfig.push("");
     umbrelMoneroConfig.push("# Prune blockchain to reduce storage requirements"); 
-    umbrelMoneroConfig.push(`prune=true`);
+    umbrelMoneroConfig.push(`prune-blockchain=1`);
   }
   
   //Block list
@@ -124,30 +124,24 @@ async function updateJsonStore(newProps) {
     ...newProps
   });
 }
-// creates umbrel-monero.conf
-function generateUmbrelMoneroConfig(settings) {
-  const confString = settingsToMultilineConfString(settings);
-  return diskService.writePlainTextFile(constants.UMBREL_MONERO_CONF_FILEPATH, confString);
-}
 
-// creates bitmonero.conf with --config-file=umbrel-monero.conf
-async function generateMoneroConfig(shouldOverwriteExistingFile = false) {
-  const baseName = path.basename(constants.UMBREL_MONERO_CONF_FILEPATH);
-  const includeConfString = `# Load additional configuration file, relative to the data directory.\nconfig-file=${baseName}`;
-
+// creates bitmonero.conf
+async function generateMoneroConfig(shouldOverwriteExistingFile = false, setting = DEFAULT_ADVANCED_SETTINGS) {
   const fileExists = await diskService.fileExists(constants.MONERO_CONF_FILEPATH);
 
   // if bitmonero.conf does not exist or should be overwritten, create it with config-file=umbrel-monero.conf
   if (!fileExists || shouldOverwriteExistingFile) {
-    return await diskService.writePlainTextFile(constants.MONERO_CONF_FILEPATH, includeConfString);
+    const confString = settingsToMultilineConfString(setting);
+    return diskService.writePlainTextFile(constants.MONERO_CONF_FILEPATH, confString);
   }
 
   const existingConfContents = await diskService.readUtf8File(constants.MONERO_CONF_FILEPATH);
   
+  // INVESTIGATE WHETHER THIS IS NEEDED - Comment out for now
   // if bitmonero.conf exists but does not include config-file=umbrel-monero.conf, add config-file=umbrel-monero.conf to the top of the file
-  if (!existingConfContents.includes(includeConfString)) {
-    return await diskService.writePlainTextFile(constants.MONERO_CONF_FILEPATH, `${includeConfString}\n${existingConfContents}`);
-  }
+  // if (!existingConfContents.includes(includeConfString)) {
+  //   return await diskService.writePlainTextFile(constants.MONERO_CONF_FILEPATH, `${includeConfString}\n${existingConfContents}`);
+  // }
 
   // do nothing if bitmonero.conf exists and contains config-file=umbrel-monero.conf
 }
@@ -155,8 +149,7 @@ async function generateMoneroConfig(shouldOverwriteExistingFile = false) {
 async function applyMoneroConfig(moneroConfig, shouldOverwriteExistingFile) {
   await Promise.all([
     updateJsonStore(moneroConfig),
-    generateUmbrelMoneroConfig(moneroConfig),
-    generateMoneroConfig(shouldOverwriteExistingFile),
+    generateMoneroConfig(shouldOverwriteExistingFile,moneroConfig),
   ]);
 }
 

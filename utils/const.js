@@ -10,7 +10,6 @@ module.exports = {
   MONERO_RPC_PASSWORD: process.env.MONERO_RPC_PASSWORD || 'monero',
   DEVICE_DOMAIN_NAME: process.env.DEVICE_DOMAIN_NAME,
   JSON_STORE_FILE: process.env.JSON_STORE_FILE || "/data/app/monero-config.json",
-  UMBREL_MONERO_CONF_FILEPATH: process.env.UMBREL_MONERO_CONF_FILE || "/monero/.monero/umbrel-monero.conf",
   MONERO_CONF_FILEPATH: process.env.MONERO_CONF_FILE || "/monero/.monero/bitmonero.conf",
   MONERO_SYNC_MODE: process.env.MONERO_SYNC_MODE || "fast",
   MONERO_SYNC_TYPE: process.env.MONERO_SYNC_TYPE || "sync",
