@@ -14,8 +14,12 @@ const DEFAULT_ADVANCED_SETTINGS = {
   i2p: false,
   incomingConnections: false,
   dbSyncMode: constants.MONERO_SYNC_MODE,
+  dbSyncType: constants.MONERO_SYNC_TYPE,
+  dbBlocksPerSync: constants.MONERO_BLOCKS_PER_SYNC,
+  dnsBlockList: false,
+  hidePort: false,
   prune: false,
-  reindex: false,
+  dbSalvage: false,
   network: constants.MONERO_DEFAULT_NETWORK
 }
 
@@ -34,32 +38,30 @@ function settingsToMultilineConfString(settings) {
     }else{
       umbrelMoneroConfig.push(`testnet=0`)
     }
+  }else{
+    umbrelMoneroConfig.push(`mainnet`)
   }
 
-  // [CORE]
-  // umbrelMoneroConfig.push(""); 
-  // umbrelMoneroConfig.push("# [core]"); 
-
-  // dbcache
-  // umbrelMoneroConfig.push("# Maximum database cache size in MiB"); 
-  // umbrelMoneroConfig.push(`dbcache=${Math.round(settings.cacheSizeMB * MB_TO_MiB)}`); 
-
   // prune
-  // if (settings.prune.enabled) {
-  //   umbrelMoneroConfig.push("# Reduce disk space requirements to this many MiB by enabling pruning (deleting) of old blocks. This mode is incompatible with -txindex and -coinstatsindex. WARNING: Reverting this setting requires re-downloading the entire blockchain. (default: 0 = disable pruning blocks, 1 = allow manual pruning via RPC, greater than or equal to 550 = automatically prune blocks to stay under target size in MiB).");
-  //   umbrelMoneroConfig.push(`prune=true`);
-  // }
+  if (settings.prune.enabled) {
+    umbrelMoneroConfig.push("");
+    umbrelMoneroConfig.push("# Prune blockchain to reduce storage requirements"); 
+    umbrelMoneroConfig.push(`prune=true`);
+  }
   
-  // reindex
-  // if (settings.reindex) {
-  //   umbrelMoneroConfig.push('# Rebuild chain state and block index from the blk*.dat files on disk.');
-  //   umbrelMoneroConfig.push('reindex=1');  
-  // }
+  //Block list
+  if (settings.dnsBlockList) {
+    umbrelMoneroConfig.push("");
+    umbrelMoneroConfig.push("# Block list to use for DNS blocking");
+    umbrelMoneroConfig.push(`block-dns=true`);
+  }
+  //Salvage DB
+  if (settings.dbSalvage) {
+    umbrelMoneroConfig.push("");
+    umbrelMoneroConfig.push('# Salvage the blockchain database if it is corrupted.');
+    umbrelMoneroConfig.push('dbSalvage=true');  
+  }
 
-
-  // // [NETWORK]
-  // umbrelMoneroConfig.push(""); 
-  // umbrelMoneroConfig.push("# [network]"); 
 
   // // clearnet
   // if (settings.clearnet) {
@@ -128,26 +130,26 @@ function generateUmbrelMoneroConfig(settings) {
   return diskService.writePlainTextFile(constants.UMBREL_MONERO_CONF_FILEPATH, confString);
 }
 
-// creates monero.conf with --config-file=umbrel-monero.conf
+// creates bitmonero.conf with --config-file=umbrel-monero.conf
 async function generateMoneroConfig(shouldOverwriteExistingFile = false) {
   const baseName = path.basename(constants.UMBREL_MONERO_CONF_FILEPATH);
   const includeConfString = `# Load additional configuration file, relative to the data directory.\nconfig-file=${baseName}`;
 
   const fileExists = await diskService.fileExists(constants.MONERO_CONF_FILEPATH);
 
-  // if monero.conf does not exist or should be overwritten, create it with config-file=umbrel-monero.conf
+  // if bitmonero.conf does not exist or should be overwritten, create it with config-file=umbrel-monero.conf
   if (!fileExists || shouldOverwriteExistingFile) {
     return await diskService.writePlainTextFile(constants.MONERO_CONF_FILEPATH, includeConfString);
   }
 
   const existingConfContents = await diskService.readUtf8File(constants.MONERO_CONF_FILEPATH);
   
-  // if monero.conf exists but does not include config-file=umbrel-monero.conf, add config-file=umbrel-monero.conf to the top of the file
+  // if bitmonero.conf exists but does not include config-file=umbrel-monero.conf, add config-file=umbrel-monero.conf to the top of the file
   if (!existingConfContents.includes(includeConfString)) {
     return await diskService.writePlainTextFile(constants.MONERO_CONF_FILEPATH, `${includeConfString}\n${existingConfContents}`);
   }
 
-  // do nothing if monero.conf exists and contains config-file=umbrel-monero.conf
+  // do nothing if bitmonero.conf exists and contains config-file=umbrel-monero.conf
 }
 
 async function applyMoneroConfig(moneroConfig, shouldOverwriteExistingFile) {
