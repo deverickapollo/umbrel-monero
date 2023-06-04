@@ -1,6 +1,9 @@
 name: Build and publish Docker image on push
 
-on: push
+on:
+  push:
+    branches:
+      - master
 
 env:
   DOCKER_CLI_EXPERIMENTAL: enabled
