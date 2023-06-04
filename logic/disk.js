@@ -43,7 +43,7 @@ function settingsToMultilineConfString(settings) {
   }
 
   // prune
-  if (settings.prune.enabled) {
+  if (settings.prune) {
     umbrelMoneroConfig.push("");
     umbrelMoneroConfig.push("# Prune blockchain to reduce storage requirements"); 
     umbrelMoneroConfig.push(`prune=true`);
