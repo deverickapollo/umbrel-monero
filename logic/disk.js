@@ -46,18 +46,24 @@ function settingsToMultilineConfString(settings) {
     umbrelMoneroConfig.push("# Prune blockchain to reduce storage requirements"); 
     umbrelMoneroConfig.push(`prune-blockchain=1`);
   }
+
+  if (settings.dbSyncMode == 'fast' || settings.dbSyncMode == 'fastest' || settings.dbSyncMode == "safe"){
+    umbrelMoneroConfig.push("");
+    umbrelMoneroConfig.push("# Database sync mode"); 
+    umbrelMoneroConfig.push(`db-sync-mode=${settings.dbSyncMode}`);
+  }
   
   //Block list
   if (settings.dnsBlockList) {
     umbrelMoneroConfig.push("");
     umbrelMoneroConfig.push("# Block list to use for DNS blocking");
-    umbrelMoneroConfig.push(`enable-dns-blocklist`);
+    umbrelMoneroConfig.push(`enable-dns-blocklist=1`);
   }
   //Salvage DB
   if (settings.dbSalvage) {
     umbrelMoneroConfig.push("");
     umbrelMoneroConfig.push('# Salvage the blockchain database if it is corrupted.');
-    umbrelMoneroConfig.push('db-salvage');  
+    umbrelMoneroConfig.push('db-salvage=1');  
   }
 
 
