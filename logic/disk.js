@@ -38,8 +38,6 @@ function settingsToMultilineConfString(settings) {
     }else{
       umbrelMoneroConfig.push(`testnet=0`)
     }
-  }else{
-    umbrelMoneroConfig.push(`mainnet`)
   }
 
   // prune
