@@ -38,7 +38,7 @@ server.on('listening', onListening);
  */
 
 async function createConfFilesAndRestartMonerod() {
-  console.log('umbrel-monero.conf does not exist, creating config files with Umbrel default values');
+  console.log('bitmonero.conf does not exist, creating config files with default values');
   const config = await diskLogic.getJsonStore();
 
   // set torProxyForClearnet to false for existing installs
