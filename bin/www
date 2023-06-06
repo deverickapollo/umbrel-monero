@@ -44,7 +44,7 @@ async function createConfFilesAndRestartMonerod() {
   // set torProxyForClearnet to false for existing installs
   if (constants.MONERO_INITIALIZE_WITH_CLEARNET_OVER_TOR) config.torProxyForClearnet = true;
 
-  await diskLogic.applyCustomMoneroConfig(config);
+  await diskLogic.applyCustomMoneroConfig(config, true);
 
   const MAX_TRIES = 60;
   let tries = 0;

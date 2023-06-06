@@ -17,6 +17,7 @@ const DEFAULT_ADVANCED_SETTINGS = {
   dbSyncType: constants.MONERO_SYNC_TYPE,
   dbBlocksPerSync: constants.MONERO_BLOCKS_PER_SYNC,
   dnsBlockList: false,
+  confirmExternalBind: true,
   hidePort: false,
   prune: false,
   dbSalvage: false,
@@ -157,8 +158,8 @@ async function applyMoneroConfig(moneroConfig, shouldOverwriteExistingFile) {
   ]);
 }
 
-async function applyCustomMoneroConfig(moneroConfig) {
-  await applyMoneroConfig(moneroConfig, false);
+async function applyCustomMoneroConfig(moneroConfig, shouldOverwriteExistingFile = false) {
+  await applyMoneroConfig(moneroConfig, shouldOverwriteExistingFile);
 }
 
 async function applyDefaultMoneroConfig() {
