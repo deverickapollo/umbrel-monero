@@ -56,7 +56,7 @@ services:
       - "8889:8889"
     volumes:
       - ${PWD}/data/app:/data # volume to persist advanced settings json
-      - ${PWD}/data/monero:/monero/.monero # volume to persist umbrel-monero.conf and bitmonero.conf
+      - ${PWD}/data/monero:/monero/.monero # volume to persist bitmonero.conf
     environment:
       PORT: "8889"
       MONERO_HOST: "monerod"
