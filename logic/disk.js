@@ -10,13 +10,14 @@ const MB_TO_MiB = 0.953674;
 const DEFAULT_ADVANCED_SETTINGS = {
   clearnet: true,
   torProxyForClearnet: false,
-  tor: false,
+  tor: true,
   i2p: false,
   incomingConnections: false,
   dbSyncMode: constants.MONERO_SYNC_MODE,
   dbSyncType: constants.MONERO_SYNC_TYPE,
   dbBlocksPerSync: constants.MONERO_BLOCKS_PER_SYNC,
   dnsBlockList: false,
+  restrictedRpc: true,
   confirmExternalBind: true,
   hidePort: false,
   prune: false,
@@ -48,6 +49,12 @@ function settingsToMultilineConfString(settings) {
     umbrelMoneroConfig.push(`prune-blockchain=1`);
   }
 
+  if (settings.restrictedRpc) {
+    umbrelMoneroConfig.push("");
+    umbrelMoneroConfig.push("# Enable the restricted RPC"); 
+    umbrelMoneroConfig.push(`restricted-rpc=1`);
+  }
+  
   if (settings.dbSyncMode == 'fast' || settings.dbSyncMode == 'fastest' || settings.dbSyncMode == "safe"){
     umbrelMoneroConfig.push("");
     umbrelMoneroConfig.push("# Database sync mode"); 
@@ -67,6 +74,14 @@ function settingsToMultilineConfString(settings) {
     umbrelMoneroConfig.push('db-salvage=1');  
   }
 
+  if (settings.tor) {
+    umbrelMoneroConfig.push('# Use Tor for all outgoing connections.');
+    umbrelMoneroConfig.push('tx-proxy=${constants.TOR_PROXY_IP}:${constants.TOR_PROXY_PORT},16');
+  
+    umbrelMoneroConfig.push('# Try to keep connections to Tor peers');
+    umbrelMoneroConfig.push('no-igd=1');
+    umbrelMoneroConfig.push('hide-my-port=1');
+  }
 
   // // clearnet
   // if (settings.clearnet) {
