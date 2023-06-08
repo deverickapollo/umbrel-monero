@@ -10,13 +10,15 @@ const MB_TO_MiB = 0.953674;
 const DEFAULT_ADVANCED_SETTINGS = {
   clearnet: true,
   torProxyForClearnet: false,
-  tor: false,
+  tor: true,
   i2p: false,
   incomingConnections: false,
   dbSyncMode: constants.MONERO_SYNC_MODE,
   dbSyncType: constants.MONERO_SYNC_TYPE,
   dbBlocksPerSync: constants.MONERO_BLOCKS_PER_SYNC,
   dnsBlockList: false,
+  restrictedRpc: true,
+  confirmExternalBind: true,
   hidePort: false,
   prune: false,
   dbSalvage: false,
@@ -47,6 +49,12 @@ function settingsToMultilineConfString(settings) {
     umbrelMoneroConfig.push(`prune-blockchain=1`);
   }
 
+  if (settings.restrictedRpc) {
+    umbrelMoneroConfig.push("");
+    umbrelMoneroConfig.push("# Enable the restricted RPC"); 
+    umbrelMoneroConfig.push(`restricted-rpc=1`);
+  }
+  
   if (settings.dbSyncMode == 'fast' || settings.dbSyncMode == 'fastest' || settings.dbSyncMode == "safe"){
     umbrelMoneroConfig.push("");
     umbrelMoneroConfig.push("# Database sync mode"); 
@@ -66,6 +74,14 @@ function settingsToMultilineConfString(settings) {
     umbrelMoneroConfig.push('db-salvage=1');  
   }
 
+  if (settings.tor) {
+    umbrelMoneroConfig.push('# Use Tor for all outgoing connections.');
+    umbrelMoneroConfig.push('tx-proxy=${constants.TOR_PROXY_IP}:${constants.TOR_PROXY_PORT},16');
+  
+    umbrelMoneroConfig.push('# Try to keep connections to Tor peers');
+    umbrelMoneroConfig.push('no-igd=1');
+    umbrelMoneroConfig.push('hide-my-port=1');
+  }
 
   // // clearnet
   // if (settings.clearnet) {
@@ -130,7 +146,7 @@ async function updateJsonStore(newProps) {
 }
 
 // creates bitmonero.conf
-async function generateMoneroConfig(shouldOverwriteExistingFile = false, setting = DEFAULT_ADVANCED_SETTINGS) {
+async function generateMoneroConfig(shouldOverwriteExistingFile = true, setting = DEFAULT_ADVANCED_SETTINGS) {
   const fileExists = await diskService.fileExists(constants.MONERO_CONF_FILEPATH);
 
   // if bitmonero.conf does not exist or should be overwritten, create it with config-file=umbrel-monero.conf
@@ -138,27 +154,24 @@ async function generateMoneroConfig(shouldOverwriteExistingFile = false, setting
     const confString = settingsToMultilineConfString(setting);
     return diskService.writePlainTextFile(constants.MONERO_CONF_FILEPATH, confString);
   }
-
-  const existingConfContents = await diskService.readUtf8File(constants.MONERO_CONF_FILEPATH);
-  
   // INVESTIGATE WHETHER THIS IS NEEDED - Comment out for now
   // if bitmonero.conf exists but does not include config-file=umbrel-monero.conf, add config-file=umbrel-monero.conf to the top of the file
+  // const existingConfContents = await diskService.readUtf8File(constants.MONERO_CONF_FILEPATH);
   // if (!existingConfContents.includes(includeConfString)) {
   //   return await diskService.writePlainTextFile(constants.MONERO_CONF_FILEPATH, `${includeConfString}\n${existingConfContents}`);
   // }
 
-  // do nothing if bitmonero.conf exists and contains config-file=umbrel-monero.conf
 }
 
-async function applyMoneroConfig(moneroConfig, shouldOverwriteExistingFile) {
+async function applyMoneroConfig(moneroConfig, shouldOverwriteExistingFile = true) {
   await Promise.all([
     updateJsonStore(moneroConfig),
     generateMoneroConfig(shouldOverwriteExistingFile,moneroConfig),
   ]);
 }
 
-async function applyCustomMoneroConfig(moneroConfig) {
-  await applyMoneroConfig(moneroConfig, false);
+async function applyCustomMoneroConfig(moneroConfig, shouldOverwriteExistingFile = true) {
+  await applyMoneroConfig(moneroConfig, shouldOverwriteExistingFile);
 }
 
 async function applyDefaultMoneroConfig() {

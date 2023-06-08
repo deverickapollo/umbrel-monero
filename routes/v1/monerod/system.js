@@ -31,14 +31,14 @@ router.post('/update-monero-config', safeHandler(async(req, res) => {
   const newMoneroConfig = req.body.moneroConfig;
   
   try {
-    await diskLogic.applyCustomMoneroConfig(newMoneroConfig);
+    await diskLogic.applyCustomMoneroConfig(newMoneroConfig,true);
     await monerodLogic.stop();
 
     res.json({success: true});
     
   } catch (error) {
     // revert everything to old config values
-    await diskLogic.applyCustomMoneroConfig(oldMoneroConfig);
+    await diskLogic.applyCustomMoneroConfig(oldMoneroConfig, true);
 
     res.json({success: false}); // show error to user in UI
   }
@@ -56,7 +56,7 @@ router.post('/restore-default-monero-config', safeHandler(async(req, res) => {
     
   } catch (error) {
     // revert everything to old config values
-    await diskLogic.applyCustomMoneroConfig(oldMoneroConfig);
+    await diskLogic.applyCustomMoneroConfig(oldMoneroConfig, true);
 
     res.json({success: false}); // show error to user in UI
   }
