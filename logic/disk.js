@@ -17,7 +17,7 @@ const DEFAULT_ADVANCED_SETTINGS = {
   dbSyncType: constants.MONERO_SYNC_TYPE,
   dbBlocksPerSync: constants.MONERO_BLOCKS_PER_SYNC,
   dnsBlockList: false,
-  restrictedRpc: true,
+  restrictedRpc: false,
   confirmExternalBind: true,
   hidePort: false,
   prune: false,
