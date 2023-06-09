@@ -76,7 +76,7 @@ function settingsToMultilineConfString(settings) {
 
   if (settings.tor) {
     umbrelMoneroConfig.push('# Use Tor for all outgoing connections.');
-    umbrelMoneroConfig.push('tx-proxy=${constants.TOR_PROXY_IP}:${constants.TOR_PROXY_PORT},16');
+    // umbrelMoneroConfig.push('tx-proxy=${constants.TOR_PROXY_IP}:${constants.TOR_PROXY_PORT},16');
   
     umbrelMoneroConfig.push('# Try to keep connections to Tor peers');
     umbrelMoneroConfig.push('no-igd=1');
