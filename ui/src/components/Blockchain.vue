@@ -133,7 +133,7 @@ export default {
   data() {
     return {
       polling: null,
-      pollInProgress: false,
+      pollInProgress: false
     };
   },
   computed: {
@@ -277,7 +277,7 @@ export default {
     position: absolute;
     height: 4rem;
     width: 2px;
-    background: #eeeeff;
+    background: #fae7da;
     top: 50%;
     left: calc(50% - 1px);
   }
@@ -288,7 +288,7 @@ export default {
     left: 0;
     height: 100%;
     width: 100%;
-    background: #eeeeff;
+    background: #fae7da;
     z-index: 0;
     border-radius: 100%;
   }
@@ -332,8 +332,8 @@ export default {
     height: $cube-size;
     line-height: $cube-size;
     text-align: center;
-    box-shadow: inset 0px 0px 0px 1px #eeeeff;
-    background: #eeeeff;
+    box-shadow: inset 0px 0px 0px 1px #fae7da;
+    background: #fae7da;
     display: block;
     position: absolute;
     .inside {
@@ -342,7 +342,7 @@ export default {
       left: $cube-size * 0.1;
       width: $cube-size * 0.8;
       height: $cube-size * 0.8;
-      background: #5351fb;
+      background: #e85f00;
       border-radius: $cube-size * 0.2;
     }
     &.top {
@@ -401,7 +401,7 @@ export default {
   .blockchain-block-icon {
     .blockchain-block-icon-bg {
       transform: scale(0);
-      background: #5351fb;
+      background: #e85f00;
     }
   }
 }
@@ -429,7 +429,7 @@ export default {
   .blockchain-block-icon {
     .blockchain-block-icon-bg {
       transform: scale(1);
-      background: #eeeeff;
+      background: #fae7da;
     }
   }
 }
