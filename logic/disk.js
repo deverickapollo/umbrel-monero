@@ -37,8 +37,6 @@ function settingsToMultilineConfString(settings) {
       umbrelMoneroConfig.push(`testnet=1`);
     } else if (settings.network === 'stagenet') {
       umbrelMoneroConfig.push(`stagenet=1`);
-    }else{
-      umbrelMoneroConfig.push(`testnet=0`)
     }
   }
 
