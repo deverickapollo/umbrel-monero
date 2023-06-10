@@ -30,7 +30,7 @@
           <b-button
             type="button"
             variant="primary"
-            class="btn btn-primary capitalize py-1 pl-2 pr-3 w-100"
+            class="btn capitalize py-1 pl-2 pr-3 w-100 custom-connect-btn"
             v-b-modal.connect-modal
           >
             <b-icon icon="plus" aria-hidden="true"></b-icon>
@@ -72,7 +72,7 @@
                 />
               </svg>
             </template>
-            <b-dropdown-item href="#" v-b-modal.advanced-settings-modal><b-badge pill variant="primary" class="mr-1">New</b-badge> Advanced Settings</b-dropdown-item>
+            <b-dropdown-item href="#" class="custom-dropdown" v-b-modal.advanced-settings-modal><b-badge pill variant="primary" class="mr-1 custom-badge">New</b-badge> Advanced Settings</b-dropdown-item>
           </b-dropdown>
         </div>
       </div>
@@ -288,7 +288,7 @@ export default {
       try {
         return Promise.all([
           this.$store.dispatch("monero/getP2PInfo"),
-          this.$store.dispatch("monero/getRpcInfo"),
+          this.$store.dispatch("monero/getRpcInfo")
         ]);
       } catch (error) {
         console.error("Error fetching connection details:", error);

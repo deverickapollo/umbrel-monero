@@ -285,7 +285,7 @@ export default {
         { value: "safe", text: "safe" }
       ],
       networks: [
-        { value: "main", text: "mainnet" },
+        { value: "mainnet", text: "mainnet" },
         { value: "test", text: "testnet" },
         { value: "stagenet", text: "stagenet" }
       ],

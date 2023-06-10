@@ -85,7 +85,7 @@ export default {
                 y2: 1
               },
               stops: [
-                [0, "#6060EE"],
+                [0, "#555d61"],
                 [1, "rgba(255, 255, 255, 0.5)"]
               ]
             },
@@ -96,7 +96,7 @@ export default {
             },
             marker: {
               enabled: false,
-              fillColor: "#6060EE",
+              fillColor: "#555d61",
               lineColor: "transparent",
               symbol: "circle",
               radius: 5,
