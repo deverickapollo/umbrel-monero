@@ -141,7 +141,7 @@
         </div>
       </div>
       <p class="mt-2">
-        Looking for step-by-step instructions to connect your wallet to your Monero node? <a href="https://link.umbrel.com/connect-bitcoin" target="_blank">Click here</a>.
+        Looking for step-by-step instructions to connect your wallet to your Monero node? <a href="https://www.getmonero.org/resources/user-guides/remote_node_gui.html" target="_blank">Click here</a>.
     </p>
     </div>
   </div>
