@@ -234,7 +234,6 @@ export default {
       network: state => state.user.moneroConfig.network,
       pruned: state => state.monero.pruned,
       pruneTargetSizeGB: state => state.monero.pruneTargetSizeGB,
-      torProxy: state => state.user.moneroConfig.torProxyForClearnet
     }),
     showReindexInProgressAlert() {
       return this.reindex && this.syncPercent !== 100 && !this.isRestartPending;

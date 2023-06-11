@@ -17,28 +17,6 @@
         <div
           class="advanced-settings-container d-flex flex-column p-3 pb-sm-3 bg-light mb-2"
         >
-          <div>
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="w-75">
-                <label class="mb-0" for="clearnet">
-                  <p class="font-weight-bold mb-0">Outgoing Connections to Clearnet Peers</p>
-                </label>
-              </div>
-              <div>
-                <toggle-switch
-                  id="clearnet"
-                  class="align-self-center"
-                  :on="settings.clearnet"
-                  @toggle="status => (settings.clearnet = status)"
-                ></toggle-switch>
-              </div>
-            </div>
-            <small class="w-sm-75 d-block text-muted mt-1">
-              Connect to peers available on the clearnet (publicly accessible internet).
-            </small>
-          </div>
-
-          <hr class="advanced-settings-divider" />
 
           <div>
             <div class="d-flex justify-content-between align-items-center">
@@ -60,32 +38,6 @@
               Connect to peers available on the Tor network.
             </small>
           </div>
-
-          <hr class="advanced-settings-divider" />
-
-          <div>
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="w-75">
-                <label class="mb-0" for="proxy">
-                  <p class="font-weight-bold mb-0">Connect to all Clearnet Peers over Tor</p>
-                </label>
-              </div>
-              <div>
-                <toggle-switch
-                  id="proxy"
-                  class="align-self-center"
-                  :on="settings.torProxyForClearnet"
-                  :disabled="isTorProxyDisabled"
-                  :tooltip="torProxyTooltip"
-                  @toggle="status => (settings.torProxyForClearnet = status)"
-                ></toggle-switch>
-              </div>
-            </div>
-            <small class="w-sm-75 d-block text-muted mt-1">
-              Connect to peers available on the clearnet via Tor to preserve your anonymity at the cost of slightly less security.
-            </small>
-          </div>
-
 
           <hr class="advanced-settings-divider" />
 
@@ -188,7 +140,7 @@
           </div>
 
           <hr class="advanced-settings-divider" />
-
+        
           <div>
             <div class="d-flex justify-content-between align-items-center">
               <div class="w-75">
@@ -212,7 +164,7 @@
             apps connected to your Monero node continue to work properly.
           </small>
         </div>
-
+      
           
           <!-- <div>
             <div class="d-flex justify-content-between align-items-center">
@@ -298,22 +250,6 @@ export default {
       rpc: state => state.monero.rpc,
       p2p: state => state.monero.p2p
     }),
-    isTorProxyDisabled() {
-      return !this.settings.clearnet || !this.settings.tor;
-    },
-    torProxyTooltip() {
-      if (!this.settings.clearnet || !this.settings.tor) {
-        return "Outgoing connections to both clearnet and Tor peers must be enabled to turn this on.";
-      } else {
-        return "";
-      }
-    }
-  },
-  watch: {
-    isTorProxyDisabled(value) {
-      if (!value) return;
-      this.settings.torProxyForClearnet = false;
-    }
   },
   props: {
     isSettingsDisabled: {
@@ -343,7 +279,7 @@ export default {
       this.settings = cloneDeep(this.moneroConfig);
     },
     isOutgoingConnectionsValid() {
-      return this.settings.clearnet || this.settings.tor || this.settings.i2p;
+      return this.settings.tor || this.settings.i2p;
     }
   }
 };
