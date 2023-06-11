@@ -662,7 +662,6 @@ body {
     background-color: #e85f00 !important; 
   }
 
-  .custom-dropdown:hover {
-    background-color: #e85f00 !important;
-    border-color: #e85f00 !important;
+  .custom-dropdown > a:active, .custom-dropdown > a:focus {
+    background-color: #e85f00;
   }

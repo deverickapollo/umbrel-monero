@@ -72,7 +72,7 @@
                 />
               </svg>
             </template>
-            <b-dropdown-item href="#" class="custom-dropdown" v-b-modal.advanced-settings-modal><b-badge pill variant="primary" class="mr-1 custom-badge">New</b-badge> Advanced Settings</b-dropdown-item>
+            <b-dropdown-item href="#" v-b-modal.advanced-settings-modal class="custom-dropdown"><b-badge pill variant="primary" class="mr-1 custom-badge">New</b-badge> Advanced Settings</b-dropdown-item>
           </b-dropdown>
         </div>
       </div>
