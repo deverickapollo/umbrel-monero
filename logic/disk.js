@@ -8,8 +8,6 @@ const GB_TO_MiB = 953.674;
 const MB_TO_MiB = 0.953674;
 
 const DEFAULT_ADVANCED_SETTINGS = {
-  clearnet: true,
-  torProxyForClearnet: false,
   tor: true,
   i2p: false,
   incomingConnections: false,
@@ -17,7 +15,6 @@ const DEFAULT_ADVANCED_SETTINGS = {
   dbSyncType: constants.MONERO_SYNC_TYPE,
   dbBlocksPerSync: constants.MONERO_BLOCKS_PER_SYNC,
   dnsBlockList: false,
-  restrictedRpc: false,
   confirmExternalBind: true,
   hidePort: false,
   prune: false,
@@ -46,12 +43,6 @@ function settingsToMultilineConfString(settings) {
     umbrelMoneroConfig.push("# Prune blockchain to reduce storage requirements"); 
     umbrelMoneroConfig.push(`prune-blockchain=1`);
   }
-
-  if (settings.restrictedRpc) {
-    umbrelMoneroConfig.push("");
-    umbrelMoneroConfig.push("# Enable the restricted RPC"); 
-    umbrelMoneroConfig.push(`restricted-rpc=1`);
-  }
   
   if (settings.dbSyncMode == 'fast' || settings.dbSyncMode == 'fastest' || settings.dbSyncMode == "safe"){
     umbrelMoneroConfig.push("");
@@ -72,55 +63,28 @@ function settingsToMultilineConfString(settings) {
     umbrelMoneroConfig.push('db-salvage=1');  
   }
 
-  if (settings.tor) {
-    umbrelMoneroConfig.push('# Use Tor for all outgoing connections.');
-    // umbrelMoneroConfig.push('tx-proxy=${constants.TOR_PROXY_IP}:${constants.TOR_PROXY_PORT},16');
-  
-    umbrelMoneroConfig.push('# Try to keep connections to Tor peers');
+  // // i2p
+  if (settings.i2p) {
+    umbrelMoneroConfig.push('# I2P SAM proxy <ip:port> to reach I2P peers.');
+    umbrelMoneroConfig.push(`i2p-proxy=${constants.I2P_DAEMON_IP}:${constants.I2P_DAEMON_PORT}`);
+  }
+
+  // Incoming connections (p2p)
+  if (settings.incomingConnections) {
+    umbrelMoneroConfig.push("");
+    umbrelMoneroConfig.push("# Enable/disable incoming connections from peers.");
+    umbrelMoneroConfig.push('public-node=1')
+    if(settings.i2p){
+      umbrelMoneroConfig.push(`anonymous-inbound=${constants.I2P_DAEMON_IP}:${constants.I2P_DAEMON_PORT}`);
+    }
+    if(settings.tor){
+      umbrelMoneroConfig.push(`p2p-bind-ip=0.0.0.0`);
+      umbrelMoneroConfig.push(`anonymous-inbound=${constants.MONERO_P2P_HIDDEN_SERVICE},${MONERO_HOST}:${constants.MONERO_P2P_PORT},25`);
+    }
+  }else{
     umbrelMoneroConfig.push('no-igd=1');
     umbrelMoneroConfig.push('hide-my-port=1');
   }
-
-  // // clearnet
-  // if (settings.clearnet) {
-  //   umbrelMoneroConfig.push('# Connect to peers over the clearnet.')
-  //   umbrelMoneroConfig.push('onlynet=ipv4');
-  //   umbrelMoneroConfig.push('onlynet=ipv6');
-  // }
-  
-  // if (settings.torProxyForClearnet) {
-  //   umbrelMoneroConfig.push('# Connect through <ip:port> SOCKS5 proxy.');
-  //   umbrelMoneroConfig.push(`proxy=${constants.TOR_PROXY_IP}:${constants.TOR_PROXY_PORT}`); 
-  // }
-
-  // // tor
-  // if (settings.tor) {
-  //   umbrelMoneroConfig.push('# Use separate SOCKS5 proxy <ip:port> to reach peers via Tor hidden services.');
-  //   umbrelMoneroConfig.push('onlynet=onion');
-  //   umbrelMoneroConfig.push(`onion=${constants.TOR_PROXY_IP}:${constants.TOR_PROXY_PORT}`);
-  //   umbrelMoneroConfig.push('# Tor control <ip:port> and password to use when onion listening enabled.');
-  //   umbrelMoneroConfig.push(`torcontrol=${constants.TOR_PROXY_IP}:${constants.TOR_PROXY_CONTROL_PORT}`);
-  //   umbrelMoneroConfig.push(`torpassword=${constants.TOR_PROXY_CONTROL_PASSWORD}`);
-  // }
-
-  // // i2p
-  // if (settings.i2p) {
-  //   umbrelMoneroConfig.push('# I2P SAM proxy <ip:port> to reach I2P peers.');
-  //   umbrelMoneroConfig.push(`i2psam=${constants.I2P_DAEMON_IP}:${constants.I2P_DAEMON_PORT}`);
-  //   umbrelMoneroConfig.push('onlynet=i2p');
-  // }
-
-  // incoming connections
-  // umbrelMoneroConfig.push('# Enable/disable incoming connections from peers.');
-  // const listen = settings.incomingConnections ? 1 : 0;
-  // umbrelMoneroConfig.push(`listen=1`);
-  // umbrelMoneroConfig.push(`listenonion=${listen}`);
-  // umbrelMoneroConfig.push(`i2pacceptincoming=${listen}`);
-
-  // umbrelMoneroConfig.push(`# Required to configure Tor control port properly`);
-  // umbrelMoneroConfig.push(`[${settings.network}]`);
-  // umbrelMoneroConfig.push(`bind=0.0.0.0:18080`);
-  // umbrelMoneroConfig.push(`bind=${constants.MONEROD_IP}:18081=onion`);
 
   return umbrelMoneroConfig.join('\n');
 }
