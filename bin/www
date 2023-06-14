@@ -41,9 +41,6 @@ async function createConfFilesAndRestartMonerod() {
   console.log('bitmonero.conf does not exist, creating config files with default values');
   const config = await diskLogic.getJsonStore();
 
-  // set torProxyForClearnet to false for existing installs
-  if (constants.MONERO_INITIALIZE_WITH_CLEARNET_OVER_TOR) config.torProxyForClearnet = true;
-
   await diskLogic.applyCustomMoneroConfig(config, true);
 
   const MAX_TRIES = 60;
