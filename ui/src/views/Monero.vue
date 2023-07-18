@@ -194,7 +194,18 @@
     <b-modal id="advanced-settings-modal" size="lg" centered hide-footer scrollable>
       <advanced-settings-modal :isSettingsDisabled="isRestartPending" @submit="saveSettingsAndRestartMonero" @clickRestoreDefaults="restoreDefaultSettingsAndRestartMonero"></advanced-settings-modal>
     </b-modal>
+
+    <footer class="bg-light text-center">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <donation></donation>
+          </div>
+        </div>
+      </div>
+    </footer>
   </div>
+  
 </template>
 
 <script>
@@ -209,6 +220,7 @@ import Blockchain from "@/components/Blockchain";
 import Stat from "@/components/Utility/Stat";
 import ConnectionModal from "@/components/ConnectionModal";
 import AdvancedSettingsModal from "@/components/AdvancedSettingsModal";
+import Donation from "@/components/DonationModal";
 import ChartWrapper from "@/components/ChartWrapper.vue";
 
 export default {
@@ -233,7 +245,7 @@ export default {
       reindex: state => state.user.moneroConfig.reindex,
       network: state => state.user.moneroConfig.network,
       pruned: state => state.monero.pruned,
-      pruneTargetSizeGB: state => state.monero.pruneTargetSizeGB,
+      pruneTargetSizeGB: state => state.monero.pruneTargetSizeGB
     }),
     showReindexInProgressAlert() {
       return this.reindex && this.syncPercent !== 100 && !this.isRestartPending;
@@ -390,6 +402,7 @@ export default {
     Stat,
     ConnectionModal,
     AdvancedSettingsModal,
+    Donation,
     ChartWrapper
   }
 };
