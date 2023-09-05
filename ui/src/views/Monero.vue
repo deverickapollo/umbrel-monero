@@ -174,9 +174,6 @@
                     :value="abbreviateSize(stats.blockchainSize)[0]"
                     :suffix="abbreviateSize(stats.blockchainSize)[1]"
                     showPercentChange
-                    :showPopover="pruned"
-                    popoverId="blockchain-size-popover"
-                    :popoverContent='[`Your "Prune Old Blocks" setting has set the max blockchain size to ${pruneTargetSizeGB}GB.`]'
                   ></stat>
                 </b-col>
               </b-row>
