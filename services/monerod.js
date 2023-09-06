@@ -4,7 +4,7 @@ const MonerodError = require('models/errors.js').MonerodError;
 const MONEROD_RPC_PORT = process.env.MONERO_RPC_PORT || 18081; // eslint-disable-line no-magic-numbers, max-len
 const MONEROD_HOST = process.env.MONERO_HOST || '127.0.0.1';
 const MONEROD_RPC_USER = process.env.MONERO_RPC_USER || 'monero';
-const MONEROD_RPC_PASSWORD = process.env.MONERO_RPC_PASSWORD;
+const MONEROD_RPC_PASSWORD = process.env.MONERO_RPC_PASSWORD || 'monero';
 
 const MONEROD_IP = `http://${MONEROD_HOST}:${MONEROD_RPC_PORT}`;
 
