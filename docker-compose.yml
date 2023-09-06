@@ -66,8 +66,8 @@ services:
       MONERO_RPC_PORT: 18081
       MONERO_ZMQ_PORT: 18082 
       MONERO_DEFAULT_NETWORK: "mainnet"
-      RPC_USER: "monero"
-      RPC_PASSWORD: "monero"
+      MONERO_RPC_USER: "monero"
+      MONERO_RPC_PASSWORD: "monero"
       MONERO_RPC_HIDDEN_SERVICE: "somehiddenservice.onion"
       MONERO_P2P_HIDDEN_SERVICE: "anotherhiddenservice.onion"
       DEVICE_DOMAIN_NAME: "monero.local"
