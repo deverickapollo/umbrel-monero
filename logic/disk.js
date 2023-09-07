@@ -63,10 +63,10 @@ function settingsToMultilineConfString(settings) {
     umbrelMoneroConfig.push('db-salvage=1');  
   }
 
-  // // i2p
+  // i2p
   if (settings.i2p) {
     umbrelMoneroConfig.push('# I2P SAM proxy <ip:port> to reach I2P peers.');
-    umbrelMoneroConfig.push(`i2p-proxy=${constants.I2P_DAEMON_IP}:${constants.I2P_DAEMON_PORT}`);
+    umbrelMoneroConfig.push(`tx-proxy=i2p,${constants.I2P_DAEMON_IP}:${constants.I2P_DAEMON_PORT}`);
   }
 
   // Incoming connections (p2p)
