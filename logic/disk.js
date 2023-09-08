@@ -65,6 +65,7 @@ function settingsToMultilineConfString(settings) {
 
   // i2p
   if (settings.i2p) {
+    umbrelMoneroConfig.push("");
     umbrelMoneroConfig.push('# I2P SAM proxy <ip:port> to reach I2P peers.');
     umbrelMoneroConfig.push(`tx-proxy=i2p,${constants.I2P_DAEMON_IP}:${constants.I2P_DAEMON_PORT}`);
   }
