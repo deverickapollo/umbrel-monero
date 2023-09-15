@@ -26,7 +26,15 @@
 
 ### Development
 
-- MONERO_HOST=your-monerod-ip MONEROD_RPC_PORT=18081 npm run start:all:dev
+- For local testing, you need to set the JSON_STORE_FILE and MONERO_CONF_FILE location in const.js or as an environment variable.  For const.js, you can use the following:
+  - Replace: 
+    - JSON_STORE_FILE: process.env.JSON_STORE_FILE || "/data/monero-config.json",
+    - MONERO_CONF_FILEPATH: process.env.MONERO_CONF_FILE || "/monero/.monero/bitmonero.conf",
+  - with:
+    - JSON_STORE_FILE: process.env.JSON_STORE_FILE || "./data/monero-config.json",
+    - MONERO_CONF_FILEPATH: process.env.MONERO_CONF_FILE || "./monero/.monero/bitmonero.conf",
+  - then run:
+    - MONERO_HOST=your-monerod-ip MONEROD_RPC_PORT=18081 npm run start:all:dev
   
 ### Production
 - npm run start
