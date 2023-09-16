@@ -67,6 +67,98 @@
           <div>
             <div class="d-flex justify-content-between align-items-center">
               <div class="w-75">
+                <label class="mb-0" for="DNS">
+                  <p class="font-weight-bold mb-0">DNS Block List</p>
+                </label>
+              </div>
+              <div>
+                <toggle-switch
+                  id="DNS"
+                  class="align-self-center"
+                  :on="settings.dnsBlockList"
+                  @toggle="status => (settings.dnsBlockList = status)"
+                ></toggle-switch>
+              </div>
+            </div>
+            <small class="w-sm-75 d-block text-muted mt-1">
+              Enable DNS Block List
+            </small>
+          </div>
+
+          <hr class="advanced-settings-divider" />
+
+          <div>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="w-75">
+                <label class="mb-0" for="dbsalvage">
+                  <p class="font-weight-bold mb-0">Salvage Database</p>
+                </label>
+              </div>
+              <div>
+                <toggle-switch
+                  id="dbsalvage"
+                  class="align-self-center"
+                  :on="settings.dbSalvage"
+                  @toggle="status => (settings.dbSalvage = status)"
+                ></toggle-switch>
+              </div>
+            </div>
+            <small class="w-sm-75 d-block text-muted mt-1">
+              Salvage the monero database if it is corrupted.
+            </small>
+          </div>
+
+          <hr class="advanced-settings-divider" />
+
+          <div>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="w-75">
+                <label class="mb-0" for="p2pFullNode">
+                  <p class="font-weight-bold mb-0">Enable P2P Full Node</p>
+                </label>
+              </div>
+              <div>
+                <toggle-switch
+                  id="p2pFullNode"
+                  class="align-self-center"
+                  :on="settings.p2pFullNode"
+                  @toggle="status => (settings.p2pFullNode = status)"
+                ></toggle-switch>
+              </div>
+            </div>
+            <small class="w-sm-75 d-block text-muted mt-1">
+              Enable P2P Full Node (default is false)
+            </small>
+          </div>
+
+          <hr class="advanced-settings-divider" />
+
+          <div>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="w-75">
+                <label class="mb-0" for="rpcOpenNode">
+                  <p class="font-weight-bold mb-0">Enable RPC Open Node</p>
+                </label>
+              </div>
+              <div>
+                <toggle-switch
+                  id="rpcOpenNode"
+                  class="align-self-center"
+                  :on="settings.rpcOpenNode"
+                  @toggle="status => (settings.rpcOpenNode = status)"
+                ></toggle-switch>
+              </div>
+            </div>
+            <small class="w-sm-75 d-block text-muted mt-1">
+              Enable RPC Open Node (default is false)
+            </small>
+          </div>
+
+          <hr class="advanced-settings-divider" />
+
+          <div>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="w-75">
                 <label class="mb-0" for="allow-incoming-connections">
                   <p class="font-weight-bold mb-0">Incoming Connections</p>
                 </label>
