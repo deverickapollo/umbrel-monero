@@ -16,6 +16,8 @@ const DEFAULT_ADVANCED_SETTINGS = {
   dbBlocksPerSync: constants.MONERO_BLOCKS_PER_SYNC,
   dnsBlockList: false,
   confirmExternalBind: true,
+  p2pFullNode: false,
+  rpcOpenNode: false,
   hidePort: false,
   blockNotify: false,
   prune: false,
@@ -58,14 +60,14 @@ function settingsToMultilineConfString(settings) {
     umbrelMoneroConfig.push(`prune-blockchain=1`);
   }
 
-  // Block list - not yet implemented in UI
+  // Block list 
   if (settings.dnsBlockList) {
     umbrelMoneroConfig.push("");
     umbrelMoneroConfig.push("# Block list to use for DNS blocking");
     umbrelMoneroConfig.push(`enable-dns-blocklist=1`);
   }
 
-  //Salvage DB - not yet implemented in UI
+  //Salvage DB 
   if (settings.dbSalvage) {
     umbrelMoneroConfig.push("");
     umbrelMoneroConfig.push('# Salvage the blockchain database if it is corrupted.');
