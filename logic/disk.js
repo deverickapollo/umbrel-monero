@@ -135,9 +135,6 @@ function settingsToMultilineConfString(settings) {
       umbrelMoneroConfig.push(`p2p-bind-ip=0.0.0.0`);
       umbrelMoneroConfig.push(`anonymous-inbound=${constants.MONERO_P2P_HIDDEN_SERVICE}:${constants.MONERO_ONION_P2P_PORT},${constants.MONERO_HOST}:${constants.MONERO_ONION_P2P_PORT},64`);
     }
-  }else{
-    umbrelMoneroConfig.push('no-igd=1');
-    umbrelMoneroConfig.push('hide-my-port=1');
   }
   
   if (process.env.APP_BTCPAY_IP && process.env.APP_BTCPAY_PORT) {
