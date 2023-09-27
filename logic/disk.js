@@ -14,10 +14,12 @@ const DEFAULT_ADVANCED_SETTINGS = {
   dbSyncMode: constants.MONERO_SYNC_MODE,
   dbSyncType: constants.MONERO_SYNC_TYPE,
   dbBlocksPerSync: constants.MONERO_BLOCKS_PER_SYNC,
-  dnsBlockList: false,
   confirmExternalBind: true,
   p2pFullNode: false,
-  rpcOpenNode: false,
+  upnp: false,
+  checkpoint: false,
+  publicNode: false,
+  zmq: false,
   hidePort: false,
   blockNotify: false,
   prune: false,
@@ -39,8 +41,13 @@ function settingsToMultilineConfString(settings) {
       umbrelMoneroConfig.push(`stagenet=1`);
     }
   }
-
+  umbrelMoneroConfig.push("# RPC ssl settings"); 
   umbrelMoneroConfig.push(`rpc-ssl=autodetect`);
+  umbrelMoneroConfig.push("");
+
+  //bandwidth settings
+  umbrelMoneroConfig.push("# Bandwidth settings"); 
+  umbrelMoneroConfig.push("");
   umbrelMoneroConfig.push(`out-peers=64`);
   umbrelMoneroConfig.push(`in-peers=64`);
   umbrelMoneroConfig.push(`limit-rate-up=1048576`);
@@ -53,18 +60,18 @@ function settingsToMultilineConfString(settings) {
     umbrelMoneroConfig.push(`db-sync-mode=${settings.dbSyncMode}`);
   }
   
+  //DNS Checkpoints
+  if (settings.checkpoint){
+    umbrelMoneroConfig.push("");
+    umbrelMoneroConfig.push("# DNS Checkpoints"); 
+    umbrelMoneroConfig.push(`enforce-dns-checkpointing=1`);
+  }
+  
   // Prune blockchain 
   if (settings.prune) {
     umbrelMoneroConfig.push("");
     umbrelMoneroConfig.push("# Prune blockchain to reduce storage requirements"); 
     umbrelMoneroConfig.push(`prune-blockchain=1`);
-  }
-
-  // Block list 
-  if (settings.dnsBlockList) {
-    umbrelMoneroConfig.push("");
-    umbrelMoneroConfig.push("# Block list to use for DNS blocking");
-    umbrelMoneroConfig.push(`enable-dns-blocklist=1`);
   }
 
   //Salvage DB 
@@ -74,18 +81,12 @@ function settingsToMultilineConfString(settings) {
     umbrelMoneroConfig.push('db-salvage=1');  
   }
 
-  // P2P full node - not yet implemented in UI
-  if (settings.p2pFullNode){
-    umbrelMoneroConfig.push(`p2p-bind-port=${constants.MONERO_P2P_PORT}`);
+  if (settings.zmq) {
+    umbrelMoneroConfig.push(`no-zmq=1`);
   }
 
-  // RPC Open Node - not yet implemented in UI
-  if (settings.rpcOpenNode){
-    umbrelMoneroConfig.push(`rpc-bind-port=${constants.MONERO_RPC_PORT}`);
-    umbrelMoneroConfig.push(`confirm-external-bind=1`);
-    umbrelMoneroConfig.push(`public-node=1`);
+  if (settings.upnp){
     umbrelMoneroConfig.push(`no-igd=1`);
-    umbrelMoneroConfig.push(`no-zmq=1`);
   }
   
   // i2p Outbound Connections 
@@ -93,10 +94,9 @@ function settingsToMultilineConfString(settings) {
     umbrelMoneroConfig.push('# I2P SAM proxy <ip:port> to reach I2P peers.');
     umbrelMoneroConfig.push(`tx-proxy=i2p,${constants.I2P_DAEMON_IP}:${constants.I2P_DAEMON_PORT}`);
   }
-
   
   // tor Outbound Connections 
-  if (settings.tor){ 1
+  if (settings.tor){ 
     umbrelMoneroConfig.push(`tx-proxy=tor,${constants.TOR_PROXY_IP}:${constants.TOR_PROXY_PORT}`);
     //# Tor: add P2P seed nodes for the Tor network
     //# For an up-to-date list of working nodes see ...
@@ -127,16 +127,29 @@ function settingsToMultilineConfString(settings) {
   if (settings.incomingConnections) {
     umbrelMoneroConfig.push("");
     umbrelMoneroConfig.push("# Enable/disable incoming connections from peers.");
-    umbrelMoneroConfig.push('public-node=1')
+    umbrelMoneroConfig.push(`p2p-bind-ip=0.0.0.0`);
+    
     if(settings.i2p){
       umbrelMoneroConfig.push(`anonymous-inbound=${constants.MONERO_I2P_HIDDEN_SERVICE}:${constants.I2P_DAEMON_PORT},${constants.I2P_DAEMON_IP}:${constants.I2P_DAEMON_PORT}`);
     }
-    if(settings.tor){
-      umbrelMoneroConfig.push(`p2p-bind-ip=0.0.0.0`);
+    if(settings.tor){   
       umbrelMoneroConfig.push(`anonymous-inbound=${constants.MONERO_P2P_HIDDEN_SERVICE}:${constants.MONERO_ONION_P2P_PORT},${constants.MONERO_HOST}:${constants.MONERO_ONION_P2P_PORT},64`);
     }
   }
+  umbrelMoneroConfig.push(`p2p-bind-port=${constants.MONERO_P2P_PORT}`);
+  umbrelMoneroConfig.push(`rpc-bind-port=${constants.MONERO_RPC_PORT}`);
+  umbrelMoneroConfig.push(`rpc-bind-ip=${constants.MONERO_HOST}`);
   
+  // Public Node
+  if (settings.publicNode){
+    umbrelMoneroConfig.push('public-node=1')
+    umbrelMoneroConfig.push(`confirm-external-bind=1`);
+    //umbrelMoneroConfig.push(`restricted-rpc=1`);
+    //We need to update the rpc-restricted-bind-ip and rpc-restricted-bind-port to the correct values
+    umbrelMoneroConfig.push(`rpc-restricted-bind-ip=${constants.MONERO_RESTRICTED_HOST}`);
+    umbrelMoneroConfig.push(`rpc-restricted-bind-port=${constants.MONERO_RESTRICTED_RPC_PORT}`);
+  }
+
   if (process.env.APP_BTCPAY_IP && process.env.APP_BTCPAY_PORT) {
       umbrelMoneroConfig.push("");
       umbrelMoneroConfig.push("# Execute command when a block is added or removed from blockchain.");

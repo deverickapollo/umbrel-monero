@@ -17,7 +17,7 @@
         <div
           class="advanced-settings-container d-flex flex-column p-3 pb-sm-3 bg-light mb-2"
         >
-
+        
           <div>
             <div class="d-flex justify-content-between align-items-center">
               <div class="w-75">
@@ -59,29 +59,6 @@
             </div>
             <small class="w-sm-75 d-block text-muted mt-1">
               Connect to peers available on the I2P network.
-            </small>
-          </div>
-
-          <hr class="advanced-settings-divider" />
-
-          <div>
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="w-75">
-                <label class="mb-0" for="DNS">
-                  <p class="font-weight-bold mb-0">DNS Block List</p>
-                </label>
-              </div>
-              <div>
-                <toggle-switch
-                  id="DNS"
-                  class="align-self-center"
-                  :on="settings.dnsBlockList"
-                  @toggle="status => (settings.dnsBlockList = status)"
-                ></toggle-switch>
-              </div>
-            </div>
-            <small class="w-sm-75 d-block text-muted mt-1">
-              Enable DNS Block List
             </small>
           </div>
 
@@ -136,21 +113,91 @@
           <div>
             <div class="d-flex justify-content-between align-items-center">
               <div class="w-75">
-                <label class="mb-0" for="rpcOpenNode">
-                  <p class="font-weight-bold mb-0">Enable RPC Open Node</p>
+                <label class="mb-0" for="public-node">
+                  <p class="font-weight-bold mb-0">Public Node</p>
                 </label>
               </div>
               <div>
                 <toggle-switch
-                  id="rpcOpenNode"
+                  id="public-node"
                   class="align-self-center"
-                  :on="settings.rpcOpenNode"
-                  @toggle="status => (settings.rpcOpenNode = status)"
+                  :on="settings.publicNode"
+                  @toggle="status => (settings.publicNode = status)"
                 ></toggle-switch>
               </div>
             </div>
             <small class="w-sm-75 d-block text-muted mt-1">
-              Enable RPC Open Node (default is false)
+                Advertise to the network that your node is public. This feature will disable most RPC calls
+                so only use if you know what you are doing.
+            </small>
+          </div>
+
+          <hr class="advanced-settings-divider" />
+
+          <div>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="w-75">
+                <label class="mb-0" for="zmq">
+                  <p class="font-weight-bold mb-0">Enable ZMQ Node</p>
+                </label>
+              </div>
+              <div>
+                <toggle-switch
+                  id="zmq"
+                  class="align-self-center"
+                  :on="settings.zmq"
+                  @toggle="status => (settings.zmq = status)"
+                ></toggle-switch>
+              </div>
+            </div>
+            <small class="w-sm-75 d-block text-muted mt-1">
+              Enable zmq (default is false)
+            </small>
+          </div>
+
+          <hr class="advanced-settings-divider" />
+
+          <div>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="w-75">
+                <label class="mb-0" for="upnp">
+                  <p class="font-weight-bold mb-0">Enable UPnP on Node</p>
+                </label>
+              </div>
+              <div>
+                <toggle-switch
+                  id="upnp"
+                  class="align-self-center"
+                  :on="settings.upnp"
+                  @toggle="status => (settings.upnp = status)"
+                ></toggle-switch>
+              </div>
+            </div>
+            <small class="w-sm-75 d-block text-muted mt-1">
+              Enable UPnP (default is false)
+            </small>
+          </div>
+
+          <hr class="advanced-settings-divider" />
+
+          <div>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="w-75">
+                <label class="mb-0" for="checkpoint">
+                  <p class="font-weight-bold mb-0">Enable DNS Checkpointing on Node</p>
+                </label>
+              </div>
+              <div>
+                <toggle-switch
+                  id="checkpoint"
+                  class="align-self-center"
+                  :on="settings.checkpoint"
+                  @toggle="status => (settings.checkpoint = status)"
+                ></toggle-switch>
+              </div>
+            </div>
+            <small class="w-sm-75 d-block text-muted mt-1">
+              Enable DNS checkpoint (default is false)
             </small>
           </div>
 
