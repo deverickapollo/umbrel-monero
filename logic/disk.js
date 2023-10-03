@@ -23,6 +23,7 @@ const DEFAULT_ADVANCED_SETTINGS = {
   hidePort: false,
   blockNotify: false,
   prune: false,
+  minercpu: false,
   dbSalvage: false,
   network: constants.MONERO_DEFAULT_NETWORK
 }
@@ -74,6 +75,20 @@ function settingsToMultilineConfString(settings) {
     umbrelMoneroConfig.push(`prune-blockchain=1`);
   }
 
+  /*
+   * Enable Mining
+   */
+  if (settings.mining && settings.moneroAddress) {
+    umbrelMoneroConfig.push(`bg-mining-enable=1`);
+    umbrelMoneroConfig.push(`start-mining=${settings.moneroAddress}`);
+  }
+
+  if (settings.minercpu) {
+    umbrelMoneroConfig.push("");
+    umbrelMoneroConfig.push("# Enable mining on CPU"); 
+    umbrelMoneroConfig.push(`bg-mining-miner-target=${settings.minercpu}`);
+  }
+
   //Salvage DB 
   if (settings.dbSalvage) {
     umbrelMoneroConfig.push("");
@@ -81,12 +96,15 @@ function settingsToMultilineConfString(settings) {
     umbrelMoneroConfig.push('db-salvage=1');  
   }
 
-  if (settings.zmq) {
-    umbrelMoneroConfig.push(`no-zmq=1`);
-  }
 
+  if (settings.hidePort){
+    umbrelMoneroConfig.push("");
+    umbrelMoneroConfig.push("# Hide the port from the peers");
+    umbrelMoneroConfig.push(`hide-my-port=1`);
+  }
+ 
   if (settings.upnp){
-    umbrelMoneroConfig.push(`no-igd=1`);
+    umbrelMoneroConfig.push(`igd=enabled`);
   }
   
   // i2p Outbound Connections 
@@ -136,17 +154,15 @@ function settingsToMultilineConfString(settings) {
       umbrelMoneroConfig.push(`anonymous-inbound=${constants.MONERO_P2P_HIDDEN_SERVICE}:${constants.MONERO_ONION_P2P_PORT},${constants.MONERO_HOST}:${constants.MONERO_ONION_P2P_PORT},64`);
     }
   }
+  umbrelMoneroConfig.push(`rpc-bind-ip=0.0.0.0`);
   umbrelMoneroConfig.push(`p2p-bind-port=${constants.MONERO_P2P_PORT}`);
   umbrelMoneroConfig.push(`rpc-bind-port=${constants.MONERO_RPC_PORT}`);
-  umbrelMoneroConfig.push(`rpc-bind-ip=${constants.MONERO_HOST}`);
-  
+
   // Public Node
   if (settings.publicNode){
     umbrelMoneroConfig.push('public-node=1')
     umbrelMoneroConfig.push(`confirm-external-bind=1`);
-    //umbrelMoneroConfig.push(`restricted-rpc=1`);
-    //We need to update the rpc-restricted-bind-ip and rpc-restricted-bind-port to the correct values
-    umbrelMoneroConfig.push(`rpc-restricted-bind-ip=${constants.MONERO_RESTRICTED_HOST}`);
+    //TODO: update the rpc-restricted-bind-ip and rpc-restricted-bind-port to the correct values
     umbrelMoneroConfig.push(`rpc-restricted-bind-port=${constants.MONERO_RESTRICTED_RPC_PORT}`);
   }
 

@@ -137,22 +137,101 @@
           <div>
             <div class="d-flex justify-content-between align-items-center">
               <div class="w-75">
-                <label class="mb-0" for="zmq">
-                  <p class="font-weight-bold mb-0">Enable ZMQ Node</p>
+                <label class="mb-0" for="hidePort">
+                  <p class="font-weight-bold mb-0">Hide Port</p>
                 </label>
               </div>
               <div>
                 <toggle-switch
-                  id="zmq"
+                  id="hidePort"
                   class="align-self-center"
-                  :on="settings.zmq"
-                  @toggle="status => (settings.zmq = status)"
+                  :on="settings.hidePort"
+                  @toggle="status => (settings.hidePort = status)"
                 ></toggle-switch>
               </div>
             </div>
             <small class="w-sm-75 d-block text-muted mt-1">
-              Enable zmq (default is false)
+              Do not announce yourself as peerlist candidate
             </small>
+          </div>
+
+          <hr class="advanced-settings-divider" />
+
+          <div>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="w-75">
+                <label class="mb-0" for="mining">
+                  <p class="font-weight-bold mb-0">Enable Mining on Server</p>
+                </label>
+              </div>
+              <div>
+                <toggle-switch
+                  id="mining"
+                  class="align-self-center"
+                  :on="settings.mining"
+                  @toggle="status => (settings.mining = status)"
+                ></toggle-switch>
+              </div>
+            </div>
+            <small class="w-sm-75 d-block text-muted mt-1">
+              Enable mining on server (default is false)
+            </small>
+          </div>
+
+          <hr v-if="settings.mining" class="advanced-settings-divider" />
+
+          <div >
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="w-75">
+                <label class="mb-0" for="moneroAddress">
+                  <p class="font-weight-bold mb-0">Monero Address</p>
+                </label>
+              </div>
+              <div>
+                <b-form-input
+                  id="moneroAddress"
+                  v-model="settings.moneroAddress"
+                  type="text"
+                  placeholder="Enter your Monero address"
+                ></b-form-input>
+              </div>
+            </div>
+            <small class="w-sm-75 d-block text-muted mt-1">
+              Set your Monero address for mining rewards.
+            </small>
+          </div>
+
+          <hr v-if="settings.mining" class="advanced-settings-divider" />
+
+
+          <div v-if="settings.mining">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="w-75">
+                <label class="mb-0" for="miner-cpu">
+                  <p class="font-weight-bold mb-0">Miner CPU Utilization</p>
+                </label>
+              </div>
+              <div>
+                <toggle-switch
+                  id="miner-cpu"
+                  class="align-self-center"
+                  :on="settings.minercpu.enabled"
+                  @toggle="status => (settings.minercpu.enabled = status)"
+                ></toggle-switch>
+              </div>
+            </div>
+            <small class="w-sm-75 d-block text-muted mt-1">
+              Specify maximum percentage cpu use by miner
+            </small>
+            <miner-slider
+              id="miner-cpu"
+              class="mt-3 mb-3"
+              :minValue="1"
+              :maxValue="100"
+              :startingValue="33"
+              :disabled="!settings.minercpu.enabled"
+              @change="value => (settings.minercpu.utilization = value)"
+            ></miner-slider>
           </div>
 
           <hr class="advanced-settings-divider" />
@@ -226,32 +305,6 @@
             </small>
           </div>
 
-          <hr class="advanced-settings-divider" />
-
-          <div>
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="w-75">
-                <label class="mb-0" for="prune-old-blocks">
-                  <p class="font-weight-bold mb-0">Prune Blocks</p>
-                </label>
-              </div>
-              <div>
-                <toggle-switch
-                  id="prune-old-blocks"
-                  class="align-self-center"
-                  :on="settings.prune"
-                  @toggle="status => (settings.prune = status)"
-                ></toggle-switch>
-              </div>
-            </div>
-            <small class="w-sm-75 d-block text-muted mt-1">
-              Save storage space by pruning (deleting) old blocks and keeping only 
-              a limited copy of the blockchain. It may take some time for your 
-              node to be online after you turn on pruning. If you turn off pruning 
-              after turning it on, you'll need to download the entire blockchain 
-              again.
-            </small>
-          </div>
 
           <hr class="advanced-settings-divider" />
 
@@ -365,6 +418,7 @@ import cloneDeep from "lodash.clonedeep";
 
 import { mapState } from "vuex";
 import ToggleSwitch from "./Utility/ToggleSwitch.vue";
+import MinerSlider from "./MinerSlider.vue";
 
 export default {
   data() {
@@ -400,7 +454,8 @@ export default {
     this.setSettings();
   },
   components: {
-    ToggleSwitch
+    ToggleSwitch,
+    MinerSlider
   },
   methods: {
     submit() {
