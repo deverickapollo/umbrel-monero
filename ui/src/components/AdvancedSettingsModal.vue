@@ -146,7 +146,9 @@
                   id="hidePort"
                   class="align-self-center"
                   :on="settings.hidePort"
-                  @toggle="status => (settings.hidePort = status)"
+                  @toggle="status => {
+                    settings.hidePort = status;
+                  }"
                 ></toggle-switch>
               </div>
             </div>
@@ -161,7 +163,7 @@
             <div class="d-flex justify-content-between align-items-center">
               <div class="w-75">
                 <label class="mb-0" for="mining">
-                  <p class="font-weight-bold mb-0">Enable Mining on Server</p>
+                  <p class="font-weight-bold mb-0">Enable Mining On Server</p>
                 </label>
               </div>
               <div>
@@ -169,7 +171,9 @@
                   id="mining"
                   class="align-self-center"
                   :on="settings.mining"
-                  @toggle="status => (settings.mining = status)"
+                  @toggle="status => {
+                    settings.mining = status;
+                  }"
                 ></toggle-switch>
               </div>
             </div>
@@ -180,7 +184,7 @@
 
           <hr v-if="settings.mining" class="advanced-settings-divider" />
 
-          <div >
+          <div v-if="settings.mining">
             <div class="d-flex justify-content-between align-items-center">
               <div class="w-75">
                 <label class="mb-0" for="moneroAddress">
@@ -215,8 +219,8 @@
                 <toggle-switch
                   id="miner-cpu"
                   class="align-self-center"
-                  :on="settings.minercpu.enabled"
-                  @toggle="status => (settings.minercpu.enabled = status)"
+                  :on="settings.minercpu"
+                  @toggle="status => (settings.minercpu = status)"
                 ></toggle-switch>
               </div>
             </div>
@@ -228,9 +232,9 @@
               class="mt-3 mb-3"
               :minValue="1"
               :maxValue="100"
-              :startingValue="33"
-              :disabled="!settings.minercpu.enabled"
-              @change="value => (settings.minercpu.utilization = value)"
+              :startingValue="0"
+              :disabled="!settings.minercpu"
+              @change="value => (settings.cpupercentage = value)"
             ></miner-slider>
           </div>
 
