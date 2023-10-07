@@ -12,7 +12,7 @@
       >
         <template v-slot:tooltip="{ value, focus }">
           <div :class="['custom-tooltip', { focus }]">
-            <small class="text-muted">{{ value }}GB</small>
+            <small class="text-muted">{{ value }}%</small>
           </div>
         </template>
       </vue-slider>
@@ -69,7 +69,7 @@
   
   .miner-slider .vue-slider-rail {
     cursor: pointer;
-    background: linear-gradient(to right, #f6b900, #00cd98);
+    background: linear-gradient(to right, #a7f82d, #fe0606);
   }
   
   .miner-slider .vue-slider-process {
