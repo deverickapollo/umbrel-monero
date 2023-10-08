@@ -1,7 +1,7 @@
 // const fs = require("fs");
-const path = require("path");
-const constants = require("utils/const.js");
-const diskService = require("services/disk.js");
+const path = require('path');
+const constants = require('utils/const.js');
+const diskService = require('services/disk.js');
 
 // TODO - consider moving these unit conversions to utils/const.js
 const GB_TO_MiB = 953.674;
@@ -17,7 +17,6 @@ const DEFAULT_ADVANCED_SETTINGS = {
   confirmExternalBind: true,
   p2pFullNode: false,
   upnp: false,
-  mining: false,
   checkpoint: false,
   publicNode: false,
   moneroAddress: '',
@@ -25,55 +24,56 @@ const DEFAULT_ADVANCED_SETTINGS = {
   hidePort: false,
   blockNotify: false,
   prune: false,
-  minercpu: false,
+  mining: false,
+  minercpuTarget: 0,
   dbSalvage: false,
-  network: constants.MONERO_DEFAULT_NETWORK
-}
+  network: constants.MONERO_DEFAULT_NETWORK,
+};
 
 
 function settingsToMultilineConfString(settings) {
   const umbrelMoneroConfig = [];
 
   // [CHAIN]
-  umbrelMoneroConfig.push("# [chain]"); 
+  umbrelMoneroConfig.push('# [chain]');
   if (settings.network !== 'mainnet') {
-    //Check if set to testnet or stagenet
+    // Check if set to testnet or stagenet
     if (settings.network === 'testnet') {
       umbrelMoneroConfig.push(`testnet=1`);
     } else if (settings.network === 'stagenet') {
       umbrelMoneroConfig.push(`stagenet=1`);
     }
   }
-  umbrelMoneroConfig.push("# RPC ssl settings"); 
+  umbrelMoneroConfig.push('# RPC ssl settings');
   umbrelMoneroConfig.push(`rpc-ssl=autodetect`);
-  umbrelMoneroConfig.push("");
+  umbrelMoneroConfig.push('');
 
-  //bandwidth settings
-  umbrelMoneroConfig.push("# Bandwidth settings"); 
-  umbrelMoneroConfig.push("");
+  // bandwidth settings
+  umbrelMoneroConfig.push('# Bandwidth settings');
+  umbrelMoneroConfig.push('');
   umbrelMoneroConfig.push(`out-peers=64`);
   umbrelMoneroConfig.push(`in-peers=64`);
   umbrelMoneroConfig.push(`limit-rate-up=1048576`);
   umbrelMoneroConfig.push(`limit-rate-down=1048576`);
-  
+
   // Database Sync Mode
-  if (settings.dbSyncMode == 'fast' || settings.dbSyncMode == 'fastest' || settings.dbSyncMode == "safe"){
-    umbrelMoneroConfig.push("");
-    umbrelMoneroConfig.push("# Database sync mode"); 
+  if (settings.dbSyncMode == 'fast' || settings.dbSyncMode == 'fastest' || settings.dbSyncMode == 'safe') {
+    umbrelMoneroConfig.push('');
+    umbrelMoneroConfig.push('# Database sync mode');
     umbrelMoneroConfig.push(`db-sync-mode=${settings.dbSyncMode}`);
   }
-  
-  //DNS Checkpoints
-  if (settings.checkpoint){
-    umbrelMoneroConfig.push("");
-    umbrelMoneroConfig.push("# DNS Checkpoints"); 
+
+  // DNS Checkpoints
+  if (settings.checkpoint) {
+    umbrelMoneroConfig.push('');
+    umbrelMoneroConfig.push('# DNS Checkpoints');
     umbrelMoneroConfig.push(`enforce-dns-checkpointing=1`);
   }
-  
-  // Prune blockchain 
+
+  // Prune blockchain
   if (settings.prune) {
-    umbrelMoneroConfig.push("");
-    umbrelMoneroConfig.push("# Prune blockchain to reduce storage requirements"); 
+    umbrelMoneroConfig.push('');
+    umbrelMoneroConfig.push('# Prune blockchain to reduce storage requirements');
     umbrelMoneroConfig.push(`prune-blockchain=1`);
   }
 
@@ -86,40 +86,40 @@ function settingsToMultilineConfString(settings) {
   }
 
   if (settings.minercpu) {
-    umbrelMoneroConfig.push("");
-    umbrelMoneroConfig.push("# Enable mining on CPU"); 
+    umbrelMoneroConfig.push('');
+    umbrelMoneroConfig.push('# Enable mining on CPU');
     umbrelMoneroConfig.push(`bg-mining-miner-target=${settings.minercpu}`);
   }
 
-  //Salvage DB 
+  // Salvage DB
   if (settings.dbSalvage) {
-    umbrelMoneroConfig.push("");
+    umbrelMoneroConfig.push('');
     umbrelMoneroConfig.push('# Salvage the blockchain database if it is corrupted.');
-    umbrelMoneroConfig.push('db-salvage=1');  
+    umbrelMoneroConfig.push('db-salvage=1');
   }
 
 
-  if (settings.hidePort){
-    umbrelMoneroConfig.push("");
-    umbrelMoneroConfig.push("# Hide the port from the peers");
+  if (settings.hidePort) {
+    umbrelMoneroConfig.push('');
+    umbrelMoneroConfig.push('# Hide the port from the peers');
     umbrelMoneroConfig.push(`hide-my-port=1`);
   }
- 
-  if (settings.upnp){
+
+  if (settings.upnp) {
     umbrelMoneroConfig.push(`igd=enabled`);
   }
-  
-  // i2p Outbound Connections 
+
+  // i2p Outbound Connections
   if (settings.i2p) {
     umbrelMoneroConfig.push('# I2P SAM proxy <ip:port> to reach I2P peers.');
     umbrelMoneroConfig.push(`tx-proxy=i2p,${constants.I2P_DAEMON_IP}:${constants.I2P_DAEMON_PORT}`);
   }
-  
-  // tor Outbound Connections 
-  if (settings.tor){ 
+
+  // tor Outbound Connections
+  if (settings.tor) {
     umbrelMoneroConfig.push(`tx-proxy=tor,${constants.TOR_PROXY_IP}:${constants.TOR_PROXY_PORT}`);
-    //# Tor: add P2P seed nodes for the Tor network
-    //# For an up-to-date list of working nodes see ...
+    // # Tor: add P2P seed nodes for the Tor network
+    // # For an up-to-date list of working nodes see ...
 
     umbrelMoneroConfig.push(`add-peer=4egylyolrzsk6rskorqvocipdo4tqqoyzxnplbjorns7issmgpoxvtyd.onion:18083`);
     umbrelMoneroConfig.push(`add-peer=fagmobguo6u4z4b2ghyg3jegcdpmd4qj4wxkhemph5d5q6dltllveqyd.onion:18083`);
@@ -129,9 +129,9 @@ function settingsToMultilineConfString(settings) {
     umbrelMoneroConfig.push(`add-peer=ozeavjybjbxbvmfcpxzjcn4zklbgohjwwndzenjt44pypvx6jisy74id.onion:18083`);
     umbrelMoneroConfig.push(`add-peer=xcccrsxi2zknef6zl3sviasqg4xnlkh5k3xqu7ytwkpfli3huyfvsjid.onion:18083`);
 
-    //# Make the seed nodes permanent to fix monerod issue of not maintaining enough connections,
-    //# based on this reddit comment:
-    //# https://www.reddit.com/r/monerosupport/comments/k3m3x2/comment/ge5ehcy/?utm_source=share&utm_medium=web2x&context=3
+    // # Make the seed nodes permanent to fix monerod issue of not maintaining enough connections,
+    // # based on this reddit comment:
+    // # https://www.reddit.com/r/monerosupport/comments/k3m3x2/comment/ge5ehcy/?utm_source=share&utm_medium=web2x&context=3
     umbrelMoneroConfig.push(`add-priority-node=4egylyolrzsk6rskorqvocipdo4tqqoyzxnplbjorns7issmgpoxvtyd.onion:18083`);
     umbrelMoneroConfig.push(`add-priority-node=fagmobguo6u4z4b2ghyg3jegcdpmd4qj4wxkhemph5d5q6dltllveqyd.onion:18083`);
     umbrelMoneroConfig.push(`add-priority-node=monerokdwzyuml7vfp73fjx5277lzesbrq4nvbl3r3t5ctgodsx34vid.onion:18089`);
@@ -140,19 +140,19 @@ function settingsToMultilineConfString(settings) {
     umbrelMoneroConfig.push(`add-priority-node=ozeavjybjbxbvmfcpxzjcn4zklbgohjwwndzenjt44pypvx6jisy74id.onion:18083`);
     umbrelMoneroConfig.push(`add-priority-node=xcccrsxi2zknef6zl3sviasqg4xnlkh5k3xqu7ytwkpfli3huyfvsjid.onion:18083`);
 
-    //umbrelMoneroConfig.push(`add-exclusive-node=5tymba6faziy36md5ffy42vatbjzlye4vyr3gyz6lcvdfximnvwpmwqd.onion:28083`);
-    //umbrelMoneroConfig.push(`add-peer=5tymba6faziy36md5ffy42vatbjzlye4vyr3gyz6lcvdfximnvwpmwqd.onion:28083`);
+    // umbrelMoneroConfig.push(`add-exclusive-node=5tymba6faziy36md5ffy42vatbjzlye4vyr3gyz6lcvdfximnvwpmwqd.onion:28083`);
+    // umbrelMoneroConfig.push(`add-peer=5tymba6faziy36md5ffy42vatbjzlye4vyr3gyz6lcvdfximnvwpmwqd.onion:28083`);
   }
   // Incoming connections (p2p)
   if (settings.incomingConnections) {
-    umbrelMoneroConfig.push("");
-    umbrelMoneroConfig.push("# Enable/disable incoming connections from peers.");
+    umbrelMoneroConfig.push('');
+    umbrelMoneroConfig.push('# Enable/disable incoming connections from peers.');
     umbrelMoneroConfig.push(`p2p-bind-ip=0.0.0.0`);
-    
-    if(settings.i2p){
+
+    if (settings.i2p) {
       umbrelMoneroConfig.push(`anonymous-inbound=${constants.MONERO_I2P_HIDDEN_SERVICE}:${constants.I2P_DAEMON_PORT},${constants.I2P_DAEMON_IP}:${constants.I2P_DAEMON_PORT}`);
     }
-    if(settings.tor){   
+    if (settings.tor) {
       umbrelMoneroConfig.push(`anonymous-inbound=${constants.MONERO_P2P_HIDDEN_SERVICE}:${constants.MONERO_ONION_P2P_PORT},${constants.MONERO_HOST}:${constants.MONERO_ONION_P2P_PORT},64`);
     }
   }
@@ -161,17 +161,17 @@ function settingsToMultilineConfString(settings) {
   umbrelMoneroConfig.push(`rpc-bind-port=${constants.MONERO_RPC_PORT}`);
 
   // Public Node
-  if (settings.publicNode){
-    umbrelMoneroConfig.push('public-node=1')
+  if (settings.publicNode) {
+    umbrelMoneroConfig.push('public-node=1');
     umbrelMoneroConfig.push(`confirm-external-bind=1`);
-    //TODO: update the rpc-restricted-bind-ip and rpc-restricted-bind-port to the correct values
+    // TODO: update the rpc-restricted-bind-ip and rpc-restricted-bind-port to the correct values
     umbrelMoneroConfig.push(`rpc-restricted-bind-port=${constants.MONERO_RESTRICTED_RPC_PORT}`);
   }
 
   if (process.env.APP_BTCPAY_IP && process.env.APP_BTCPAY_PORT) {
-      umbrelMoneroConfig.push("");
-      umbrelMoneroConfig.push("# Execute command when a block is added or removed from blockchain.");
-      umbrelMoneroConfig.push('block-notify="/usr/bin/curl --silent -o /dev/null -X GET http://${constants.APP_BTCPAY_IP}:${constants.APP_BTCPAY_PORT}/monerolikedaemoncallback/block?cryptoCode=xmr&hash=%s"');
+    umbrelMoneroConfig.push('');
+    umbrelMoneroConfig.push('# Execute command when a block is added or removed from blockchain.');
+    umbrelMoneroConfig.push('block-notify="/usr/bin/curl --silent -o /dev/null -X GET http://${constants.APP_BTCPAY_IP}:${constants.APP_BTCPAY_PORT}/monerolikedaemoncallback/block?cryptoCode=xmr&hash=%s"');
   }
 
   return umbrelMoneroConfig.join('\n');
@@ -180,7 +180,7 @@ function settingsToMultilineConfString(settings) {
 async function getJsonStore() {
   try {
     const jsonStore = await diskService.readJsonFile(constants.JSON_STORE_FILE);
-    return { ...DEFAULT_ADVANCED_SETTINGS, ...jsonStore };
+    return {...DEFAULT_ADVANCED_SETTINGS, ...jsonStore};
   } catch (error) {
     return DEFAULT_ADVANCED_SETTINGS;
   }
@@ -191,7 +191,7 @@ async function updateJsonStore(newProps) {
   const jsonStore = await getJsonStore();
   return diskService.writeJsonFile(constants.JSON_STORE_FILE, {
     ...jsonStore,
-    ...newProps
+    ...newProps,
   });
 }
 
@@ -210,13 +210,12 @@ async function generateMoneroConfig(shouldOverwriteExistingFile = true, setting 
   // if (!existingConfContents.includes(includeConfString)) {
   //   return await diskService.writePlainTextFile(constants.MONERO_CONF_FILEPATH, `${includeConfString}\n${existingConfContents}`);
   // }
-
 }
 
 async function applyMoneroConfig(moneroConfig, shouldOverwriteExistingFile = true) {
   await Promise.all([
     updateJsonStore(moneroConfig),
-    generateMoneroConfig(shouldOverwriteExistingFile,moneroConfig),
+    generateMoneroConfig(shouldOverwriteExistingFile, moneroConfig),
   ]);
 }
 
@@ -227,8 +226,6 @@ async function applyCustomMoneroConfig(moneroConfig, shouldOverwriteExistingFile
 async function applyDefaultMoneroConfig() {
   await applyMoneroConfig(DEFAULT_ADVANCED_SETTINGS, true);
 }
-
-
 
 
 module.exports = {

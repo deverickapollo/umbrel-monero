@@ -6,10 +6,10 @@
       <h3 class="mt-1">Advanced Settings</h3>
       <b-alert variant="warning" show class="mb-3">
         <small>
-          Be careful when changing the settings below as they may cause issues 
-          with other apps on your Umbrel that connect to your Monero node. Only make 
-          changes if you understand the potential effects on connected apps or 
-          wallets.
+          Be careful when changing the settings below as they may cause issues
+          with other apps on your Umbrel that connect to your Monero node. Only
+          make changes if you understand the potential effects on connected apps
+          or wallets.
         </small>
       </b-alert>
 
@@ -17,12 +17,13 @@
         <div
           class="advanced-settings-container d-flex flex-column p-3 pb-sm-3 bg-light mb-2"
         >
-        
           <div>
             <div class="d-flex justify-content-between align-items-center">
               <div class="w-75">
                 <label class="mb-0" for="tor">
-                  <p class="font-weight-bold mb-0">Outgoing Connections to Tor Peers</p>
+                  <p class="font-weight-bold mb-0">
+                    Outgoing Connections to Tor Peers
+                  </p>
                 </label>
               </div>
               <div>
@@ -45,7 +46,9 @@
             <div class="d-flex justify-content-between align-items-center">
               <div class="w-75">
                 <label class="mb-0" for="I2P">
-                  <p class="font-weight-bold mb-0">Outgoing Connections to I2P Peers</p>
+                  <p class="font-weight-bold mb-0">
+                    Outgoing Connections to I2P Peers
+                  </p>
                 </label>
               </div>
               <div>
@@ -127,8 +130,9 @@
               </div>
             </div>
             <small class="w-sm-75 d-block text-muted mt-1">
-                Advertise to the network that your node is public. This feature will disable most RPC calls
-                so only use if you know what you are doing.
+              Advertise to the network that your node is public. This feature
+              will disable most RPC calls so only use if you know what you are
+              doing.
             </small>
           </div>
 
@@ -146,9 +150,11 @@
                   id="hidePort"
                   class="align-self-center"
                   :on="settings.hidePort"
-                  @toggle="status => {
-                    settings.hidePort = status;
-                  }"
+                  @toggle="
+                    status => {
+                      settings.hidePort = status;
+                    }
+                  "
                 ></toggle-switch>
               </div>
             </div>
@@ -163,7 +169,9 @@
             <div class="d-flex justify-content-between align-items-center">
               <div class="w-75">
                 <label class="mb-0" for="mining">
-                  <p class="font-weight-bold mb-0">Enable Mining On Server</p>
+                  <p class="font-weight-bold mb-0">
+                    Enable mining on the server
+                  </p>
                 </label>
               </div>
               <div>
@@ -171,15 +179,22 @@
                   id="mining"
                   class="align-self-center"
                   :on="settings.mining"
-                  @toggle="status => {
-                    settings.mining = status;
-                  }"
+                  @toggle="status => (settings.mining = status)"
                 ></toggle-switch>
               </div>
             </div>
             <small class="w-sm-75 d-block text-muted mt-1">
-              Enable mining on server (default is false)
+              Specify maximum percentage cpu use by miner
             </small>
+            <miner-slider
+              id="miner-cpu"
+              class="mt-3 mb-3"
+              :minValue="0"
+              :maxValue="100"
+              :startingValue="33"
+              :disabled="!settings.mining"
+              @change="value => (settings.minercpuTarget = value)"
+            ></miner-slider>
           </div>
 
           <hr v-if="settings.mining" class="advanced-settings-divider" />
@@ -206,37 +221,6 @@
           </div>
 
           <hr v-if="settings.mining" class="advanced-settings-divider" />
-
-
-          <div v-if="settings.mining">
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="w-75">
-                <label class="mb-0" for="miner-cpu">
-                  <p class="font-weight-bold mb-0">Miner CPU Utilization</p>
-                </label>
-              </div>
-              <div>
-                <toggle-switch
-                  id="miner-cpu"
-                  class="align-self-center"
-                  :on="settings.minercpu"
-                  @toggle="status => (settings.minercpu = status)"
-                ></toggle-switch>
-              </div>
-            </div>
-            <small class="w-sm-75 d-block text-muted mt-1">
-              Specify maximum percentage cpu use by miner
-            </small>
-            <miner-slider
-              id="miner-cpu"
-              class="mt-3 mb-3"
-              :minValue="1"
-              :maxValue="100"
-              :startingValue="0"
-              :disabled="!settings.minercpu"
-              @change="value => (settings.cpupercentage = value)"
-            ></miner-slider>
-          </div>
 
           <hr class="advanced-settings-divider" />
 
@@ -267,7 +251,9 @@
             <div class="d-flex justify-content-between align-items-center">
               <div class="w-75">
                 <label class="mb-0" for="checkpoint">
-                  <p class="font-weight-bold mb-0">Enable DNS Checkpointing on Node</p>
+                  <p class="font-weight-bold mb-0">
+                    Enable DNS Checkpointing on Node
+                  </p>
                 </label>
               </div>
               <div>
@@ -303,15 +289,14 @@
               </div>
             </div>
             <small class="w-sm-75 d-block text-muted mt-1">
-              Broadcast your node to the Monero network to help other nodes 
-              access the blockchain. You may need to set up port forwarding on 
-              your router to allow incoming connections from clearnet-only peers.
+              Broadcast your node to the Monero network to help other nodes
+              access the blockchain. You may need to set up port forwarding on
+              your router to allow incoming connections from clearnet-only
+              peers.
             </small>
           </div>
 
-
           <hr class="advanced-settings-divider" />
-
 
           <div>
             <div class="d-flex justify-content-between align-items-center">
@@ -329,14 +314,15 @@
               </div>
             </div>
             <small class="w-sm-75 d-block text-muted mt-1">
-              Configure database synchronization mode for your node.
-              Adjusting these settings can help you optimize the performance of your Monero node, 
-              particularly during the initial blockchain synchronization and ongoing block validation.
+              Configure database synchronization mode for your node. Adjusting
+              these settings can help you optimize the performance of your
+              Monero node, particularly during the initial blockchain
+              synchronization and ongoing block validation.
             </small>
           </div>
 
           <hr class="advanced-settings-divider" />
-        
+
           <div>
             <div class="d-flex justify-content-between align-items-center">
               <div class="w-75">
@@ -355,59 +341,61 @@
             </div>
           </div>
           <small class="w-sm-75 d-block text-muted mt-1">
-            Choose which network you want your Monero node to connect to. 
-            If you change the network, restart your Umbrel to make sure any 
-            apps connected to your Monero node continue to work properly.
+            Choose which network you want your Monero node to connect to. If you
+            change the network, restart your Umbrel to make sure any apps
+            connected to your Monero node continue to work properly.
           </small>
         </div>
-      
-          
-          <!-- <div>
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="w-75">
-                <label class="mb-0" for="reindex-blockchain">
-                  <p class="font-weight-bold mb-0">Reindex Blockchain</p>
-                </label>
-              </div>
-              <div>
-                <toggle-switch
-                  id="reindex-blockchain"
-                  class="align-self-center"
-                  :on="settings.reindex"
-                  @toggle="status => (settings.reindex = status)"
-                ></toggle-switch>
-              </div>
-            </div>
-            <small class="w-sm-75 d-block text-muted mt-1">
-              Rebuild the database index used by your Monero node. This can 
-              be useful if the index becomes corrupted.
-            </small>
-          </div>
-
-          <hr class="advanced-settings-divider" /> -->
-
-          
         <!-- template overlay with empty div to show an overlay with no spinner -->
         <template #overlay>
           <div></div>
         </template>
       </b-overlay>
 
-      <b-alert variant="warning" :show="showOutgoingConnectionsError" class="mt-2" @dismissed="showOutgoingConnectionsError=false">
+      <b-alert
+        variant="warning"
+        :show="showOutgoingConnectionsError"
+        class="mt-2"
+        @dismissed="showOutgoingConnectionsError = false"
+      >
         <small>
-          Please choose at least one source for outgoing connections (Clearnet, Tor, or I2P).
+          Please choose at least one source for outgoing connections (Clearnet,
+          Tor, or I2P).
+        </small>
+      </b-alert>
+
+      <b-alert
+        variant="warning"
+        :show="showMiningError"
+        class="mt-2"
+        @dismissed="showMiningError = false"
+      >
+        <small>
+          Please enter a valid Monero address.
         </small>
       </b-alert>
 
       <div class="mt-2 mb-2">
         <b-row>
           <b-col cols="12" lg="6">
-            <b-button @click="clickRestoreDefaults" class="btn-border" variant="outline-secondary" block :disabled="isSettingsDisabled">
+            <b-button
+              @click="clickRestoreDefaults"
+              class="btn-border"
+              variant="outline-secondary"
+              block
+              :disabled="isSettingsDisabled"
+            >
               Restore Default Settings</b-button
             >
           </b-col>
           <b-col cols="12" lg="6">
-            <b-button class="mt-2 mt-lg-0" variant="success" type="submit" block :disabled="isSettingsDisabled">
+            <b-button
+              class="mt-2 mt-lg-0"
+              variant="success"
+              type="submit"
+              block
+              :disabled="isSettingsDisabled"
+            >
               Save and Restart Monero Node</b-button
             >
           </b-col>
@@ -419,15 +407,18 @@
 
 <script>
 import cloneDeep from "lodash.clonedeep";
-
 import { mapState } from "vuex";
 import ToggleSwitch from "./Utility/ToggleSwitch.vue";
 import MinerSlider from "./MinerSlider.vue";
+import { keccak256 } from "js-sha3"; // Import a SHA-3 hashing library import
+import bs58 from "bs58"; // Import a Base58 decoding library
 
 export default {
   data() {
     return {
-      settings: {},
+      settings: {
+        minercpu: { enabled: false }
+      },
       dbSyncMode: [
         { value: "fastest", text: "fastest" },
         { value: "fast", text: "fast" },
@@ -438,7 +429,8 @@ export default {
         { value: "test", text: "testnet" },
         { value: "stagenet", text: "stagenet" }
       ],
-      showOutgoingConnectionsError: false
+      showOutgoingConnectionsError: false,
+      showMiningError: false
     };
   },
   computed: {
@@ -446,7 +438,7 @@ export default {
       moneroConfig: state => state.user.moneroConfig,
       rpc: state => state.monero.rpc,
       p2p: state => state.monero.p2p
-    }),
+    })
   },
   props: {
     isSettingsDisabled: {
@@ -464,11 +456,23 @@ export default {
   methods: {
     submit() {
       this.showOutgoingConnectionsError = false;
-      if (!this.isOutgoingConnectionsValid()) return this.showOutgoingConnectionsError = true;
+      this.showMiningError = false;
+      if (!this.isOutgoingConnectionsValid())
+        return (this.showOutgoingConnectionsError = true);
+      //Here we need to verify the monero address is valid
+      if (
+        this.settings.mining &&
+        !this.isValidAddress(this.settings.moneroAddress)
+      ) {
+        console.log("TESTING ADDRESS VALIDATION");
+        return (this.showMiningError = true);
+      }
       this.$emit("submit", this.settings);
     },
     clickRestoreDefaults() {
-      if (window.confirm("Are you sure you want to restore the default settings?")) {
+      if (
+        window.confirm("Are you sure you want to restore the default settings?")
+      ) {
         this.$emit("clickRestoreDefaults");
       }
     },
@@ -478,6 +482,19 @@ export default {
     },
     isOutgoingConnectionsValid() {
       return this.settings.tor || this.settings.i2p;
+    },
+    isValidAddress(address) {
+      const addressHex = bs58.decode(address).toString("hex");
+      if (address.length !== 95 && address.length !== 97) return false;
+      if (!/^[0-9a-f]+$/.test(addressHex)) return false;
+      const networkByte = addressHex.substring(0, 2);
+      if (networkByte !== "12" && networkByte !== "35" && networkByte !== "25")
+        return false;
+      const checksum = addressHex.slice(-8);
+      const body = addressHex.slice(0, -8);
+      const hash = keccak256(body);
+      const hashChecksum = hash.slice(0, 8);
+      return checksum === hashChecksum;
     }
   }
 };
@@ -498,7 +515,8 @@ export default {
     max-width: 75px;
   }
   // to remove arrows on number input field
-  .advanced-settings-input::-webkit-outer-spin-button, .advanced-settings-input::-webkit-inner-spin-button {
+  .advanced-settings-input::-webkit-outer-spin-button,
+  .advanced-settings-input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
   }
@@ -531,7 +549,7 @@ export default {
 
 /* sm breakpoint */
 @media (min-width: 576px) {
-  .w-sm-75 { 
+  .w-sm-75 {
     width: 75% !important;
   }
 }
