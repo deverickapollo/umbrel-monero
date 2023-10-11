@@ -13,7 +13,7 @@ function getMoneroP2PConnectionDetails() {
     port,
     torConnectionString,
     localAddress,
-    localConnectionString
+    localConnectionString,
   };
 }
 
@@ -24,18 +24,22 @@ function getMoneroRPCConnectionDetails() {
   const rpcpassword = constants.MONERO_RPC_PASSWORD;
   const torAddress = hiddenService;
   const port = constants.MONERO_RPC_PORT;
+  const restrictedPort = constants.MONERO_RPC_RESTRICTED_PORT;
   const torConnectionString = `xmrrpc://${rpcuser}:${rpcpassword}@${torAddress}:${port}?label=${encodeURIComponent(label)}`;
   const localAddress = constants.DEVICE_DOMAIN_NAME;
   const localConnectionString = `xmrrpc://${rpcuser}:${rpcpassword}@${localAddress}:${port}?label=${encodeURIComponent(label)}`;
+  const restrictedConnectionString = `xmrrpc://${rpcuser}:${rpcpassword}@${localAddress}:${restrictedPort}?label=${encodeURIComponent(label)}`;
 
   return {
     rpcuser,
     rpcpassword,
     torAddress,
     port,
+    restrictedPort,
     torConnectionString,
     localAddress,
-    localConnectionString
+    localConnectionString,
+    restrictedConnectionString,
   };
 }
 

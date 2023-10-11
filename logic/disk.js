@@ -83,9 +83,6 @@ function settingsToMultilineConfString(settings) {
   if (settings.mining && settings.moneroAddress) {
     umbrelMoneroConfig.push(`bg-mining-enable=1`);
     umbrelMoneroConfig.push(`start-mining=${settings.moneroAddress}`);
-  }
-
-  if (settings.minercpu) {
     umbrelMoneroConfig.push('');
     umbrelMoneroConfig.push('# Enable mining on CPU');
     umbrelMoneroConfig.push(`bg-mining-miner-target=${settings.minercpu}`);
@@ -159,13 +156,13 @@ function settingsToMultilineConfString(settings) {
   umbrelMoneroConfig.push(`rpc-bind-ip=0.0.0.0`);
   umbrelMoneroConfig.push(`p2p-bind-port=${constants.MONERO_P2P_PORT}`);
   umbrelMoneroConfig.push(`rpc-bind-port=${constants.MONERO_RPC_PORT}`);
+  umbrelMoneroConfig.push(`rpc-restricted-bind-port=${constants.MONERO_RESTRICTED_RPC_PORT}`);
 
   // Public Node
   if (settings.publicNode) {
     umbrelMoneroConfig.push('public-node=1');
     umbrelMoneroConfig.push(`confirm-external-bind=1`);
     // TODO: update the rpc-restricted-bind-ip and rpc-restricted-bind-port to the correct values
-    umbrelMoneroConfig.push(`rpc-restricted-bind-port=${constants.MONERO_RESTRICTED_RPC_PORT}`);
   }
 
   if (process.env.APP_BTCPAY_IP && process.env.APP_BTCPAY_PORT) {
