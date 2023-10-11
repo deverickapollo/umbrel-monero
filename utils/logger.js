@@ -4,8 +4,8 @@ const constants = require('utils/const.js');
 const fs = require('fs');
 const path = require('path');
 const winston = require('winston');
-const { format } = require('winston');
-const { combine, timestamp, printf } = format;
+const {format} = require('winston');
+const {combine, timestamp, printf} = format;
 const getNamespace = require('continuation-local-storage').getNamespace;
 
 const LOCAL = 'local';
@@ -17,7 +17,7 @@ if (!fs.existsSync(logDir)) {
 }
 
 const appendCorrelationId = format((info, opts) => {
-  var apiRequest = getNamespace(constants.REQUEST_CORRELATION_NAMESPACE_KEY);
+  const apiRequest = getNamespace(constants.REQUEST_CORRELATION_NAMESPACE_KEY);
   if (apiRequest) {
     info.internalCorrelationId = apiRequest.get(constants.REQUEST_CORRELATION_ID_KEY);
   }
@@ -30,20 +30,20 @@ const errorFileTransport = new winston.transports.DailyRotateFile({
   datePattern: 'YYYY-MM-DD',
   level: 'error',
   maxSize: '10m',
-  maxFiles: '7d'
+  maxFiles: '7d',
 });
 
 const apiFileTransport = new winston.transports.DailyRotateFile({
   filename: path.join(logDir, 'api-%DATE%.log'),
   datePattern: 'YYYY-MM-DD',
   maxSize: '10m',
-  maxFiles: '7d'
+  maxFiles: '7d',
 });
 
-const localLogFormat = printf(info => {
-  var data = '';
+const localLogFormat = printf((info) => {
+  let data = '';
   if (info.data) {
-    data = JSON.stringify({ data: info.data });
+    data = JSON.stringify({data: info.data});
   }
 
   return `${info.timestamp} ${info.level.toUpperCase()}: ${info.internalCorrelationId} [${info._module}] ${info.message} ${data}`;
@@ -61,19 +61,19 @@ if (ENV === 'dev') {
 winston.loggers.add(LOCAL, {
   level: 'info',
   format: combine(
-    timestamp(),
-    appendCorrelationId(),
-    localLogFormat
+      timestamp(),
+      appendCorrelationId(),
+      localLogFormat
   ),
-  transports: localLoggerTransports
+  transports: localLoggerTransports,
 });
 
 const morganConfiguration = {
   stream: {
-    write: function (message) {
+    write: function(message) {
       info(message, 'umbrel-middleware');
-    }
-  }
+    },
+  },
 };
 
 const localLogger = winston.loggers.get(LOCAL);
@@ -90,7 +90,7 @@ function error(message, _module, data) {
   printToStandardOut(data);
   localLogger.error(message, {
     _module: _module,
-    data: data
+    data: data,
   });
 }
 
@@ -100,7 +100,7 @@ function warn(message, _module, data) {
   printToStandardOut(data);
   localLogger.warn(message, {
     _module: _module,
-    data: data
+    data: data,
   });
 }
 
@@ -110,7 +110,7 @@ function info(message, _module, data) {
   printToStandardOut(data);
   localLogger.info(message, {
     _module: _module,
-    data: data
+    data: data,
   });
 }
 
@@ -120,7 +120,7 @@ function debug(message, _module, data) {
   printToStandardOut(data);
   localLogger.debug(message, {
     _module: _module,
-    data: data
+    data: data,
   });
 }
 

@@ -17,7 +17,7 @@ const MONEROD_IP = `http://${MONEROD_HOST}:${MONEROD_RPC_PORT}`;
 class MoneroDaemon {
   constructor(config) {
     this.config = config;
-    (async() => await this.init())();
+    (async () => await this.init())();
   }
 
   async init() {
@@ -153,19 +153,18 @@ async function getBlockChainInfo() {
         mempoolBytes: miningInfo.getBytesTotal(),
         mempoolTransactions: miningInfo.getNumTxs(),
         verificationprogress: getSyncPercentage(
-          infoState.height,
-          infoState.targetHeight
+            infoState.height,
+            infoState.targetHeight
         ),
         pruned: true, // TODO implement after monero-js implements
-        pruneTargetSize: 0, // TODO
       },
     };
 
     return info;
   } catch (err) {
     throw new MonerodError(
-      'Unable to obtain getBlockChainInfo from Daemon',
-      err
+        'Unable to obtain getBlockChainInfo from Daemon',
+        err
     );
   }
 }
