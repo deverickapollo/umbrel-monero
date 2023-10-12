@@ -24,7 +24,7 @@ function getMoneroRPCConnectionDetails() {
   const rpcpassword = constants.MONERO_RPC_PASSWORD;
   const torAddress = hiddenService;
   const port = constants.MONERO_RPC_PORT;
-  const restrictedPort = constants.MONERO_RPC_RESTRICTED_PORT;
+  const restrictedPort = constants.MONERO_RESTRICTED_RPC_PORT;
   const torConnectionString = `xmrrpc://${rpcuser}:${rpcpassword}@${torAddress}:${port}?label=${encodeURIComponent(label)}`;
   const localAddress = constants.DEVICE_DOMAIN_NAME;
   const localConnectionString = `xmrrpc://${rpcuser}:${rpcpassword}@${localAddress}:${port}?label=${encodeURIComponent(label)}`;

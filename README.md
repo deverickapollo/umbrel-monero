@@ -35,6 +35,7 @@
     - MONERO_CONF_FILEPATH: process.env.MONERO_CONF_FILE || "./monero/.monero/bitmonero.conf",
   - then run:
     - MONERO_HOST=your-monerod-ip MONEROD_RPC_PORT=18081 npm run start:all:dev
+    - MONERO_HOST=127.0.0.1 MONEROD_RPC_PORT=18081 npm run start:all:dev
   
 ### Production
 - npm run start
@@ -49,7 +50,29 @@ To build:
 
 This app can be installed in one click via the Umbrel Community App Store.
 
----
+## Copying blockchain from another node
+  1. SSH into Umbrel node and input password : `ssh umbrel@umbrel.local`
+  2. Stop Monero app: `sudo /home/umbrel/umbrel/scripts/app stop meganero-monero`
+  3. Archive/Delete contents of `/home/umbrel/umbrel/app-data/meganero-monero/data/monero/lmdb`, i.e.: `rm data.mdb lock.mdb` 
+  4. From device with copy of Monero blockchain, go to the data directory for the monero chain then copy the contents to the lmdb directory:
+  	`scp -r . umbrel@umbrel.local:/home/umbrel/umbrel/app-data/meganero-monero/data/monero/lmdb`
+  5. Once you're done moving files over, start up the app again
+  	`sudo /home/umbrel/umbrel/scripts/app start meganero-monero`
+
+## Updating
+1. `sudo ./scripts/app stop meganero-monero`
+2. `sudo docker container prune`
+3. `docker images`
+4. **Remove Specific Docker Image:** 
+	1. To remove a specific image, you can use:
+		`docker rmi [IMAGE ID or REPOSITORY:TAG]`
+		For instance, if the image ID is `abcd1234`, you can remove it using:
+		`docker rmi abcd1234`
+		Or if the image's repository and tag are `my_image:latest`, you can remove it using:
+		`docker rmi my_image:latest`
+5. **Remove All Docker Images:** 
+	1. `sudo docker image prune -a`
+6. `sudo ./scripts/app start meganero-monero`
 
 ## Contributing
 
