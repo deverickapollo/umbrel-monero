@@ -88,7 +88,7 @@
             </small>
           </div>
 
-          <hr class="advanced-settings-divider" />
+          <!-- <hr class="advanced-settings-divider" />
 
           <div>
             <div class="d-flex justify-content-between align-items-center">
@@ -109,7 +109,7 @@
             <small class="w-sm-75 d-block text-muted mt-1">
               Enable P2P Full Node (default is false)
             </small>
-          </div>
+          </div> -->
 
           <hr class="advanced-settings-divider" />
 
@@ -219,8 +219,6 @@
               Set your Monero address for mining rewards.
             </small>
           </div>
-
-          <hr v-if="settings.mining" class="advanced-settings-divider" />
 
           <hr class="advanced-settings-divider" />
 
