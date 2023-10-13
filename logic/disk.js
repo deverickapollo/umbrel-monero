@@ -1,11 +1,11 @@
 // const fs = require("fs");
-const path = require('path');
+// const path = require('path');
 const constants = require('utils/const.js');
 const diskService = require('services/disk.js');
 
 // TODO - consider moving these unit conversions to utils/const.js
-const GB_TO_MiB = 953.674;
-const MB_TO_MiB = 0.953674;
+// const GB_TO_MiB = 953.674;
+// const MB_TO_MiB = 0.953674;
 
 const DEFAULT_ADVANCED_SETTINGS = {
   tor: true,
@@ -14,14 +14,13 @@ const DEFAULT_ADVANCED_SETTINGS = {
   dbSyncMode: constants.MONERO_SYNC_MODE,
   dbSyncType: constants.MONERO_SYNC_TYPE,
   dbBlocksPerSync: constants.MONERO_BLOCKS_PER_SYNC,
-  confirmExternalBind: true,
-  p2pFullNode: false,
-  upnp: false,
-  checkpoint: false,
+  confirmExternalBind: false,
+  upnp: true,
+  checkpoint: true,
   publicNode: false,
   moneroAddress: '',
   zmq: false,
-  hidePort: false,
+  hidePort: true,
   blockNotify: false,
   prune: false,
   mining: false,
@@ -147,22 +146,23 @@ function settingsToMultilineConfString(settings) {
     umbrelMoneroConfig.push(`p2p-bind-ip=0.0.0.0`);
 
     if (settings.i2p) {
-      umbrelMoneroConfig.push(`anonymous-inbound=${constants.MONERO_I2P_HIDDEN_SERVICE}:${constants.I2P_DAEMON_PORT},${constants.I2P_DAEMON_IP}:${constants.I2P_DAEMON_PORT}`);
+      umbrelMoneroConfig.push(`anonymous-inbound=${constants.MONERO_I2P_HIDDEN_SERVICE}:${constants.I2P_DAEMON_PORT},${constants.MONERO_HOST}:${constants.I2P_DAEMON_PORT}`);
     }
     if (settings.tor) {
-      umbrelMoneroConfig.push(`anonymous-inbound=${constants.MONERO_P2P_HIDDEN_SERVICE}:${constants.MONERO_ONION_P2P_PORT},${constants.MONERO_HOST}:${constants.MONERO_ONION_P2P_PORT},64`);
+      umbrelMoneroConfig.push(`anonymous-inbound=${constants.MONERO_P2P_HIDDEN_SERVICE}:${constants.MONERO_P2P_PORT},${constants.MONERO_HOST}:${constants.MONERO_P2P_PORT},64`);
     }
   }
   umbrelMoneroConfig.push(`rpc-bind-ip=0.0.0.0`);
+  umbrelMoneroConfig.push(`rpc-restricted-bind-ip=0.0.0.0`);
   umbrelMoneroConfig.push(`p2p-bind-port=${constants.MONERO_P2P_PORT}`);
   umbrelMoneroConfig.push(`rpc-bind-port=${constants.MONERO_RPC_PORT}`);
+
   umbrelMoneroConfig.push(`rpc-restricted-bind-port=${constants.MONERO_RESTRICTED_RPC_PORT}`);
 
   // Public Node
   if (settings.publicNode) {
     umbrelMoneroConfig.push('public-node=1');
     umbrelMoneroConfig.push(`confirm-external-bind=1`);
-    // TODO: update the rpc-restricted-bind-ip and rpc-restricted-bind-port to the correct values
   }
 
   if (process.env.APP_BTCPAY_IP && process.env.APP_BTCPAY_PORT) {
