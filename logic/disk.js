@@ -55,6 +55,7 @@ function settingsToMultilineConfString(settings) {
   umbrelMoneroConfig.push(`limit-rate-up=1048576`);
   umbrelMoneroConfig.push(`limit-rate-down=1048576`);
 
+
   // Database Sync Mode
   if (settings.dbSyncMode == 'fast' || settings.dbSyncMode == 'fastest' || settings.dbSyncMode == 'safe') {
     umbrelMoneroConfig.push('');
@@ -105,6 +106,9 @@ function settingsToMultilineConfString(settings) {
     umbrelMoneroConfig.push(`igd=enabled`);
   }
 
+  umbrelMoneroConfig.push(`p2p-bind-ip=0.0.0.0`);
+  umbrelMoneroConfig.push(`p2p-bind-port=${constants.MONERO_P2P_PORT}`);
+
   // i2p Outbound Connections
   if (settings.i2p) {
     umbrelMoneroConfig.push('# I2P SAM proxy <ip:port> to reach I2P peers.');
@@ -139,24 +143,21 @@ function settingsToMultilineConfString(settings) {
     // umbrelMoneroConfig.push(`add-exclusive-node=5tymba6faziy36md5ffy42vatbjzlye4vyr3gyz6lcvdfximnvwpmwqd.onion:28083`);
     // umbrelMoneroConfig.push(`add-peer=5tymba6faziy36md5ffy42vatbjzlye4vyr3gyz6lcvdfximnvwpmwqd.onion:28083`);
   }
+
   // Incoming connections (p2p)
   if (settings.incomingConnections) {
-    umbrelMoneroConfig.push('');
-    umbrelMoneroConfig.push('# Enable/disable incoming connections from peers.');
-    umbrelMoneroConfig.push(`p2p-bind-ip=0.0.0.0`);
-
     if (settings.i2p) {
       umbrelMoneroConfig.push(`anonymous-inbound=${constants.MONERO_I2P_HIDDEN_SERVICE}:${constants.I2P_DAEMON_PORT},${constants.MONERO_HOST}:${constants.I2P_DAEMON_PORT}`);
     }
     if (settings.tor) {
-      umbrelMoneroConfig.push(`anonymous-inbound=${constants.MONERO_P2P_HIDDEN_SERVICE}:${constants.MONERO_P2P_PORT},${constants.MONERO_HOST}:${constants.MONERO_P2P_PORT},64`);
+      umbrelMoneroConfig.push(`anonymous-inbound=${constants.MONERO_P2P_HIDDEN_SERVICE}:${constants.MONERO_ONION_P2P_PORT},${constants.MONERO_HOST}:${constants.MONERO_ONION_P2P_PORT},64`);
     }
   }
+
+
   umbrelMoneroConfig.push(`rpc-bind-ip=0.0.0.0`);
   umbrelMoneroConfig.push(`rpc-restricted-bind-ip=0.0.0.0`);
-  umbrelMoneroConfig.push(`p2p-bind-port=${constants.MONERO_P2P_PORT}`);
   umbrelMoneroConfig.push(`rpc-bind-port=${constants.MONERO_RPC_PORT}`);
-
   umbrelMoneroConfig.push(`rpc-restricted-bind-port=${constants.MONERO_RESTRICTED_RPC_PORT}`);
 
   // Public Node
