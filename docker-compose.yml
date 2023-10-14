@@ -63,6 +63,7 @@ services:
       PORT: "8889"
       MONERO_HOST: "monerod"
       MONERO_P2P_PORT: 18080
+      MONERO_ONION_P2P_PORT: 18083
       MONERO_RPC_PORT: 18081
       MONERO_ZMQ_PORT: 18082 
       MONERO_DEFAULT_NETWORK: "mainnet"
