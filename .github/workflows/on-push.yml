@@ -12,7 +12,7 @@ env:
 jobs:
   build:
     name: Build Docker image
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - name: Set BRANCH
         run: echo "BRANCH=$(echo ${GITHUB_REF#refs/heads/} | sed 's/\//-/g')" >> $GITHUB_ENV
