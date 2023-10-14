@@ -17,7 +17,7 @@ const DEFAULT_ADVANCED_SETTINGS = {
   confirmExternalBind: false,
   upnp: true,
   checkpoint: true,
-  publicNode: false,
+  publicNode: true,
   moneroAddress: '',
   zmq: false,
   hidePort: true,
