@@ -110,7 +110,6 @@ function settingsToMultilineConfString(settings) {
 
   // i2p Outbound Connections
   if (settings.i2p) {
-    umbrelMoneroConfig.push('# I2P SAM proxy <ip:port> to reach I2P peers.');
     umbrelMoneroConfig.push(`tx-proxy=i2p,${constants.I2P_DAEMON_IP}:${constants.I2P_DAEMON_PORT}`);
   }
 
@@ -146,7 +145,7 @@ function settingsToMultilineConfString(settings) {
   // Incoming connections (p2p)
   if (settings.incomingConnections) {
     if (settings.i2p) {
-      umbrelMoneroConfig.push(`anonymous-inbound=${constants.MONERO_I2P_HIDDEN_SERVICE}:${constants.I2P_DAEMON_PORT},${constants.MONERO_HOST}:${constants.I2P_DAEMON_PORT}`);
+      umbrelMoneroConfig.push(`anonymous-inbound=${constants.MONERO_I2P_HIDDEN_SERVICE}:${constants.I2P_DAEMON_PORT},${constants.MONERO_HOST}:${constants.MONERO_I2P_P2P_PORT},25`);
     }
     if (settings.tor) {
       umbrelMoneroConfig.push(`anonymous-inbound=${constants.MONERO_P2P_HIDDEN_SERVICE}:${constants.MONERO_ONION_P2P_PORT},${constants.MONERO_HOST}:${constants.MONERO_ONION_P2P_PORT},64`);
