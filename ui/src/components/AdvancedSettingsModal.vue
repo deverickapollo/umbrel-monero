@@ -41,7 +41,7 @@
           </div>
 
           <hr class="advanced-settings-divider" />
-
+          <!-- 
           <div>
             <div class="d-flex justify-content-between align-items-center">
               <div class="w-75">
@@ -65,7 +65,7 @@
             </small>
           </div>
 
-          <hr class="advanced-settings-divider" />
+          <hr class="advanced-settings-divider" /> -->
 
           <div>
             <div class="d-flex justify-content-between align-items-center">
@@ -357,8 +357,8 @@
         @dismissed="showOutgoingConnectionsError = false"
       >
         <small>
-          Please choose at least one source for outgoing connections (Clearnet,
-          Tor, or I2P).
+          Please choose at least one source for outgoing connections (Clearnet
+          or Tor).
         </small>
       </b-alert>
 
@@ -479,7 +479,8 @@ export default {
       this.settings = cloneDeep(this.moneroConfig);
     },
     isOutgoingConnectionsValid() {
-      return this.settings.tor || this.settings.i2p;
+      return this.settings.tor;
+      //return this.settings.tor || this.settings.i2p;
     },
     isValidAddress(address) {
       const addressHex = bs58.decode(address).toString("hex");

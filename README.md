@@ -72,7 +72,8 @@ This app can be installed in one click via the Umbrel Community App Store.
 		`docker rmi my_image:latest`
 5. **Remove All Docker Images:** 
 	1. `sudo docker image prune -a`
-6. `sudo ./scripts/app start meganero-monero`
+6. `sudo docker pull deverickapollo/umbrel-monero:dev-refactor-settings`
+7. `sudo ./scripts/app start meganero-monero`
 
 ## Contributing
 
