@@ -1,7 +1,7 @@
 import API from "@/helpers/api";
 import { toPrecision } from "@/helpers/units";
 
-const BYTES_PER_GB = 1000000000;
+//const BYTES_PER_GB = 1000000000;
 
 // Initial state
 const state = () => ({
@@ -13,21 +13,22 @@ const state = () => ({
     localAddress: "",
     localConnectionString: "",
     torAddress: "",
-    torConnectionString: "",
+    torConnectionString: ""
   },
   rpc: {
     rpcuser: "",
     rpcpassword: "",
     port: "",
+    restrictedPort: "",
     localAddress: "",
     localConnectionString: "",
     torAddress: "",
     torConnectionString: "",
+    restrictedConnectionString: ""
   },
   currentBlock: 0,
   chain: "",
   pruned: false,
-  pruneTargetSizeGB: 0,
   blockHeight: 0,
   blocks: [],
   percent: -1, //for loading state
@@ -62,7 +63,6 @@ const mutations = {
     state.blockHeight = sync.headerCount;
     state.chain = sync.chain;
     state.pruned = sync.pruned;
-    state.pruneTargetSizeGB = Math.round(sync.pruneTargetSize / BYTES_PER_GB);
 
     // TODO sync.status and 'calibrating' seem to be unused
     if (sync.status === "calibrating") {
@@ -106,8 +106,10 @@ const mutations = {
     state.rpc.rpcuser = rpcInfo.rpcuser;
     state.rpc.rpcpassword = rpcInfo.rpcpassword;
     state.rpc.port = rpcInfo.port;
+    state.rpc.restrictedPort = rpcInfo.restrictedPort;
     state.rpc.localAddress = rpcInfo.localAddress;
     state.rpc.localConnectionString = rpcInfo.localConnectionString;
+    state.rpc.restrictedConnectionString = rpcInfo.restrictedConnectionString;
     state.rpc.torAddress = rpcInfo.torAddress;
     state.rpc.torConnectionString = rpcInfo.torConnectionString;
   },
@@ -191,7 +193,9 @@ const actions = {
 
     //TODO: Fetch only new blocks
     const latestFiveBlocks = await API.get(
-      `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/info/blocks?from=${currentBlock - 3}&to=${currentBlock}`
+      `${
+        process.env.VUE_APP_API_BASE_URL
+      }/v1/monerod/info/blocks?from=${currentBlock - 3}&to=${currentBlock}`
     );
 
     if (!latestFiveBlocks.blocks) {
@@ -202,8 +206,7 @@ const actions = {
     commit("setBlocks", latestFiveBlocks.blocks);
   },
 
-  async getChartData({dispatch, state, commit}) {
-
+  async getChartData({ dispatch, state, commit }) {
     // get the latest block height
     await dispatch("getSync");
 
@@ -216,11 +219,17 @@ const actions = {
 
     // get last 180 blocks (~24 hours)
     const lastDaysBlocks = await API.get(
-      `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/info/blocks?from=${currentBlock - 179}&to=${currentBlock}`
+      `${
+        process.env.VUE_APP_API_BASE_URL
+      }/v1/monerod/info/blocks?from=${currentBlock - 179}&to=${currentBlock}`
     );
 
     // exit if we don't get the blocks for some reason
-    if (!lastDaysBlocks || !lastDaysBlocks.blocks || !lastDaysBlocks.blocks.length) {
+    if (
+      !lastDaysBlocks ||
+      !lastDaysBlocks.blocks ||
+      !lastDaysBlocks.blocks.length
+    ) {
       return;
     }
 

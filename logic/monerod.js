@@ -10,11 +10,11 @@ async function getBlockCount() {
 async function getConnectionsCount() {
   const peerInfo = await monerodService.getPeerInfo();
 
-  var outBoundConnections = 0;
-  var inBoundConnections = 0;
-  var clearnetConnections = 0;
-  var torConnections = 0;
-  var i2pConnections = 0;
+  let outBoundConnections = 0;
+  let inBoundConnections = 0;
+  let clearnetConnections = 0;
+  const torConnections = 0;
+  const i2pConnections = 0;
 
   peerInfo.result.forEach(function(peer) {
     if (peer.isIncoming === false) {
@@ -31,7 +31,7 @@ async function getConnectionsCount() {
     // } else {
     //   // ipv4 and ipv6 are clearnet
     //   clearnetConnections++;
-    // }   
+    // }
 
     clearnetConnections++;
   });
@@ -42,7 +42,7 @@ async function getConnectionsCount() {
     outbound: outBoundConnections,
     clearnet: clearnetConnections,
     tor: torConnections,
-    i2p: i2pConnections
+    i2p: i2pConnections,
   };
 
   return connections;
@@ -57,7 +57,6 @@ async function getStatus() {
     } else {
       return {operational: false};
     }
-
   } catch (error) {
     if (error instanceof MonerodError) {
       return {operational: false};
@@ -95,7 +94,6 @@ async function getLocalSyncInfo() {
   const headerCount = blockChainInfo.headers;
   const percent = blockChainInfo.verificationprogress;
   const pruned = blockChainInfo.pruned;
-  const pruneTargetSize = blockChainInfo.pruneTargetSize;
 
   return {
     chain,
@@ -103,7 +101,6 @@ async function getLocalSyncInfo() {
     currentBlock: blockCount,
     headerCount: headerCount, // eslint-disable-line object-shorthand,
     pruned,
-    pruneTargetSize
   };
 }
 
@@ -139,7 +136,7 @@ async function getTransaction(txid) {
     size: transactionObj.result.size,
     input: transactionObj.result.vin.txid,
     utxo: transactionObj.result.vout,
-    rawtx: transactionObj.result.hex
+    rawtx: transactionObj.result.hex,
   };
 }
 
@@ -160,24 +157,24 @@ async function getBlock(hash) {
     blocktime: blockObj.result.time,
     prevblock: blockObj.result.previousblockhash,
     nextblock: blockObj.result.nextblockhash,
-    transactions: blockObj.result.tx
+    transactions: blockObj.result.tx,
   };
 }
 
 const memoizedGetFormattedBlock = () => {
   const cache = {};
 
-  return async blockHeight => {
+  return async (blockHeight) => {
     // cache cleanup
     // 6 blocks/hr * 24 hrs/day * 7 days = 1008 blocks over 7 days
     // plus some wiggle room in case weird difficulty adjustment or period of faster blocks
     // Make CACHE_LIMIT configurable
     const CACHE_LIMIT = process.env.CACHE_LIMIT || 1100;
-    while(Object.keys(cache).length > CACHE_LIMIT) {
+    while (Object.keys(cache).length > CACHE_LIMIT) {
       const cacheItemToDelete = Object.keys(cache)[0];
       delete cache[cacheItemToDelete];
     }
-    
+
     if (blockHeight in cache) {
       return cache[blockHeight];
     } else {
@@ -200,7 +197,7 @@ const memoizedGetFormattedBlock = () => {
         confirmations: block.confirmations,
         time: block.time,
         size: block.size,
-        previousblockhash: block.previousblockhash
+        previousblockhash: block.previousblockhash,
       };
 
       return cache[blockHeight];
@@ -242,7 +239,7 @@ async function getBlocks(fromHeight, toHeight) {
     try {
       const formattedBlock = await initializedMemoizedGetFormattedBlock(currentHeight);
       blocks.push(formattedBlock);
-    } catch(e) {
+    } catch (e) {
       console.error('Error memoizing formatted blocks');
     }
   }
@@ -254,7 +251,7 @@ async function getBlockHash(height) {
   const getBlockHashObj = await monerodService.getBlockHash(height);
 
   return {
-    hash: getBlockHashObj.result
+    hash: getBlockHashObj.result,
   };
 }
 
@@ -282,7 +279,7 @@ async function nodeStatusSummary() {
     mempool: blockchainInfo.result.mempoolBytes,
     mempoolTransactions: blockchainInfo.result.mempoolTransactions,
     connections: blockchainInfo.result.numOutgoingConnections,
-    networkhashps: blockchainInfo.result.difficulty / 120 // TODO review bigint conversions
+    networkhashps: blockchainInfo.result.difficulty / 120, // TODO review bigint conversions
   };
 }
 
@@ -305,5 +302,5 @@ module.exports = {
   getSyncStatus,
   getVersion,
   nodeStatusSummary,
-  stop
+  stop,
 };

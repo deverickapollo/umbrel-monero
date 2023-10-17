@@ -62,11 +62,13 @@ services:
       MONERO_HOST: "monerod"
       MONERO_P2P_PORT: 18080
       MONERO_RPC_PORT: 18081
+      MONERO_ONION_P2P_PORT: 18083
       MONERO_DEFAULT_NETWORK: "mainnet"
       RPC_USER: "monero"
       RPC_PASSWORD: "monero"
       MONERO_RPC_HIDDEN_SERVICE: "somehiddenservice.onion"
       MONERO_P2P_HIDDEN_SERVICE: "anotherhiddenservice.onion"
+      MONERO_I2P_HIDDEN_SERVICE: "yetanotherhiddenservice.onion"
       DEVICE_DOMAIN_NAME: "monero.local"
       MONEROD_IP: "10.21.1.4"
       TOR_PROXY_IP: "10.21.1.3"

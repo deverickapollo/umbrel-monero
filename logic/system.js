@@ -4,6 +4,8 @@ const NodeError = require('models/errors.js').NodeError;
 function getMoneroP2PConnectionDetails() {
   const torAddress = constants.MONERO_P2P_HIDDEN_SERVICE;
   const port = constants.MONERO_P2P_PORT;
+  // const restrictedPort = constants.MONERO_RESTRICTED_RPC_PORT;
+  const onionPort = constnats.MONERO_ONION_P2P_PORT;
   const torConnectionString = `${torAddress}:${port}`;
   const localAddress = constants.DEVICE_DOMAIN_NAME;
   const localConnectionString = `${localAddress}:${port}`;
@@ -11,9 +13,10 @@ function getMoneroP2PConnectionDetails() {
   return {
     torAddress,
     port,
+    onionPort,
     torConnectionString,
     localAddress,
-    localConnectionString
+    localConnectionString,
   };
 }
 
@@ -24,18 +27,22 @@ function getMoneroRPCConnectionDetails() {
   const rpcpassword = constants.MONERO_RPC_PASSWORD;
   const torAddress = hiddenService;
   const port = constants.MONERO_RPC_PORT;
+  const restrictedPort = constants.MONERO_RESTRICTED_RPC_PORT;
   const torConnectionString = `xmrrpc://${rpcuser}:${rpcpassword}@${torAddress}:${port}?label=${encodeURIComponent(label)}`;
   const localAddress = constants.DEVICE_DOMAIN_NAME;
   const localConnectionString = `xmrrpc://${rpcuser}:${rpcpassword}@${localAddress}:${port}?label=${encodeURIComponent(label)}`;
+  const restrictedConnectionString = `xmrrpc://${rpcuser}:${rpcpassword}@${localAddress}:${restrictedPort}?label=${encodeURIComponent(label)}`;
 
   return {
     rpcuser,
     rpcpassword,
     torAddress,
     port,
+    restrictedPort,
     torConnectionString,
     localAddress,
-    localConnectionString
+    localConnectionString,
+    restrictedConnectionString,
   };
 }
 

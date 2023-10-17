@@ -1,8 +1,12 @@
 <template>
   <div class="pt-2 pt-md-4 pb-4 px-2">
     <div class="my-3 pb-2">
-      <div class="d-flex flex-wrap justify-content-between align-items-center mb-2">
-        <div class="d-flex flex-grow-1 justify-content-start align-items-start mb-3">
+      <div
+        class="d-flex flex-wrap justify-content-between align-items-center mb-2"
+      >
+        <div
+          class="d-flex flex-grow-1 justify-content-start align-items-start mb-3"
+        >
           <img
             class="app-icon mr-2 mr-sm-3"
             src="@/assets/community-monero-icon.svg"
@@ -15,9 +19,16 @@
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <circle cx="4" cy="4" r="4" :fill="`${isMoneroCoreOperational ? '#00CD98' : '#F6B900'}`" />
+              <circle
+                cx="4"
+                cy="4"
+                r="4"
+                :fill="`${isMoneroCoreOperational ? '#00CD98' : '#F6B900'}`"
+              />
             </svg>
-            <small v-if="isMoneroCoreOperational" class="ml-1 text-success">Running</small>
+            <small v-if="isMoneroCoreOperational" class="ml-1 text-success"
+              >Running</small
+            >
             <small v-else class="ml-1 text-warning">Starting</small>
             <h3 class="d-block font-weight-bold mb-1">Monero Node</h3>
             <span class="d-block text-muted">{{
@@ -25,7 +36,9 @@
             }}</span>
           </div>
         </div>
-        <div class="d-flex col-12 col-md-auto justify-content-start align-items-center p-0">
+        <div
+          class="d-flex col-12 col-md-auto justify-content-start align-items-center p-0"
+        >
           <!-- TODO - work on responsiveness of connect + settings button -->
           <b-button
             type="button"
@@ -72,16 +85,40 @@
                 />
               </svg>
             </template>
-            <b-dropdown-item href="#" v-b-modal.advanced-settings-modal class="custom-dropdown"><b-badge pill variant="primary" class="mr-1 custom-badge">New</b-badge> Advanced Settings</b-dropdown-item>
+            <b-dropdown-item
+              href="#"
+              v-b-modal.advanced-settings-modal
+              class="custom-dropdown"
+              ><b-badge pill variant="primary" class="mr-1 custom-badge"
+                >New</b-badge
+              >
+              Advanced Settings</b-dropdown-item
+            >
           </b-dropdown>
         </div>
       </div>
-      <b-alert :show="showReindexCompleteAlert" variant="warning">Reindexing is now complete. Turn off "Reindex blockchain" in <span class="open-settings" @click="() => $bvModal.show('advanced-settings-modal')">advanced settings</span> to prevent reindexing every time Monero Node restarts.</b-alert>
+      <b-alert :show="showReindexCompleteAlert" variant="warning"
+        >Reindexing is now complete. Turn off "Reindex blockchain" in
+        <span
+          class="open-settings"
+          @click="() => $bvModal.show('advanced-settings-modal')"
+          >advanced settings</span
+        >
+        to prevent reindexing every time Monero Node restarts.</b-alert
+      >
 
-    <b-alert :show="showReindexInProgressAlert" variant="info">Reindexing in progress...</b-alert>
+      <b-alert :show="showReindexInProgressAlert" variant="info"
+        >Reindexing in progress...</b-alert
+      >
 
-    <b-alert :show="showRestartError" variant="danger" dismissible @dismissed="showRestartError=false">
-      Something went wrong while attempting to change the configuration of Monero Node.
+      <b-alert
+        :show="showRestartError"
+        variant="danger"
+        dismissible
+        @dismissed="showRestartError = false"
+      >
+        Something went wrong while attempting to change the configuration of
+        Monero Node.
       </b-alert>
     </div>
 
@@ -143,7 +180,13 @@
                     showPercentChange
                     :showPopover="true"
                     popoverId="connections-popover"
-                    :popoverContent="[`Clearnet${torProxy ? ' (over Tor)': ''}: ${peers.clearnet}`, `Tor: ${peers.tor}`, `I2P: ${peers.i2p}`]"
+                    :popoverContent="[
+                      `Clearnet${torProxy ? ' (over Tor)' : ''}: ${
+                        peers.clearnet
+                      }`,
+                      `Tor: ${peers.tor}`,
+                      `I2P: ${peers.i2p}`
+                    ]"
                   ></stat>
                 </b-col>
                 <b-col col cols="6" md="3">
@@ -188,11 +231,20 @@
       <connection-modal></connection-modal>
     </b-modal>
 
-    <b-modal id="advanced-settings-modal" size="lg" centered hide-footer scrollable>
-      <advanced-settings-modal :isSettingsDisabled="isRestartPending" @submit="saveSettingsAndRestartMonero" @clickRestoreDefaults="restoreDefaultSettingsAndRestartMonero"></advanced-settings-modal>
+    <b-modal
+      id="advanced-settings-modal"
+      size="lg"
+      centered
+      hide-footer
+      scrollable
+    >
+      <advanced-settings-modal
+        :isSettingsDisabled="isRestartPending"
+        @submit="saveSettingsAndRestartMonero"
+        @clickRestoreDefaults="restoreDefaultSettingsAndRestartMonero"
+      ></advanced-settings-modal>
     </b-modal>
   </div>
-  
 </template>
 
 <script>
@@ -230,8 +282,7 @@ export default {
       p2p: state => state.monero.p2p,
       reindex: state => state.user.moneroConfig.reindex,
       network: state => state.user.moneroConfig.network,
-      pruned: state => state.monero.pruned,
-      pruneTargetSizeGB: state => state.monero.pruneTargetSizeGB
+      pruned: state => state.monero.pruned
     }),
     showReindexInProgressAlert() {
       return this.reindex && this.syncPercent !== 100 && !this.isRestartPending;

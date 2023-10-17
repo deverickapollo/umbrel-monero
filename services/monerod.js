@@ -1,10 +1,10 @@
 const RpcClient = require('monero-javascript');
 const MonerodError = require('models/errors.js').MonerodError;
 
-const MONEROD_RPC_PORT = process.env.RPC_PORT || 18081; // eslint-disable-line no-magic-numbers, max-len
+const MONEROD_RPC_PORT = process.env.MONERO_RPC_PORT || 18081; // eslint-disable-line no-magic-numbers, max-len
 const MONEROD_HOST = process.env.MONERO_HOST || '127.0.0.1';
-const MONEROD_RPC_USER = process.env.RPC_USER;
-const MONEROD_RPC_PASSWORD = process.env.RPC_PASSWORD;
+const MONEROD_RPC_USER = process.env.MONERO_RPC_USER || 'monero';
+const MONEROD_RPC_PASSWORD = process.env.MONERO_RPC_PASSWORD || 'monero';
 
 const MONEROD_IP = `http://${MONEROD_HOST}:${MONEROD_RPC_PORT}`;
 
@@ -17,7 +17,7 @@ const MONEROD_IP = `http://${MONEROD_HOST}:${MONEROD_RPC_PORT}`;
 class MoneroDaemon {
   constructor(config) {
     this.config = config;
-    (async() => await this.init())();
+    (async () => await this.init())();
   }
 
   async init() {
@@ -153,19 +153,18 @@ async function getBlockChainInfo() {
         mempoolBytes: miningInfo.getBytesTotal(),
         mempoolTransactions: miningInfo.getNumTxs(),
         verificationprogress: getSyncPercentage(
-          infoState.height,
-          infoState.targetHeight
+            infoState.height,
+            infoState.targetHeight
         ),
         pruned: true, // TODO implement after monero-js implements
-        pruneTargetSize: 0, // TODO
       },
     };
 
     return info;
   } catch (err) {
     throw new MonerodError(
-      'Unable to obtain getBlockChainInfo from Daemon',
-      err
+        'Unable to obtain getBlockChainInfo from Daemon',
+        err
     );
   }
 }
