@@ -16,3 +16,7 @@ data/
 ui/dist
 umbrel@umbrel.local
 .vscode/launch.json
+.vscode/diff/vulsCount.txt
+.vscode/settings.json
+.eslintrc.json
+utils/const.js
