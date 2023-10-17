@@ -343,6 +343,27 @@
             change the network, restart your Umbrel to make sure any apps
             connected to your Monero node continue to work properly.
           </small>
+
+          <hr class="advanced-settings-divider" />
+
+          <div class="row">
+            <div
+              class="col-12 col-md-8 col-sm-12 d-flex flex-column align-items-start mb-md-0"
+            >
+              <p class="font-weight-bold mb-0">XMR Donation Address</p>
+              <small class=" d-block text-muted mt-1 mb-3">
+                To support our developers, please consider donating to our
+                Monero address. Funds will go towards development of this app
+                and other Monero apps on Umbrel.
+              </small>
+            </div>
+            <div
+              class="col-12 col-md-4 col-sm-12 d-flex justify-content-center justify-content-md-end align-items-center"
+            >
+              <div ref="address" class="d-none">{{ address }}</div>
+              <donation></donation>
+            </div>
+          </div>
         </div>
         <!-- template overlay with empty div to show an overlay with no spinner -->
         <template #overlay>
@@ -410,6 +431,7 @@ import ToggleSwitch from "./Utility/ToggleSwitch.vue";
 import MinerSlider from "./MinerSlider.vue";
 import { keccak256 } from "js-sha3"; // Import a SHA-3 hashing library import
 import bs58 from "bs58"; // Import a Base58 decoding library
+import Donation from "@/components/DonationModal";
 
 export default {
   data() {
@@ -449,7 +471,8 @@ export default {
   },
   components: {
     ToggleSwitch,
-    MinerSlider
+    MinerSlider,
+    Donation
   },
   methods: {
     submit() {
