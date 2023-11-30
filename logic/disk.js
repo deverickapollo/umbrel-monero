@@ -84,7 +84,7 @@ function settingsToMultilineConfString(settings) {
     umbrelMoneroConfig.push(`start-mining=${settings.moneroAddress}`);
     umbrelMoneroConfig.push('');
     umbrelMoneroConfig.push('# Enable mining on CPU');
-    umbrelMoneroConfig.push(`bg-mining-miner-target=${settings.minercpu}`);
+    umbrelMoneroConfig.push(`bg-mining-miner-target=${settings.minercpuTarget}`);
   }
 
   // Salvage DB
