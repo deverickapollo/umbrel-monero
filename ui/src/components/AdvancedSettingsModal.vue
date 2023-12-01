@@ -189,7 +189,7 @@
             <miner-slider
               id="miner-cpu"
               class="mt-3 mb-3"
-              :minValue="0"
+              :minValue="1"
               :maxValue="100"
               :startingValue="33"
               :disabled="!settings.mining"
@@ -428,9 +428,8 @@
 import cloneDeep from "lodash.clonedeep";
 import { mapState } from "vuex";
 import ToggleSwitch from "./Utility/ToggleSwitch.vue";
+import { MoneroUtils } from "monero-javascript";
 import MinerSlider from "./MinerSlider.vue";
-import { keccak256 } from "js-sha3"; // Import a SHA-3 hashing library import
-import bs58 from "bs58"; // Import a Base58 decoding library
 import Donation from "@/components/DonationModal";
 
 export default {
@@ -478,16 +477,14 @@ export default {
     submit() {
       this.showOutgoingConnectionsError = false;
       this.showMiningError = false;
+      const addressVerification = this.isValidAddress(
+        this.settings.moneroAddress
+      );
       if (!this.isOutgoingConnectionsValid())
         return (this.showOutgoingConnectionsError = true);
       //Here we need to verify the monero address is valid
-      if (
-        this.settings.mining &&
-        !this.isValidAddress(this.settings.moneroAddress)
-      ) {
-        console.log("TESTING ADDRESS VALIDATION");
+      if (this.settings.mining && !addressVerification)
         return (this.showMiningError = true);
-      }
       this.$emit("submit", this.settings);
     },
     clickRestoreDefaults() {
@@ -505,18 +502,10 @@ export default {
       return this.settings.tor;
       //return this.settings.tor || this.settings.i2p;
     },
-    isValidAddress(address) {
-      const addressHex = bs58.decode(address).toString("hex");
-      if (address.length !== 95 && address.length !== 97) return false;
-      if (!/^[0-9a-f]+$/.test(addressHex)) return false;
-      const networkByte = addressHex.substring(0, 2);
-      if (networkByte !== "12" && networkByte !== "35" && networkByte !== "25")
-        return false;
-      const checksum = addressHex.slice(-8);
-      const body = addressHex.slice(0, -8);
-      const hash = keccak256(body);
-      const hashChecksum = hash.slice(0, 8);
-      return checksum === hashChecksum;
+    async isValidAddress(address) {
+      const isValid = await MoneroUtils.isValidAddress(address, 0);
+      if (isValid) return true;
+      return false;
     }
   }
 };
