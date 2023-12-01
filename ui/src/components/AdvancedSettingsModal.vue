@@ -189,7 +189,7 @@
             <miner-slider
               id="miner-cpu"
               class="mt-3 mb-3"
-              :minValue="0"
+              :minValue="1"
               :maxValue="100"
               :startingValue="33"
               :disabled="!settings.mining"
@@ -505,6 +505,7 @@ export default {
     },
     async isValidAddress(address) {
       const isValid = await MoneroUtils.isValidAddress(address, 0);
+      console.log("Valid Monero Address " + isValid);
       return isValid;
     }
   }
