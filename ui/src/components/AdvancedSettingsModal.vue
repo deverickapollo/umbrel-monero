@@ -474,19 +474,18 @@ export default {
     Donation
   },
   methods: {
-    submit() {
+    async submit() {
       this.showOutgoingConnectionsError = false;
       this.showMiningError = false;
+      const addressVerification = await this.isValidAddress(
+        this.settings.moneroAddress
+      );
       if (!this.isOutgoingConnectionsValid())
         return (this.showOutgoingConnectionsError = true);
       //Here we need to verify the monero address is valid
-      if (
-        this.settings.mining &&
-        !this.isValidAddress(this.settings.moneroAddress)
-      ) {
+      if (this.settings.mining && !addressVerification)
         return (this.showMiningError = true);
-      }
-      this.$emit("submit", this.settings);
+      // this.$emit("submit", this.settings);
     },
     clickRestoreDefaults() {
       if (
@@ -504,9 +503,7 @@ export default {
       //return this.settings.tor || this.settings.i2p;
     },
     async isValidAddress(address) {
-      const isValid = await MoneroUtils.isValidAddress(address, 0);
-      console.log("Valid Monero Address " + isValid);
-      return isValid;
+      return await MoneroUtils.isValidAddress(address, 0);
     }
   }
 };
