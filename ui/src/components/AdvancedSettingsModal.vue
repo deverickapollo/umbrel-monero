@@ -485,7 +485,7 @@ export default {
       //Here we need to verify the monero address is valid
       if (this.settings.mining && !addressVerification)
         return (this.showMiningError = true);
-      // this.$emit("submit", this.settings);
+      this.$emit("submit", this.settings);
     },
     clickRestoreDefaults() {
       if (
