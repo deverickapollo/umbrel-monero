@@ -474,10 +474,10 @@ export default {
     Donation
   },
   methods: {
-    submit() {
+    async submit() {
       this.showOutgoingConnectionsError = false;
       this.showMiningError = false;
-      const addressVerification = this.isValidAddress(
+      const addressVerification = await this.isValidAddress(
         this.settings.moneroAddress
       );
       if (!this.isOutgoingConnectionsValid())
