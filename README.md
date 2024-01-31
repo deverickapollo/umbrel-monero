@@ -63,17 +63,18 @@ This app can be installed in one click via the Umbrel Community App Store.
 1. `sudo ./scripts/app stop meganero-monero`
 2. `sudo docker container prune`
 3. `docker images`
-4. **Remove Specific Docker Image:** 
-	1. To remove a specific image, you can use:
-		`docker rmi [IMAGE ID or REPOSITORY:TAG]`
-		For instance, if the image ID is `abcd1234`, you can remove it using:
-		`docker rmi abcd1234`
-		Or if the image's repository and tag are `my_image:latest`, you can remove it using:
-		`docker rmi my_image:latest`
-5. **Remove All Docker Images:** 
-	1. `sudo docker image prune -a`
-6. `sudo docker pull deverickapollo/umbrel-monero:dev-refactor-settings`
-7. `sudo ./scripts/app start meganero-monero`
+4. Remove Old Image
+   1. **Remove Specific Docker Image:** 
+   	1. To remove a specific image, you can use:
+   		`docker rmi [IMAGE ID or REPOSITORY:TAG]`
+   		For instance, if the image ID is `abcd1234`, you can remove it using:
+   		`docker rmi abcd1234`
+   		Or if the image's repository and tag are `my_image:latest`, you can remove it using:
+   		`docker rmi my_image:latest`
+   2. **Remove All Docker Images:** 
+   	1. `sudo docker image prune -a`
+5. `sudo docker pull deverickapollo/umbrel-monero:dev-refactor-settings` - Make sure to set the tag to the version you want to pull. We recommend using the master branch.
+6. `sudo ./scripts/app start meganero-monero`
 
 ## Contributing
 

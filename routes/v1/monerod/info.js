@@ -24,22 +24,22 @@ const safeHandler = require('utils/safeHandler');
 
 router.get('/connections', safeHandler((req, res) =>
   monerod.getConnectionsCount()
-    .then(connections => res.json(connections))
+      .then((connections) => res.json(connections)),
 ));
 
 router.get('/status', safeHandler((req, res) =>
   monerod.getStatus()
-    .then(status => res.json(status))
+      .then((status) => res.json(status)),
 ));
 
 router.get('/sync', safeHandler((req, res) =>
   monerod.getSyncStatus()
-    .then(status => res.json(status))
+      .then((status) => res.json(status)),
 ));
 
 router.get('/version', safeHandler((req, res) =>
   monerod.getVersion()
-    .then(version => res.json(version))
+      .then((version) => res.json(version)),
 ));
 
 // unused by UI
@@ -50,24 +50,24 @@ router.get('/version', safeHandler((req, res) =>
 
 router.get('/stats', safeHandler((req, res) =>
   monerod.nodeStatusSummary()
-    .then(statussumarry => res.json(statussumarry))
+      .then((statussumarry) => res.json(statussumarry)),
 ));
 
 router.get('/block', safeHandler((req, res) => {
   if (req.query.hash !== undefined && req.query.hash !== null) {
     monerod.getBlock(req.query.hash)
-      .then(blockhash => res.json(blockhash))
+        .then((blockhash) => res.json(blockhash));
   } else if (req.query.height !== undefined && req.query.height !== null) {
     monerod.getBlockHash(req.query.height)
-      .then(blockhash => res.json(blockhash))
+        .then((blockhash) => res.json(blockhash));
   }
-}
+},
 ));
 
 // /v1/monerod/info/block/<hash>
 router.get('/block/:id', safeHandler((req, res) =>
   monerod.getBlock(req.params.id)
-    .then(blockhash => res.json(blockhash))
+      .then((blockhash) => res.json(blockhash)),
 ));
 
 router.get('/blocks', safeHandler((req, res) => {
@@ -80,8 +80,8 @@ router.get('/blocks', safeHandler((req, res) => {
   }
 
   monerod.getBlocks(fromHeight, toHeight)
-    .then(blocks => res.json(blocks))
-}
+      .then((blocks) => res.json(blocks));
+},
 ));
 
 // unused by UI

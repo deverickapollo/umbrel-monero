@@ -20,24 +20,24 @@ const exec = (command, args, opts) => new Promise((resolve, reject) => {
 
   const childProc = childProcess.spawn(command, args, {cwd});
 
-  childProc.on('error', err => {
+  childProc.on('error', (err) => {
     reject(err);
   });
 
   const result = {
     err: '',
-    out: ''
+    out: '',
   };
 
-  childProc.stdout.on('data', chunk => {
+  childProc.stdout.on('data', (chunk) => {
     result.out += chunk.toString();
   });
 
-  childProc.stderr.on('data', chunk => {
+  childProc.stderr.on('data', (chunk) => {
     result.err += chunk.toString();
   });
 
-  childProc.on('close', code => {
+  childProc.on('close', (code) => {
     if (code === 0) {
       resolve(result);
     } else {
