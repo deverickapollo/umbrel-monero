@@ -27,7 +27,7 @@ function readFile(filePath, encoding) {
       } else {
         resolve(str);
       }
-    })
+    }),
   );
 }
 
@@ -50,7 +50,7 @@ function writeFile(filePath, data, encoding) {
       } else {
         resolve();
       }
-    })
+    }),
   );
 }
 
@@ -69,8 +69,8 @@ function writeJsonFile(filePath, obj) {
                 } else {
                   resolve();
                 }
-              })
-            )
+              }),
+            ),
       )
       .catch((err) => {
         if (err) {
@@ -100,8 +100,8 @@ function writePlainTextFile(filePath, string) {
                 } else {
                   resolve();
                 }
-              })
-            )
+              }),
+            ),
       ).catch((err) => {
         if (err) {
           fs.unlink(tempFileName, (err) => {

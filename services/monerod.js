@@ -28,7 +28,7 @@ class MoneroDaemon {
         password: MONEROD_RPC_PASSWORD,
       });
     } catch (err) {
-      throw new MonerodError('Unable to obtain connect to Monero daemon.', err);
+      throw new MonerodError('Unable to connect to Monero daemon.', err);
     }
   }
 }
@@ -128,12 +128,14 @@ async function getTransaction(txHash) {
 }
 
 function getSyncPercentage(height, targetHeight) {
-  if (targetHeight > height) {
+  if (targetHeight > height && targetHeight !== 0) {
     // eslint-disable-next-line no-magic-numbers
     return Number((height / targetHeight).toFixed(4));
   }
-
-  return 1;
+  if (targetHeight === 0) {
+    return 0;
+  }
+  return 0;
 }
 
 async function getBlockChainInfo() {
@@ -141,7 +143,6 @@ async function getBlockChainInfo() {
     const {state: infoState} = await daemonController.daemon.getInfo();
 
     const miningInfo = await daemonController.daemon.getTxPoolStats();
-
     const info = {
       result: {
         chain: RpcClient.MoneroNetworkType.toString(infoState.networkType),
@@ -154,7 +155,7 @@ async function getBlockChainInfo() {
         mempoolTransactions: miningInfo.getNumTxs(),
         verificationprogress: getSyncPercentage(
             infoState.height,
-            infoState.targetHeight
+            infoState.targetHeight,
         ),
         pruned: true, // TODO implement after monero-js implements
       },
@@ -164,7 +165,7 @@ async function getBlockChainInfo() {
   } catch (err) {
     throw new MonerodError(
         'Unable to obtain getBlockChainInfo from Daemon',
-        err
+        err,
     );
   }
 }

@@ -2,11 +2,10 @@ import API from "@/helpers/api";
 import { toPrecision } from "@/helpers/units";
 
 //const BYTES_PER_GB = 1000000000;
-
 // Initial state
 const state = () => ({
   operational: false,
-  calibrating: false,
+  // calibrating: false,
   version: "",
   p2p: {
     port: "",
@@ -59,17 +58,19 @@ const mutations = {
 
   syncStatus(state, sync) {
     state.percent = Number(toPrecision(parseFloat(sync.percent) * 100, 2));
+    state.percent = Math.floor(sync.percent * 10000) / 100;
+    if (sync.currentBlock === sync.headerCount) state.percent = 100;
+    if (sync.headerCount === 0 || sync.headerCount === 1) state.percent = 0;
     state.currentBlock = sync.currentBlock;
     state.blockHeight = sync.headerCount;
     state.chain = sync.chain;
     state.pruned = sync.pruned;
-
     // TODO sync.status and 'calibrating' seem to be unused
-    if (sync.status === "calibrating") {
-      state.calibrating = true;
-    } else {
-      state.calibrating = false;
-    }
+    // if (sync.status === "calibrating") {
+    //   state.calibrating = true;
+    // } else {
+    //   state.calibrating = false;
+    // }
   },
 
   setBlocks(state, blocks) {
@@ -137,7 +138,6 @@ const actions = {
 
     if (status) {
       commit("isOperational", status.operational);
-
       if (status.operational) {
         await dispatch("getSync");
       }
@@ -168,7 +168,6 @@ const actions = {
     const sync = await API.get(
       `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/info/sync`
     );
-
     if (sync) {
       commit("syncStatus", sync);
     }

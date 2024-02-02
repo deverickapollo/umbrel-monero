@@ -87,14 +87,12 @@ async function getMempoolInfo() {
 
 async function getLocalSyncInfo() {
   const info = await monerodService.getBlockChainInfo();
-
   const blockChainInfo = info.result;
   const chain = blockChainInfo.chain;
   const blockCount = blockChainInfo.blocks;
   const headerCount = blockChainInfo.headers;
   const percent = blockChainInfo.verificationprogress;
   const pruned = blockChainInfo.pruned;
-
   return {
     chain,
     percent,

@@ -3,17 +3,14 @@
     <div
       class="px-3 px-lg-4 pb-2 d-flex flex-wrap w-100 justify-content-between align-items-center"
     >
-      <h6 
+      <h6
         class="mb-0 font-weight-normal text-muted"
-        :class="{invisible: !isSynced}"
+        :class="{ invisible: !isSynced }"
       >
         Transactions on the network
       </h6>
     </div>
-    <chart
-      v-if="isSynced && chartData.length"
-      :chartData="chartData"
-    ></chart>
+    <chart v-if="isSynced && chartData.length" :chartData="chartData"></chart>
     <chart-empty-state v-else />
   </div>
 </template>
@@ -27,14 +24,14 @@ import ChartEmptyState from "@/components/ChartEmptyState";
 export default {
   data() {
     return {
-      selectedFilter: "1hr",
+      selectedFilter: "1hr"
     };
   },
   computed: {
     ...mapState({
       blocks: state => state.monero.blocks,
       chartData: state => state.monero.chartData,
-      isSynced: state => state.monero.percent >= 99.99,
+      isSynced: state => state.monero.percent >= 99.99
     })
   },
   methods: {
@@ -42,7 +39,7 @@ export default {
       if (this.isSynced) {
         this.$store.dispatch("monero/getChartData");
       }
-    },
+    }
   },
   watch: {
     blocks: {
@@ -55,12 +52,12 @@ export default {
     isSynced: {
       handler() {
         this.getChartData();
-      },
-    },
+      }
+    }
   },
   components: {
     Chart,
-    ChartEmptyState,
+    ChartEmptyState
   }
 };
 </script>
