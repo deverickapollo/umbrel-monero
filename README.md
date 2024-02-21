@@ -6,7 +6,7 @@
   <p align="center">
     Run a Monero node on your Umbrel personal server. An unofficial app by @deverickapollo and @CryptoGrampy
     <br />
-    <a href="https://getmonero.org"><strong>monero.org »</strong></a>
+    <a href="https://getmonero.org"><strong>getmonero.org »</strong></a>
     <br />
     <br />
     <a href="https://twitter.com/monero">
