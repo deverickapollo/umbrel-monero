@@ -128,12 +128,11 @@ async function getTransaction(txHash) {
 }
 
 function getSyncPercentage(height, targetHeight) {
+  // print log message for height and targetHeight
+  // console.log('height: ', height, ' targetHeight: ', targetHeight);
   if (targetHeight > height && targetHeight !== 0) {
     // eslint-disable-next-line no-magic-numbers
     return Number((height / targetHeight).toFixed(4));
-  }
-  if (targetHeight === 0) {
-    return 0;
   }
   return 0;
 }
