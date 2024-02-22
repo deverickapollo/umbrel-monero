@@ -10,6 +10,7 @@
           with other apps on your Umbrel that connect to your Monero node. Only
           make changes if you understand the potential effects on connected apps
           or wallets.
+          <br />
         </small>
       </b-alert>
 
@@ -350,7 +351,7 @@
             <div
               class="col-12 col-md-8 col-sm-12 d-flex flex-column align-items-start mb-md-0"
             >
-              <p class="font-weight-bold mb-0">XMR Donation Address</p>
+              <p class="font-weight-bold mb-0">Monero Donation Address</p>
               <small class=" d-block text-muted mt-1 mb-3">
                 To support our developers, please consider donating to our
                 Monero address. Funds will go towards development of this app
@@ -362,6 +363,52 @@
             >
               <div ref="address" class="d-none">{{ address }}</div>
               <donation></donation>
+            </div>
+          </div>
+
+          <hr class="advanced-settings-divider" />
+
+          <!-- <div class="row">
+            <div
+              class="col-12 col-md-8 col-sm-12 d-flex flex-column align-items-start mb-md-0"
+            >
+              <p class="font-weight-bold mb-0">Support & Feedback</p>
+              <small class=" d-block text-muted mt-1 mb-3">
+                Follow me on Twitter
+                <a href="https://twitter.com/deverickapollo" target="_blank"
+                  >@deverickapollo</a
+                >
+              </small>
+            </div>
+            <div
+              class="col-12 col-md-4 col-sm-12 d-flex justify-content-center justify-content-md-end align-items-center"
+            >
+              <div ref="address" class="d-none">{{ address }}</div>
+              <donation></donation>
+            </div>
+          </div> -->
+          <div class="row">
+            <div
+              class="col-12 col-md-8 col-sm-12 d-flex flex-column align-items-start mb-md-0"
+            >
+              <p class="font-weight-bold mb-0">Support & Feedback</p>
+              <small class="d-block text-muted mt-1 mb-3">
+                Encountered an issue or have a feature request?
+              </small>
+              <small class="d-block text-muted mt-1 mb-3">
+                Please submit all requests to
+                <a
+                  href="https://github.com/deverickapollo/umbrel-monero/issues/new"
+                  target="_blank"
+                >
+                  Github
+                </a>
+                and follow me on Twitter
+                <a href="https://twitter.com/deverickapollo" target="_blank"
+                  >@deverickapollo</a
+                >
+                to stay updated on upcoming releases.
+              </small>
             </div>
           </div>
         </div>
