@@ -119,24 +119,24 @@ function settingsToMultilineConfString(settings) {
     // # Tor: add P2P seed nodes for the Tor network
     // # For an up-to-date list of working nodes see ...
 
-    umbrelMoneroConfig.push(`add-peer=4egylyolrzsk6rskorqvocipdo4tqqoyzxnplbjorns7issmgpoxvtyd.onion:18083`);
-    umbrelMoneroConfig.push(`add-peer=fagmobguo6u4z4b2ghyg3jegcdpmd4qj4wxkhemph5d5q6dltllveqyd.onion:18083`);
-    umbrelMoneroConfig.push(`add-peer=monerokdwzyuml7vfp73fjx5277lzesbrq4nvbl3r3t5ctgodsx34vid.onion:18089`);
-    umbrelMoneroConfig.push(`add-peer=b75obarnhi42p7js7wgzo7v3wtiwcgf4bknrwv6ihatop77jivrtwpid.onion:15892`);
-    umbrelMoneroConfig.push(`add-peer=5nvd6jbefgto3u74nzzdkcsbqgxyzrkk7bz5qupsdqg4gbuj5valiaqd.onion:18083`);
-    umbrelMoneroConfig.push(`add-peer=ozeavjybjbxbvmfcpxzjcn4zklbgohjwwndzenjt44pypvx6jisy74id.onion:18083`);
-    umbrelMoneroConfig.push(`add-peer=xcccrsxi2zknef6zl3sviasqg4xnlkh5k3xqu7ytwkpfli3huyfvsjid.onion:18083`);
+    // umbrelMoneroConfig.push(`add-peer=4egylyolrzsk6rskorqvocipdo4tqqoyzxnplbjorns7issmgpoxvtyd.onion:18083`);
+    // umbrelMoneroConfig.push(`add-peer=fagmobguo6u4z4b2ghyg3jegcdpmd4qj4wxkhemph5d5q6dltllveqyd.onion:18083`);
+    // umbrelMoneroConfig.push(`add-peer=monerokdwzyuml7vfp73fjx5277lzesbrq4nvbl3r3t5ctgodsx34vid.onion:18089`);
+    // umbrelMoneroConfig.push(`add-peer=b75obarnhi42p7js7wgzo7v3wtiwcgf4bknrwv6ihatop77jivrtwpid.onion:15892`);
+    // umbrelMoneroConfig.push(`add-peer=5nvd6jbefgto3u74nzzdkcsbqgxyzrkk7bz5qupsdqg4gbuj5valiaqd.onion:18083`);
+    // umbrelMoneroConfig.push(`add-peer=ozeavjybjbxbvmfcpxzjcn4zklbgohjwwndzenjt44pypvx6jisy74id.onion:18083`);
+    // umbrelMoneroConfig.push(`add-peer=xcccrsxi2zknef6zl3sviasqg4xnlkh5k3xqu7ytwkpfli3huyfvsjid.onion:18083`);
 
     // # Make the seed nodes permanent to fix monerod issue of not maintaining enough connections,
     // # based on this reddit comment:
     // # https://www.reddit.com/r/monerosupport/comments/k3m3x2/comment/ge5ehcy/?utm_source=share&utm_medium=web2x&context=3
-    umbrelMoneroConfig.push(`add-priority-node=4egylyolrzsk6rskorqvocipdo4tqqoyzxnplbjorns7issmgpoxvtyd.onion:18083`);
-    umbrelMoneroConfig.push(`add-priority-node=fagmobguo6u4z4b2ghyg3jegcdpmd4qj4wxkhemph5d5q6dltllveqyd.onion:18083`);
-    umbrelMoneroConfig.push(`add-priority-node=monerokdwzyuml7vfp73fjx5277lzesbrq4nvbl3r3t5ctgodsx34vid.onion:18089`);
-    umbrelMoneroConfig.push(`add-priority-node=b75obarnhi42p7js7wgzo7v3wtiwcgf4bknrwv6ihatop77jivrtwpid.onion:15892`);
-    umbrelMoneroConfig.push(`add-priority-node=5nvd6jbefgto3u74nzzdkcsbqgxyzrkk7bz5qupsdqg4gbuj5valiaqd.onion:18083`);
-    umbrelMoneroConfig.push(`add-priority-node=ozeavjybjbxbvmfcpxzjcn4zklbgohjwwndzenjt44pypvx6jisy74id.onion:18083`);
-    umbrelMoneroConfig.push(`add-priority-node=xcccrsxi2zknef6zl3sviasqg4xnlkh5k3xqu7ytwkpfli3huyfvsjid.onion:18083`);
+    // umbrelMoneroConfig.push(`add-priority-node=4egylyolrzsk6rskorqvocipdo4tqqoyzxnplbjorns7issmgpoxvtyd.onion:18083`);
+    // umbrelMoneroConfig.push(`add-priority-node=fagmobguo6u4z4b2ghyg3jegcdpmd4qj4wxkhemph5d5q6dltllveqyd.onion:18083`);
+    // umbrelMoneroConfig.push(`add-priority-node=monerokdwzyuml7vfp73fjx5277lzesbrq4nvbl3r3t5ctgodsx34vid.onion:18089`);
+    // umbrelMoneroConfig.push(`add-priority-node=b75obarnhi42p7js7wgzo7v3wtiwcgf4bknrwv6ihatop77jivrtwpid.onion:15892`);
+    // umbrelMoneroConfig.push(`add-priority-node=5nvd6jbefgto3u74nzzdkcsbqgxyzrkk7bz5qupsdqg4gbuj5valiaqd.onion:18083`);
+    // umbrelMoneroConfig.push(`add-priority-node=ozeavjybjbxbvmfcpxzjcn4zklbgohjwwndzenjt44pypvx6jisy74id.onion:18083`);
+    // umbrelMoneroConfig.push(`add-priority-node=xcccrsxi2zknef6zl3sviasqg4xnlkh5k3xqu7ytwkpfli3huyfvsjid.onion:18083`);
 
     // umbrelMoneroConfig.push(`add-exclusive-node=5tymba6faziy36md5ffy42vatbjzlye4vyr3gyz6lcvdfximnvwpmwqd.onion:28083`);
     // umbrelMoneroConfig.push(`add-peer=5tymba6faziy36md5ffy42vatbjzlye4vyr3gyz6lcvdfximnvwpmwqd.onion:28083`);
