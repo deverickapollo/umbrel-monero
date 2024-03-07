@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://umbrel.com">
-    <img src="https://i.imgur.com/rhDWq5W.jpg" alt="Logo">
+    <img src="https://raw.githubusercontent.com/deverickapollo/umbrel-monero/6c34c9fd4fd98208d1f71172737a2b2a16a651f2/pictures/Monero%20Dashboard.png" alt="Logo">
   </a>
   <h1 align="center">Monero Node for Umbrel</h1>
   <p align="center">
@@ -10,13 +10,13 @@
     <br />
     <br />
     <a href="https://twitter.com/monero">
-      <img src="https://img.shields.io/twitter/follow/umbrel?style=social" />
+      <img src="https://img.shields.io/twitter/follow/Monero?style=social" />
     </a>
     <a href="https://telegram.me/monero">
       <img src="https://img.shields.io/badge/community-chat-%235351FB">
     </a>
     <a href="https://reddit.com/r/Monero">
-      <img src="https://img.shields.io/reddit/subreddit-subscribers/getumbrel?style=social">
+      <img src="https://img.shields.io/reddit/subreddit-subscribers/monero?style=social">
     </a>
     <a href="https://github.com/monero-project/monero/issues">
       <img src="https://img.shields.io/badge/community-forum-%235351FB">
