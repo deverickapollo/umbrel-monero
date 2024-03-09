@@ -128,19 +128,19 @@ async function getTransaction(txHash) {
 }
 
 function getSyncPercentage(height, targetHeight) {
-  // print log message for height and targetHeight
-  // console.log('height: ', height, ' targetHeight: ', targetHeight);
-  if (targetHeight > height && targetHeight !== 0) {
+  if (targetHeight === 0 && height === 0) {
+    return 0;
+  }
+  if (targetHeight > height) {
     // eslint-disable-next-line no-magic-numbers
     return Number((height / targetHeight).toFixed(4));
   }
-  return 0;
+  return 1;
 }
 
 async function getBlockChainInfo() {
   try {
     const {state: infoState} = await daemonController.daemon.getInfo();
-
     const miningInfo = await daemonController.daemon.getTxPoolStats();
     const info = {
       result: {
