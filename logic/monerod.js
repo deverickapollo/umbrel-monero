@@ -50,9 +50,9 @@ async function getConnectionsCount() {
 
 async function getStatus() {
   try {
-    const info = await monerodService.getBlockChainInfo();
-
-    if (info) {
+    // const info = await monerodService.getBlockChainInfo();
+    const connected = await monerodService.getIsConnected();
+    if (connected.result === true) {
       return {operational: true};
     } else {
       return {operational: false};

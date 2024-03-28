@@ -139,6 +139,7 @@ export default {
   computed: {
     ...mapState({
       isMoneroCoreOperational: state => state.monero.operational,
+      peers: state => state.monero.peers,
       syncPercent: state => state.monero.percent,
       blocks: state => state.monero.blocks
     })
@@ -149,6 +150,12 @@ export default {
       if (!this.isMoneroCoreOperational) {
         return;
       }
+      // dont poll if no peers
+      // console.log("peer ", this.peers.total);
+    
+      // if (this.peers.total === 0) {
+      //   return;
+      // }
       //prevent multiple polls if previous poll already in progress
       if (this.pollInProgress) {
         return;

@@ -128,15 +128,23 @@ async function getTransaction(txHash) {
 }
 
 function getSyncPercentage(height, targetHeight) {
-  if (targetHeight === 0 && height === 0) {
-    return 0;
-  }
-  if (targetHeight > height) {
+
+  if (targetHeight > height && targetHeight !== 0) {
     // eslint-disable-next-line no-magic-numbers
     return Number((height / targetHeight).toFixed(4));
   }
   return 1;
 }
+
+async function getIsConnected() {
+  try {
+    const connected = await daemonController.daemon.isConnected();
+    return {result: connected};
+  } catch (err) {
+    throw new MonerodError('Unable to obtain isConnected from Daemon', err);
+  }
+}
+
 
 async function getBlockChainInfo() {
   try {
@@ -306,6 +314,7 @@ module.exports = {
   getBlock,
   getTransaction,
   getBlockChainInfo,
+  getIsConnected,
   getBlockCount,
   getPeerInfo,
   getMempoolInfo,
