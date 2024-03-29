@@ -127,11 +127,15 @@ const actions = {
       `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/info/status`
     );
 
-    if (status) {
-      commit("isOperational", status.operational);
-      if (status.operational) {
-        await dispatch("getSync");
-      }
+    if (status.operational) {
+        // Add check for peers to ensure we have a targetheight before calling getSync dispatch
+        const peers = await API.get(
+          `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/info/connections`
+        );
+        if(peers.total > 1){
+          commit("isOperational", status.operational);
+          await dispatch("getSync");
+        }
     }
   },
 
@@ -159,7 +163,7 @@ const actions = {
     const sync = await API.get(
       `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/info/sync`
     );
-    console.log("sync", sync);
+    
     if (sync) {
       commit("syncStatus", sync);
     }
