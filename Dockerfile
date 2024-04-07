@@ -1,5 +1,5 @@
 # Build Stage
-FROM node:19-alpine AS monero-middleware-builder
+FROM node:21.6.1-alpine AS monero-middleware-builder
 
 # Create app directory
 WORKDIR /app
@@ -13,12 +13,17 @@ RUN npm install --production --fetch-timeout 300000
 # Copy project files and folders to the current working directory (i.e. '/app')
 COPY . .
 
+# Install TypeScript globally
+RUN npm install -g typescript
+
+# Compile TypeScript files
+RUN tsc
 # Install UI dependencies and build UI 
 RUN npm run install:ui
 RUN npm run build:ui
 
 # Final Stage (Production) 
-FROM node:19-alpine AS monero-middleware
+FROM node:21.6.1-alpine AS monero-middleware
 
 # Copy built code from build stage to '/app' directory
 COPY --from=monero-middleware-builder /app /app

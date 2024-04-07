@@ -5,6 +5,7 @@
   "author": "Deverick",
   "scripts": {
     "lint": "eslint",
+    "build": "tsc",
     "start": "node ./bin/www",
     "start:server:dev": "NODE_ENV=development node --watch ./bin/www",
     "start:ui:dev": "cd ui && npm run serve:dev",
@@ -29,7 +30,9 @@
     "js-sha3": "^0.9.2",
     "module-alias": "^2.1.0",
     "monero-javascript": "^0.7.12",
+    "monero-ts": "^0.9.7",
     "morgan": "^1.9.0",
+    "typescript": "^5.4.3",
     "uuid": "^3.3.2",
     "winston": "^3.0.0-rc5",
     "winston-daily-rotate-file": "^3.1.3"

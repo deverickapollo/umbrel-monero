@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const monerod = require('logic/monerod.js');
-const monerodService = require('services/monerod.js');
+const monerodService = require('build/services/monerod.js');
 const safeHandler = require('utils/safeHandler');
 
 const aggregates = {

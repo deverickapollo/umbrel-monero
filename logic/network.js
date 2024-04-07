@@ -1,4 +1,4 @@
-const monerodService = require('services/monerod.js');
+const monerodService = require('build/services/monerod.js');
 const bashService = require('services/bash.js');
 
 async function getMonerodAddresses() {

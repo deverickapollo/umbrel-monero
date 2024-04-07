@@ -1,4 +1,4 @@
-const monerodService = require('services/monerod.js');
+const monerodService = require('build/services/monerod.js');
 const MonerodError = require('models/errors.js').MonerodError;
 
 async function getBlockCount() {
@@ -13,8 +13,8 @@ async function getConnectionsCount() {
   let outBoundConnections = 0;
   let inBoundConnections = 0;
   let clearnetConnections = 0;
-  const torConnections = 0;
-  const i2pConnections = 0;
+  let torConnections = 0;
+  let i2pConnections = 0;
 
   peerInfo.result.forEach(function(peer) {
     if (peer.isIncoming === false) {
@@ -50,7 +50,6 @@ async function getConnectionsCount() {
 
 async function getStatus() {
   try {
-    // const info = await monerodService.getBlockChainInfo();
     const connected = await monerodService.getIsConnected();
     if (connected.result === true) {
       return {operational: true};
