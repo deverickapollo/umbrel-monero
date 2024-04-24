@@ -135,6 +135,8 @@ const actions = {
         if(peers.total > 1){
           commit("isOperational", status.operational);
           await dispatch("getSync");
+        }else{
+          commit("isOperational", false);
         }
     }
   },

@@ -1,4 +1,3 @@
-// import RpcClient = require('monero-javascript');
 import RpcClient from "monero-ts";
 import { MoneroDaemonRpc } from 'monero-ts';
 import { MoneroBlock } from 'monero-ts';
@@ -210,7 +209,7 @@ async function getBlockChainInfo(): Promise<{result: infoInterface}>{
           infoState.height,
           infoState.targetHeight,
       ),
-      pruned: false, // TODO implement after monero-js implements
+      pruned: true, // TODO implement after monero-js implements
     };
 
     return {result: infoResult};
