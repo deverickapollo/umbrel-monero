@@ -299,7 +299,7 @@ export async function getMempoolInfo(): Promise<{result: MoneroTx[]}>{
   }
 }
 
-async function getVersion() {
+export async function getVersion() {
   try {
     const info: MoneroDaemonInfo  = await daemonController.daemon.getInfo();
 
