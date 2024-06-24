@@ -77,7 +77,7 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
 
-import helmet from 'helmet'
+// import helmet from 'helmet'
 
 
 
@@ -90,15 +90,15 @@ dotenv.config();
 const environment = process.env.NODE_ENV;
 const app = express();
 
-app.use(helmet());
+// app.use(helmet());
 
 // temporarily disable contentSecurityPolicy
-app.use(
-  helmet({
-    contentSecurityPolicy: false,
-  })
-);
-// app.use(cors());
+// app.use(
+//   helmet({
+//     contentSecurityPolicy: false,
+//   })
+// );
+app.use(cors());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
