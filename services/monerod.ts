@@ -1,12 +1,6 @@
 import RpcClient from "monero-ts";
-import { MoneroDaemonRpc } from 'monero-ts';
-import { MoneroBlock } from 'monero-ts';
 import { MonerodError } from '../models/errors.js';
-import { MoneroTx } from 'monero-ts';
-import { MoneroDaemonInfo } from 'monero-ts';
-import { MoneroTxPoolStats } from 'monero-ts';
-import { MoneroPeer } from 'monero-ts';
-import { ConnectionType } from 'monero-ts';
+import { MoneroDaemonRpc, MoneroBlock, MoneroTx, MoneroDaemonInfo, MoneroTxPoolStats, MoneroPeer, ConnectionType } from 'monero-ts';
 
 const MONEROD_RPC_PORT = process.env.MONERO_RPC_PORT || 18081; // eslint-disable-line no-magic-numbers, max-len
 const MONEROD_HOST = process.env.MONERO_HOST || '127.0.0.1';
@@ -53,10 +47,18 @@ interface State {
  */
 
 class MoneroDaemon {
-  daemon: MoneroDaemonRpc;
-
+  private static instance: MoneroDaemon;
+  daemon: MoneroDaemonRpc | undefined;
+  private ready: Promise<void>;
+  
   constructor() {
-    (async () => await this.init())();
+    this.ready = (async () => {
+      try {
+        await this.init();
+      } catch (err) {
+        throw new MonerodError('Unable to initialize Monero daemon.', err);
+      }
+    })();
   }
 
   async init() {
@@ -70,9 +72,24 @@ class MoneroDaemon {
       throw new MonerodError('Unable to connect to Monero daemon.', err);
     }
   }
+
+
+  public returnReady() {
+    return this.ready;
+  } 
+
+  async stop() {
+    if(!this.daemon) {
+      throw new MonerodError('Daemon is not connecte during stop');
+    }
+    await this.daemon.stop();
+  }
+  
 }
 
+
 const daemonController = new MoneroDaemon();
+// await daemonController.init();
 
 // function promiseify(rpcObj, rpcFn, what) {
 //   return new Promise((resolve, reject) => {
@@ -122,21 +139,7 @@ const daemonController = new MoneroDaemon();
 //   });
 // }
 
-// function getBestBlockHash() {
-//   return promiseify(rpcClient, rpcClient.getLastBlockHeader, 'best block hash');
-// }
-
-// async function getBlockHash(height: number) {
-//   try {
-//     const heightData = await daemonController.daemon.getBlockHash(height);
-
-//     return {result: heightData};
-//   } catch (err) {
-//     throw new MonerodError('Unable to obtain getBlockHash from Daemon', err);
-//   }
-// }
-
-async function getBlockHash(height: number): Promise<{result: string}> {
+export async function getBlockHash(height: number): Promise<{result: string}> {
   try {
     const blockhash: string = await daemonController.daemon.getBlockHash(height);
     return {result: blockhash};
@@ -145,7 +148,7 @@ async function getBlockHash(height: number): Promise<{result: string}> {
   }
 }
 
-async function getBlock(hash: string): Promise<{result: BlockInterface}> {
+export async function getBlock(hash: string): Promise<{result: BlockInterface}> {
   try {
     const state: MoneroBlock = await daemonController.daemon.getBlockByHash(hash);
 
@@ -164,7 +167,7 @@ async function getBlock(hash: string): Promise<{result: BlockInterface}> {
   }
 }
 
-async function getTransaction(txHash: string): Promise<{result: MoneroTx}> {
+export async function getTransaction(txHash: string): Promise<{result: MoneroTx}> {
   try {
     const hash: MoneroTx = await daemonController.daemon.getTx(txHash);
     return {result: hash};
@@ -173,7 +176,7 @@ async function getTransaction(txHash: string): Promise<{result: MoneroTx}> {
   }
 }
 
-function getSyncPercentage(height: number, targetHeight: number): number{
+export function getSyncPercentage(height: number, targetHeight: number): number{
   if (targetHeight > height && targetHeight !== 0) {
     // eslint-disable-next-line no-magic-numbers
     return Number((height / targetHeight).toFixed(4));
@@ -181,16 +184,19 @@ function getSyncPercentage(height: number, targetHeight: number): number{
   return 1;
 }
 
-async function getIsConnected() {
+export async function getIsConnected() {
   try {
+    if(!daemonController.daemon) {
+      throw new MonerodError('Daemon is not connected during check connection');
+    }
     const connected = await daemonController.daemon.isConnected();
     return {result: connected};
   } catch (err) {
-    throw new MonerodError('Unable to obtain isConnected from Daemon', err);
+    throw new MonerodError('Unable to obtain isConnecteds from Daemon', err);
   }
 }
 
-async function getBlockChainInfo(): Promise<{result: infoInterface}>{
+export async function getBlockChainInfo(): Promise<{result: infoInterface}>{
   try {
     const infoState: MoneroDaemonInfo = await daemonController.daemon.getInfo();
     
@@ -241,7 +247,7 @@ async function getBlockChainInfo(): Promise<{result: infoInterface}>{
   }
 }
 
-async function getPeerInfo() {
+export async function getPeerInfo() {
   try {
     const peers: MoneroPeer[] = await daemonController.daemon.getPeers();
 
@@ -261,7 +267,7 @@ async function getPeerInfo() {
   }
 }
 
-async function getBlockCount(): Promise<number>{
+export async function getBlockCount(): Promise<number>{
   try {
     const state: MoneroDaemonInfo = await daemonController.daemon.getInfo();
 
@@ -272,7 +278,7 @@ async function getBlockCount(): Promise<number>{
 }
 
 // TODO implement this
-async function getMempoolInfo(): Promise<{result: MoneroTx[]}>{
+export async function getMempoolInfo(): Promise<{result: MoneroTx[]}>{
   try {
     // const info = {
     //   result: {
@@ -304,7 +310,7 @@ async function getVersion() {
 }
 
 // TODO implement
-async function getNetworkInfo() {
+export async function getNetworkInfo() {
   try {
     //const daemon: MoneroDaemon = daemonController;
     const peers: MoneroPeer[]  = await daemonController.daemon.getPeers();
@@ -398,20 +404,10 @@ async function getNetworkInfo() {
 //   }
 // }
 
-async function stop() {
+export async function stop() {
   await daemonController.daemon.stop();
 }
 
-module.exports = {
-  getBlockHash,
-  getBlock,
-  getTransaction,
-  getBlockChainInfo,
-  getBlockCount,
-  getIsConnected,
-  getPeerInfo,
-  getMempoolInfo,
-  getNetworkInfo,
-  getVersion,
-  stop,
-};
+export async function isReady() {
+  await daemonController.returnReady();
+}

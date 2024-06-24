@@ -1,8 +1,11 @@
 /* globals assert */
 /* eslint-disable max-len */
 
-const proxyquire = require('proxyquire');
-const monerodMocks = require('../mocks/monerod.js');
+// const proxyquire = require('proxyquire');
+// const monerodMocks = require('../mocks/monerod.js');
+
+import proxyquire from 'proxyquire';
+import monerodMocks from '../mocks/monerod.js';
 
 describe('networkLogic', function() {
 
@@ -17,7 +20,7 @@ describe('networkLogic', function() {
       peerInfo.result[0].addrlocal = ipv4 + ':' + port;
 
       const monerodServiceStub = {
-        'services/monerod.js': {
+        'build/services/monerod.js': {
           getPeerInfo: () => Promise.resolve(peerInfo),
           getNetworkInfo: () => Promise.resolve(monerodMocks.getNetworkInfoWithoutTor()),
         }
@@ -42,7 +45,7 @@ describe('networkLogic', function() {
       peerInfo.result[0].addrlocal = ipv4 + ':' + port;
 
       const monerodServiceStub = {
-        'services/monerod.js': {
+        'build/services/monerod.js': {
           getPeerInfo: () => Promise.resolve(peerInfo),
           getNetworkInfo: () => Promise.resolve(monerodMocks.getNetworkInfoWithTor()),
         }
@@ -71,7 +74,7 @@ describe('networkLogic', function() {
       }
 
       const monerodServiceStub = {
-        'services/monerod.js': {
+        'build/services/monerod.js': {
           getPeerInfo: () => Promise.resolve(peerInfo),
           getNetworkInfo: () => Promise.resolve(monerodMocks.getNetworkInfoWithoutTor()),
         }
@@ -95,7 +98,7 @@ describe('networkLogic', function() {
       delete peerInfo.result[0].addrlocal;
 
       const monerodServiceStub = {
-        'services/monerod.js': {
+        'build/services/monerod.js': {
           getPeerInfo: () => Promise.resolve(peerInfo),
           getNetworkInfo: () => Promise.resolve(monerodMocks.getNetworkInfoWithoutTor()),
         }
@@ -120,7 +123,7 @@ describe('networkLogic', function() {
       peerInfo.result[0].addrlocal = ipv4 + ':' + port;
 
       const monerodServiceStub = {
-        'services/monerod.js': {
+        'build/services/monerod.js': {
           getPeerInfo: () => Promise.resolve(peerInfo),
           getNetworkInfo: () => Promise.resolve(monerodMocks.getNetworkInfoWithoutTor()),
         }
@@ -148,7 +151,7 @@ describe('networkLogic', function() {
         'services/bash.js': {
           exec: () => Promise.resolve(ipInfo)
         },
-        'services/monerod.js': {
+        'build/services/monerod.js': {
           getPeerInfo: () => Promise.resolve(peerInfo),
           getNetworkInfo: () => Promise.resolve(monerodMocks.getNetworkInfoWithoutTor()),
         }
@@ -176,7 +179,7 @@ describe('networkLogic', function() {
         'services/bash.js': {
           exec: () => Promise.resolve(ipInfo)
         },
-        'services/monerod.js': {
+        'build/services/monerod.js': {
           getPeerInfo: () => Promise.resolve(peerInfo),
           getNetworkInfo: () => Promise.resolve(monerodMocks.getNetworkInfoWithoutTor()),
         }

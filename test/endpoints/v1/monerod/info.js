@@ -3,15 +3,17 @@
 const sinon = require('sinon');
 const monerodMocks = require('../../../mocks/monerod.js');
 
+
 describe('v1/monerod/info endpoint', () => {
   let token;
 
-  before(async() => {
-    reset();
+  // before(async() => {
+  //   // reset();
 
-    token = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InRlc3QtdXNlciIsImlhdCI6MTU3NTIyNjQxMn0.N06esl2dhN1mFqn-0o4KQmmAaDW9OsHA39calpp_N9B3Ig3aXWgl064XAR9YVK0qwX7zMOnK9UrJ48KUZ-Sb4A';
-  });
+  //   // token = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InRlc3QtdXNlciIsImlhdCI6MTU3NTIyNjQxMn0.N06esl2dhN1mFqn-0o4KQmmAaDW9OsHA39calpp_N9B3Ig3aXWgl064XAR9YVK0qwX7zMOnK9UrJ48KUZ-Sb4A';
+  // });
 
+  
   describe('/addresses GET', function() {
     let monerodRPCGetPeerInfo;
     let monerodRPCGetNetworkInfo;
@@ -21,8 +23,10 @@ describe('v1/monerod/info endpoint', () => {
       monerodRPCGetNetworkInfo.restore();
     });
 
+
+
     it('should respond for an IPv4 address', done => {
-      monerodRPCGetPeerInfo = sinon.stub(require('monero-javascript').prototype, 'getPeerInfo').callsFake(callback => callback(undefined, {
+      monerodRPCGetPeerInfo = sinon.stub(moneroInstance, 'getPeerInfo').callsFake(callback => callback(undefined, {
         result:
           [
             {

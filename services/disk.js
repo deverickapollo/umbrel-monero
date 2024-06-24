@@ -2,14 +2,17 @@
  * Generic disk functions.
  */
 
-const logger = require('utils/logger');
-const fs = require('fs');
-const crypto = require('crypto');
+// const logger = require('utils/logger');
+// const fs = require('fs');
+// const crypto = require('crypto');
+import logger from '../utils/logger.js';
+import fs from 'fs';
+import crypto from 'crypto';
 
 const UINT32_BYTES = 4;
 
 // Asynchronously checks if a file exists
-async function fileExists(filePath) {
+export async function fileExists(filePath) {
   try {
     await fs.promises.access(filePath);
     return true;
@@ -19,7 +22,7 @@ async function fileExists(filePath) {
 }
 
 // Reads a file. Wraps fs.readFile into a native promise
-function readFile(filePath, encoding) {
+export function readFile(filePath, encoding) {
   return new Promise((resolve, reject) =>
     fs.readFile(filePath, encoding, (err, str) => {
       if (err) {
@@ -32,17 +35,17 @@ function readFile(filePath, encoding) {
 }
 
 // Reads a file as a utf8 string. Wraps fs.readFile into a native promise
-async function readUtf8File(filePath) {
+export async function readUtf8File(filePath) {
   return (await readFile(filePath, 'utf8')).trim();
 }
 
-async function readJsonFile(filePath) {
+export async function readJsonFile(filePath) {
   return readUtf8File(filePath).then(JSON.parse);
 }
 
 // Writes a string to a file. Wraps fs.writeFile into a native promise
 // This is _not_ concurrency safe, so don't export it without making it like writeJsonFile
-function writeFile(filePath, data, encoding) {
+export function writeFile(filePath, data, encoding) {
   return new Promise((resolve, reject) =>
     fs.writeFile(filePath, data, encoding, (err) => {
       if (err) {
@@ -54,7 +57,7 @@ function writeFile(filePath, data, encoding) {
   );
 }
 
-function writeJsonFile(filePath, obj) {
+export function writeJsonFile(filePath, obj) {
   const tempFileName = `${filePath}.${crypto
       .randomBytes(UINT32_BYTES)
       .readUInt32LE(0)}`;
@@ -85,7 +88,7 @@ function writeJsonFile(filePath, obj) {
       });
 }
 
-function writePlainTextFile(filePath, string) {
+export function writePlainTextFile(filePath, string) {
   const tempFileName = `${filePath}.${crypto
       .randomBytes(UINT32_BYTES)
       .readUInt32LE(0)}`;
@@ -114,13 +117,13 @@ function writePlainTextFile(filePath, string) {
       });
 }
 
-module.exports = {
-  fileExists,
-  readFile,
-  readUtf8File,
-  readJsonFile,
-  writeJsonFile,
-  writeFile,
-  writePlainTextFile,
-};
+// module.exports = {
+//   fileExists,
+//   readFile,
+//   readUtf8File,
+//   readJsonFile,
+//   writeJsonFile,
+//   writeFile,
+//   writePlainTextFile,
+// };
 

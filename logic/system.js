@@ -1,7 +1,9 @@
-const constants = require('utils/const.js');
-const NodeError = require('models/errors.js').NodeError;
+// const constants = require('utils/const.js');
+// const NodeError = require('models/errors.js').NodeError;
+import * as constants from '../utils/const.js';
+// import * as NodeError from '../models/errors.js';
 
-function getMoneroP2PConnectionDetails() {
+export function getMoneroP2PConnectionDetails() {
   const torAddress = constants.MONERO_P2P_HIDDEN_SERVICE;
   const port = constants.MONERO_P2P_PORT;
   // const restrictedPort = constants.MONERO_RESTRICTED_RPC_PORT;
@@ -20,7 +22,7 @@ function getMoneroP2PConnectionDetails() {
   };
 }
 
-function getMoneroRPCConnectionDetails() {
+export function getMoneroRPCConnectionDetails() {
   const hiddenService = constants.MONERO_RPC_HIDDEN_SERVICE;
   const label = 'My Umbrel';
   const rpcuser = constants.MONERO_RPC_USER;
@@ -46,7 +48,7 @@ function getMoneroRPCConnectionDetails() {
   };
 }
 
-module.exports = {
-  getMoneroP2PConnectionDetails,
-  getMoneroRPCConnectionDetails,
-};
+// module.exports = {
+//   getMoneroP2PConnectionDetails,
+//   getMoneroRPCConnectionDetails,
+// };

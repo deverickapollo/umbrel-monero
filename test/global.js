@@ -12,10 +12,10 @@ before(() => {
   global.requester = chai.request(server).keepOpen();
 });
 
-global.reset = () => {
-  global.Lightning.reset();
-  global.WalletUnlocker.reset();
-};
+// global.reset = () => {
+//   global.Lightning.reset();
+//   global.WalletUnlocker.reset();
+// };
 
 after(() => {
   global.requester.close();

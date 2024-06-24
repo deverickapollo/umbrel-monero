@@ -18,6 +18,7 @@ RUN npm install -g typescript
 
 # Compile TypeScript files
 RUN tsc
+
 # Install UI dependencies and build UI 
 RUN npm run install:ui
 RUN npm run build:ui

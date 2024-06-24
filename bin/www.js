@@ -4,26 +4,26 @@
  * Module dependencies.
  */
 
-const app = require('../app');
-const debug = require('debug')('nodejs-regular-webapp2:server');
-const http = require('http');
+import * as app from '../app.js';
+import debug from 'debug';
+import http from 'http';
 
-const diskLogic = require('../logic/disk');
-const diskService = require('../services/disk');
-const monerodLogic = require('../logic/monerod');
-const constants = require('../utils/const');
+import * as diskLogic from '../logic/disk.js';
+import * as diskService from '../services/disk.js';
+import * as monerodLogic from '../logic/monerod.js';
+import * as constants from '../utils/const.js';
 
 /**
  * Get port from environment and store in Express.
  */
 const port = normalizePort(process.env.PORT || '8889');
-app.set('port', port);
+app.default.set('port', port);
 
 /**
  * Create HTTP server.
  */
 
-const server = http.createServer(app);
+const server = http.createServer(app.default);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -38,23 +38,45 @@ server.on('listening', onListening);
  */
 
 async function createConfFilesAndRestartMonerod() {
-  console.log('bitmonero.conf does not exist, creating config files with default values');
-  const config = await diskLogic.getJsonStore();
+  console.log('bitmonero.conf does not exist, creating config files with DEFAULT values!');
 
-  await diskLogic.applyCustomMoneroConfig(config, true);
+  try{
+    const config = await diskLogic.getJsonStore();
+    await diskLogic.applyCustomMoneroConfig(config, true);
+  } catch (error) {
+    console.log(error);
+    return;
+  }
 
-  const MAX_TRIES = 60;
+  //Verify config file was created successfully and matches the default values
+  if (! await diskService.fileExists(constants.MONERO_CONF_FILEPATH)) {
+    console.log('Failed to create bitmonero.conf');
+    return;
+  } else {
+    console.log('bitmonero.conf now exists');
+  }
+  
+  const MAX_TRIES = 10;
   let tries = 0;
-
+  
   while (tries < MAX_TRIES) {
-    try {
-      await monerodLogic.stop();
-      break;
-    } catch (error) {
-      console.error(error);
-      tries++;
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+    const status = await monerodLogic.getStatus();
+    if (status.operational){
+      try {
+        await monerodLogic.stop();
+        break;
+      } catch (error) {
+        console.log(`Attempt ${tries + 1} to stop monerod failed:`, error);
+
+      }
+    }else{
+      console.log(`Monerod is not connected, retrying in ${2 ** tries} seconds...`);
     }
+    tries++;
+    await new Promise((resolve) => setTimeout(resolve, 2 ** tries * 1000));
+  }
+  if (tries === MAX_TRIES) {
+    console.log('Max attempts to stop monerod reached, giving up.');
   }
 }
 
@@ -96,11 +118,9 @@ function onError(error) {
     case 'EACCES':
       console.error(bind + ' requires elevated privileges');
       process.exit(1);
-      break;
     case 'EADDRINUSE':
       console.error(bind + ' is already in use');
       process.exit(1);
-      break;
     default:
       throw error;
   }
@@ -117,6 +137,7 @@ async function onListening() {
     'port ' + addr.port;
   debug('Listening on ' + bind);
   console.log('Listening on ' + bind);
+  await monerodLogic.getIsReady();
 
   // if bitmonero.conf does not exist, create default monero config files and restart monerod.
   if (! await diskService.fileExists(constants.MONERO_CONF_FILEPATH)) {

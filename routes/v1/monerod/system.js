@@ -1,31 +1,38 @@
-const express = require('express');
+// const express = require('express');
+// const router = express.Router();
+// const systemLogic = require('logic/system.js');
+// const diskLogic = require('logic/disk.js');
+// const monerodLogic = require('logic/monerod.js');
+// const safeHandler = require('utils/safeHandler');
+import express from 'express';
+
+import * as systemLogic from '../../../logic/system.js';
+import * as diskLogic from '../../../logic/disk.js';
+import * as monerodLogic from '../../../logic/monerod.js';
+import * as safeHandler from '../../../utils/safeHandler.js';
+
 const router = express.Router();
 
-const systemLogic = require('logic/system.js');
-const diskLogic = require('logic/disk.js');
-const monerodLogic = require('logic/monerod.js');
-const safeHandler = require('utils/safeHandler');
-
-router.get('/monero-p2p-connection-details', safeHandler(async (req, res) => {
+router.get('/monero-p2p-connection-details', safeHandler.safeHandler(async (req, res) => {
   const connectionDetails = systemLogic.getMoneroP2PConnectionDetails();
 
   return res.json(connectionDetails);
 }));
 
-router.get('/monero-rpc-connection-details', safeHandler(async (req, res) => {
+router.get('/monero-rpc-connection-details', safeHandler.safeHandler(async (req, res) => {
   const connectionDetails = systemLogic.getMoneroRPCConnectionDetails();
 
   return res.json(connectionDetails);
 }));
 
-router.get('/monero-config', safeHandler(async (req, res) => {
+router.get('/monero-config', safeHandler.safeHandler(async (req, res) => {
   const moneroConfig = await diskLogic.getJsonStore();
   return res.json(moneroConfig);
 }));
 
 // updateJsonStore / generateMoneroConfig are all called through these routes below so that even if user closes the browser prematurely, the backend will complete the update.
 
-router.post('/update-monero-config', safeHandler(async (req, res) => {
+router.post('/update-monero-config', safeHandler.safeHandler(async (req, res) => {
   // store old moneroConfig in memory to revert to in case of errors setting new config and restarting monerod
   const oldMoneroConfig = await diskLogic.getJsonStore();
   const newMoneroConfig = req.body.moneroConfig;
@@ -43,7 +50,7 @@ router.post('/update-monero-config', safeHandler(async (req, res) => {
   }
 }));
 
-router.post('/restore-default-monero-config', safeHandler(async (req, res) => {
+router.post('/restore-default-monero-config', safeHandler.safeHandler(async (req, res) => {
   // store old moneroConfig in memory to revert to in case of errors setting new config and restarting monerod
   const oldMoneroConfig = await diskLogic.getJsonStore();
 
@@ -60,4 +67,5 @@ router.post('/restore-default-monero-config', safeHandler(async (req, res) => {
   }
 }));
 
-module.exports = router;
+// module.exports = router;
+export default router;

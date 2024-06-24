@@ -1,7 +1,10 @@
 // const fs = require("fs");
 // const path = require('path');
-const constants = require('utils/const.js');
-const diskService = require('services/disk.js');
+// const constants = require('utils/const.js');
+// const diskService = require('services/disk.js');
+
+import * as constants from '../utils/const.js';
+import * as diskService from '../services/disk.js';
 
 // TODO - consider moving these unit conversions to utils/const.js
 // const GB_TO_MiB = 953.674;
@@ -49,8 +52,8 @@ function settingsToMultilineConfString(settings) {
   // bandwidth settings
   umbrelMoneroConfig.push('# Bandwidth settings');
   umbrelMoneroConfig.push('');
-  umbrelMoneroConfig.push(`out-peers=64`);
-  umbrelMoneroConfig.push(`in-peers=64`);
+  umbrelMoneroConfig.push(`out-peers=12`);
+  umbrelMoneroConfig.push(`in-peers=12`);
   umbrelMoneroConfig.push(`limit-rate-up=1048576`);
   umbrelMoneroConfig.push(`limit-rate-down=1048576`);
 
@@ -109,13 +112,13 @@ function settingsToMultilineConfString(settings) {
   umbrelMoneroConfig.push(`p2p-bind-port=${constants.MONERO_P2P_PORT}`);
 
   // i2p Outbound Connections
-  if (settings.i2p) {
-    umbrelMoneroConfig.push(`tx-proxy=i2p,${constants.I2P_DAEMON_IP}:${constants.I2P_DAEMON_PORT}`);
-  }
+  // if (settings.i2p) {
+  //   umbrelMoneroConfig.push(`tx-proxy=i2p,${constants.I2P_DAEMON_IP}:${constants.I2P_DAEMON_PORT}`);
+  // }
 
   // tor Outbound Connections
   if (settings.tor) {
-    umbrelMoneroConfig.push(`tx-proxy=tor,${constants.TOR_PROXY_IP}:${constants.TOR_PROXY_PORT}`);
+    // umbrelMoneroConfig.push(`tx-proxy=tor,${constants.TOR_PROXY_IP}:${constants.TOR_PROXY_PORT}`);
     // # Tor: add P2P seed nodes for the Tor network
     // # For an up-to-date list of working nodes see ...
 
@@ -153,9 +156,9 @@ function settingsToMultilineConfString(settings) {
   }
 
 
-  umbrelMoneroConfig.push(`rpc-bind-ip=0.0.0.0`);
+  // umbrelMoneroConfig.push(`rpc-bind-ip=0.0.0.0`);
   umbrelMoneroConfig.push(`rpc-restricted-bind-ip=0.0.0.0`);
-  umbrelMoneroConfig.push(`rpc-bind-port=${constants.MONERO_RPC_PORT}`);
+  // umbrelMoneroConfig.push(`rpc-bind-port=${constants.MONERO_RPC_PORT}`);
   umbrelMoneroConfig.push(`rpc-restricted-bind-port=${constants.MONERO_RESTRICTED_RPC_PORT}`);
 
   // Public Node
@@ -173,7 +176,7 @@ function settingsToMultilineConfString(settings) {
   return umbrelMoneroConfig.join('\n');
 }
 
-async function getJsonStore() {
+export async function getJsonStore() {
   try {
     const jsonStore = await diskService.readJsonFile(constants.JSON_STORE_FILE);
     return {...DEFAULT_ADVANCED_SETTINGS, ...jsonStore};
@@ -215,17 +218,17 @@ async function applyMoneroConfig(moneroConfig, shouldOverwriteExistingFile = tru
   ]);
 }
 
-async function applyCustomMoneroConfig(moneroConfig, shouldOverwriteExistingFile = true) {
+export async function applyCustomMoneroConfig(moneroConfig, shouldOverwriteExistingFile = true) {
   await applyMoneroConfig(moneroConfig, shouldOverwriteExistingFile);
 }
 
-async function applyDefaultMoneroConfig() {
+export async function applyDefaultMoneroConfig() {
   await applyMoneroConfig(DEFAULT_ADVANCED_SETTINGS, true);
 }
 
 
-module.exports = {
-  getJsonStore,
-  applyCustomMoneroConfig,
-  applyDefaultMoneroConfig,
-};
+// module.exports = {
+//   getJsonStore,
+//   applyCustomMoneroConfig,
+//   applyDefaultMoneroConfig,
+// };
