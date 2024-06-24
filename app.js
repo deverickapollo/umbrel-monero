@@ -60,7 +60,7 @@ import express from 'express';
 import path from 'path';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
-// import cors from 'cors';
+import cors from 'cors';
 
 import * as requestCorrelationMiddleware  from './middlewares/requestCorrelationId.js';
 import { camelCaseRequest as camelCaseReqMiddleware } from './middlewares/camelCaseRequest.js';
