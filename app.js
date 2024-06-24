@@ -90,7 +90,13 @@ dotenv.config();
 const environment = process.env.NODE_ENV;
 const app = express();
 
-app.use(helmet())
+app.use(helmet());
+
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    ...defaultDirectives,
+  },
+}));
 // app.use(cors());
 
 app.use(bodyParser.json());
