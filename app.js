@@ -92,11 +92,12 @@ const app = express();
 
 app.use(helmet());
 
-app.use(helmet.contentSecurityPolicy({
-  directives: {
-    ...defaultDirectives,
-  },
-}));
+// temporarily disable contentSecurityPolicy
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  })
+);
 // app.use(cors());
 
 app.use(bodyParser.json());
