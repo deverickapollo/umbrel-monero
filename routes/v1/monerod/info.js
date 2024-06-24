@@ -1,31 +1,8 @@
-// const express = require('express');
-// const router = express.Router();
-// const monerod = require('logic/monerod.mjs');
-// const safeHandler = require('utils/safeHandler');
-// const networkLogic = require('logic/network.js');
-
 import express from 'express';
 import * as monerod from '../../../logic/monerod.js';
 import * as safeHandler from '../../../utils/safeHandler.js';
 
 const router = express.Router();
-// // unused by UI
-// router.get('/mempool', safeHandler((req, res) =>
-//   monerod.getMempoolInfo()
-//     .then(mempool => res.json(mempool.result))
-// ));
-
-// // unused by UI
-// router.get('/addresses', safeHandler((req, res) =>
-//   networkLogic.getMonerodAddresses()
-//     .then(addresses => res.json(addresses))
-// ));
-
-// // unused by UI
-// router.get('/blockcount', safeHandler((req, res) =>
-//   monerod.getBlockCount()
-//     .then(blockCount => res.json(blockCount))
-// ));
 
 router.get('/connections', safeHandler.safeHandler((req, res) =>
   monerod.getConnectionsCount()
@@ -46,12 +23,6 @@ router.get('/version', safeHandler.safeHandler((req, res) =>
   monerod.getVersion()
       .then((version) => res.json(version)),
 ));
-
-// unused by UI
-// router.get('/statsDump', safeHandler((req, res) =>
-//   monerod.nodeStatusDump()
-//     .then(statusdump => res.json(statusdump))
-// ));
 
 router.get('/stats', safeHandler.safeHandler((req, res) =>
   monerod.nodeStatusSummary()
@@ -88,13 +59,5 @@ router.get('/blocks', safeHandler.safeHandler((req, res) => {
       .then((blocks) => res.json(blocks));
 },
 ));
-
-// unused by UI
-// router.get('/txid/:id', safeHandler((req, res) =>
-//   monerod.getTransaction(req.params.id)
-//     .then(txhash => res.json(txhash))
-// ));
-
-// module.exports = router;
 
 export default router;

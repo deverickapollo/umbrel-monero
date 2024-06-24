@@ -1,4 +1,3 @@
-// const camelizeKeys = require('camelize-keys');
 import camelizeKeys from 'camelize-keys';
 
 export function camelCaseRequest(req, res, next) {
@@ -7,7 +6,3 @@ export function camelCaseRequest(req, res, next) {
   }
   next();
 }
-
-// module.exports = {
-//   camelCaseRequest,
-// };

@@ -252,23 +252,6 @@ export async function getBlockHash(height) {
   };
 }
 
-// unused function
-// async function nodeStatusDump() {
-//   const blockchainInfo = await monerodService.getBlockChainInfo();
-//   const networkInfo = await monerodService.getNetworkInfo();
-//   const mempoolInfo = await monerodService.getMempoolInfo();
-//   const miningInfo = await monerodService.getMiningInfo();
-
-//   return {
-//     blockchain_info: blockchainInfo.result,
-//     network_info: networkInfo.result,
-//     mempool: mempoolInfo.result,
-//     mining_info: miningInfo.result
-//   };
-// }
-
-
-
 export async function nodeStatusSummary() {
   const blockchainInfo = await monerodService.getBlockChainInfo();
 

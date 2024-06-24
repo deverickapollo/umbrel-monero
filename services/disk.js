@@ -1,10 +1,6 @@
 /**
  * Generic disk functions.
  */
-
-// const logger = require('utils/logger');
-// const fs = require('fs');
-// const crypto = require('crypto');
 import logger from '../utils/logger.js';
 import fs from 'fs';
 import crypto from 'crypto';
@@ -116,14 +112,4 @@ export function writePlainTextFile(filePath, string) {
         }
       });
 }
-
-// module.exports = {
-//   fileExists,
-//   readFile,
-//   readUtf8File,
-//   readJsonFile,
-//   writeJsonFile,
-//   writeFile,
-//   writePlainTextFile,
-// };
 

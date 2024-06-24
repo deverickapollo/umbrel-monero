@@ -1,5 +1,3 @@
-// const monerodService = require('build/services/monerod.mjs');
-// const bashService = require('services/bash.js');
 import * as monerodService from '../build/services/monerod.js';
 import * as bashService from '../services/bash.js';
 
@@ -77,7 +75,3 @@ function getMostValidatedIP(peerInfo) {
 
   return mostValidatedExternalIp.externalIP;
 }
-
-// module.exports = {
-//   getMonerodAddresses,
-// };

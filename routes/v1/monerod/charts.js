@@ -1,10 +1,4 @@
-// const express = require('express');
-// const router = express.Router();
-// const monerod = require('logic/monerod.js');
-// const monerodService = require('build/services/monerod.mjs');
-// const safeHandler = require('utils/safeHandler');
 import express from 'express';
-
 import * as monerod from '../../../logic/monerod.js';
 import * as safeHandler from '../../../utils/safeHandler.js';
 import * as monerodService from '../../../build/services/monerod.js';
@@ -62,5 +56,4 @@ router.get('/charts', safeHandler.safeHandler((req, res) => {
 },
 ));
 
-// module.exports = router;
 export default router;

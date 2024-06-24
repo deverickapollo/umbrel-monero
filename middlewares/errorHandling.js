@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars, no-magic-numbers */
-// const logger = require('utils/logger.js');
 import logger from '../utils/logger.js';
 
 export function handleError(error, req, res, next) {
@@ -12,4 +11,3 @@ export function handleError(error, req, res, next) {
   res.status(statusCode).json(message);
 }
  export default handleError;
-// module.exports = handleError;

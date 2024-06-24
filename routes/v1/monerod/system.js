@@ -1,11 +1,4 @@
-// const express = require('express');
-// const router = express.Router();
-// const systemLogic = require('logic/system.js');
-// const diskLogic = require('logic/disk.js');
-// const monerodLogic = require('logic/monerod.js');
-// const safeHandler = require('utils/safeHandler');
 import express from 'express';
-
 import * as systemLogic from '../../../logic/system.js';
 import * as diskLogic from '../../../logic/disk.js';
 import * as monerodLogic from '../../../logic/monerod.js';
@@ -67,5 +60,4 @@ router.post('/restore-default-monero-config', safeHandler.safeHandler(async (req
   }
 }));
 
-// module.exports = router;
 export default router;

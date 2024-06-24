@@ -1,6 +1,3 @@
-// const express = require('express');
-// const pjson = require('../package.json');
-// const router = express.Router();
 import express from 'express';
 
 // import * as pjson from '../package.json';
@@ -12,4 +9,3 @@ router.get('/', function(req, res) {
 });
 
 export default router;
-// module.exports = router;

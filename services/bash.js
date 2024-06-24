@@ -1,4 +1,3 @@
-// const childProcess = require('child_process');
 import childProcess from 'child_process';
 
 // Sets environment variables on container.
@@ -51,7 +50,3 @@ export const exec = (command, args, opts) => new Promise((resolve, reject) => {
     childProc.stderr.pipe(process.stderr);
   }
 });
-
-// module.exports = {
-//   exec,
-// };

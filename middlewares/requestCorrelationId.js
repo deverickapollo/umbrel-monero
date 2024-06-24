@@ -1,6 +1,3 @@
-// const UUID = require('utils/UUID.js');
-// const constants = require('utils/const.js');
-// const createNamespace = require('continuation-local-storage').createNamespace;
 import * as UUID from '../utils/UUID.js';
 import * as constants from '../utils/const.js';
 import { createNamespace } from 'continuation-local-storage';
@@ -17,4 +14,3 @@ export function addCorrelationId(req, res, next) {
 }
 
 export default addCorrelationId;
-// module.exports = addCorrelationId;

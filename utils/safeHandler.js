@@ -11,5 +11,3 @@ export function safeHandler(handler) {
     }
   };
 }
-
-// module.exports = safeHandler;

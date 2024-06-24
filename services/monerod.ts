@@ -220,25 +220,6 @@ export async function getBlockChainInfo(): Promise<{result: infoInterface}>{
 
     return {result: infoResult};
 
-    // const info = {
-    //   result: {
-    //     chain: RpcClient.MoneroNetworkType.toString(infoState.networkType),
-    //     blocks: infoState.height,
-    //     headers: infoState.height,
-    //     difficulty: parseInt(infoState.difficulty, 10),
-    //     sizeOnDisk: infoState.databaseSize,
-    //     numOutgoingConnections: infoState.numOutgoingConnections,
-    //     mempoolBytes: miningInfo.getBytesTotal(),
-    //     mempoolTransactions: miningInfo.getNumTxs(),
-    //     verificationprogress: getSyncPercentage(
-    //         infoState.height,
-    //         infoState.targetHeight,
-    //     ),
-    //     pruned: true, // TODO implement after monero-js implements
-    //   },
-    // };
-
-    // return info;
   } catch (err) {
     throw new MonerodError(
         'Unable to obtain getBlockChainInfo from Daemon',
@@ -280,16 +261,6 @@ export async function getBlockCount(): Promise<number>{
 // TODO implement this
 export async function getMempoolInfo(): Promise<{result: MoneroTx[]}>{
   try {
-    // const info = {
-    //   result: {
-    //     size: 4524,
-    //     bytes: 2071293,
-    //     usage: 6141256,
-    //     maxmempool: 20000000,
-    //     mempoolminfee: 0.00000001,
-    //     minrelaytxfee: 0.00000001,
-    //   }
-    // }
 
     const pool: MoneroTx[] = await daemonController.daemon.getTxPool();
 
@@ -312,23 +283,8 @@ export async function getVersion() {
 // TODO implement
 export async function getNetworkInfo() {
   try {
-    //const daemon: MoneroDaemon = daemonController;
     const peers: MoneroPeer[]  = await daemonController.daemon.getPeers();
-    // const hardForkInfoData = {
-    //   connections: undefined, // peers
-    //   localAddresses: undefined,
-    //   hardForkInfo: undefined,
-    //   blockHeader: undefined,
-    //   blockHeight: undefined,
-    //   version: undefined,
-    //   height: undefined,
-    //   difficulty: undefined,
-    //   hashrate: undefined,
-    //   tx_count: undefined,
-    //   fee_per_kb: undefined,
-    //   fee_address: undefined,
-    //   fee_amount: undefined,
-    // };
+
     interface HardForkInfoData {
       connections: number | undefined;
       localAddresses: any | undefined;
@@ -345,7 +301,6 @@ export async function getNetworkInfo() {
       fee_amount: number | undefined;
     }
 
-    //const blah = await daemon.daemon.getPeers();
     const hardForkInfoData: HardForkInfoData = {
       connections: peers ? peers.length : 0,
       localAddresses: undefined,
@@ -361,19 +316,7 @@ export async function getNetworkInfo() {
       fee_address: undefined,
       fee_amount: undefined,
     };
-    //hardForkInfoData.connections = blah ? blah.length : 0;
 
-    // const hardForkInfo = daemonController.daemon.getInfo();
-    // const blockHeader = daemonController.daemon.getLastBlockHeader();
-    // const blockHeight = blockHeader.height;
-    // const version = hardForkInfo.version;
-    // const height = blockHeight;
-    // const difficulty = hardForkInfo.difficulty;
-    // const hashrate = hardForkInfo.difficulty / blockHeader.timestamp;
-    // const tx_count = hardForkInfo.tx_count;
-    // const fee_per_kb = hardForkInfo.fee_address;
-    // const fee_address = hardForkInfo.fee_address;
-    // const fee_amount = hardForkInfo.fee_amount;
     return {
       result: {
         hardForkInfoData,
@@ -383,26 +326,6 @@ export async function getNetworkInfo() {
     throw new MonerodError('Unable to obtain getNetworkInfo from Daemon', err);
   }
 }
-
-// Unused function
-// function getMiningInfo() {
-//   try {
-//     const blockHeader = daemonController.daemon.getLastBlockHeader();
-
-//     // const blockHeight = blockHeader.height;
-//     // const difficulty = blockHeader.difficulty;
-//     // const hashrate = difficulty / blockHeader.timestamp;
-//     // const tx_count = blockHeader.tx_count;
-//     // const fee_per_kb = blockHeader.fee_per_kb;
-//     // const fee_address = blockHeader.fee_address;
-//     // const fee_amount = blockHeader.fee_amount;
-//     return {result: {
-//       networkhashps: parseInt(blockHeader.difficulty) / 120
-//     }};
-//   } catch (err) {
-//     throw new MonerodError('Unable to obtain getMiningInfo from Daemon', err);
-//   }
-// }
 
 export async function stop() {
   await daemonController.daemon.stop();

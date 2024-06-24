@@ -1,5 +1,3 @@
-// const constants = require('utils/const.js');
-// const NodeError = require('models/errors.js').NodeError;
 import * as constants from '../utils/const.js';
 // import * as NodeError from '../models/errors.js';
 
@@ -47,8 +45,3 @@ export function getMoneroRPCConnectionDetails() {
     restrictedConnectionString,
   };
 }
-
-// module.exports = {
-//   getMoneroP2PConnectionDetails,
-//   getMoneroRPCConnectionDetails,
-// };

@@ -1,14 +1,5 @@
-// const fs = require("fs");
-// const path = require('path');
-// const constants = require('utils/const.js');
-// const diskService = require('services/disk.js');
-
 import * as constants from '../utils/const.js';
 import * as diskService from '../services/disk.js';
-
-// TODO - consider moving these unit conversions to utils/const.js
-// const GB_TO_MiB = 953.674;
-// const MB_TO_MiB = 0.953674;
 
 const DEFAULT_ADVANCED_SETTINGS = {
   tor: true,
@@ -225,10 +216,3 @@ export async function applyCustomMoneroConfig(moneroConfig, shouldOverwriteExist
 export async function applyDefaultMoneroConfig() {
   await applyMoneroConfig(DEFAULT_ADVANCED_SETTINGS, true);
 }
-
-
-// module.exports = {
-//   getJsonStore,
-//   applyCustomMoneroConfig,
-//   applyDefaultMoneroConfig,
-// };
