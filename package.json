@@ -31,7 +31,7 @@
     "helmet": "^7.1.0",
     "js-sha3": "^0.9.2",
     "module-alias": "^2.1.0",
-    "monero-javascript": "^0.7.12",
+    "monero-javascript": "^0.8.0",
     "monero-ts": "^0.9.7",
     "morgan": "^1.9.0",
     "typescript": "^5.4.3",
