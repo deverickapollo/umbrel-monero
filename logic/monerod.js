@@ -2,12 +2,14 @@ import * as monerodService from '../build/services/monerod.js';
 import * as MonerodError from '../models/errors.js';
 
 export async function getBlockCount() {
+  await monerodService.isReady();
   const blockCount = await monerodService.getBlockCount();
 
   return {blockCount: blockCount.result};
 }
 
 export async function getConnectionsCount() {
+  await monerodService.isReady();
   const peerInfo = await monerodService.getPeerInfo();
 
   let outBoundConnections = 0;
@@ -49,6 +51,7 @@ export async function getConnectionsCount() {
 }
 
 export async function getStatus() {
+  await monerodService.isReady();
   try {
     const connected = await monerodService.getIsConnected();
     if (connected.result === true) {
@@ -66,11 +69,13 @@ export async function getStatus() {
 }
 
 export async function getMempoolInfo() {
+  await monerodService.isReady();
   return await monerodService.getMempoolInfo();
 }
 
 // Return the max synced header for all connected peers or -1 if no data is available.
 export async function getMaxSyncHeader() {
+  await monerodService.isReady();
   const peerInfo = (await monerodService.getPeerInfo()).result;
 
   if (peerInfo.length === 0) {
@@ -85,6 +90,7 @@ export async function getMaxSyncHeader() {
 }
 
 export async function getLocalSyncInfo() {
+  await monerodService.isReady();
   const info = await monerodService.getBlockChainInfo();
   const blockChainInfo = info.result;
   const chain = blockChainInfo.chain;
@@ -102,6 +108,7 @@ export async function getLocalSyncInfo() {
 }
 
 export async function getSyncStatus() {
+  await monerodService.isReady();
   const maxPeerHeader = await getMaxSyncHeader();
   const localSyncInfo = await getLocalSyncInfo();
 
@@ -114,6 +121,7 @@ export async function getSyncStatus() {
 
 // TODO - consider using getNetworkInfo for info on proxy for ipv4 and ipv6
 export async function getVersion() {
+  await monerodService.isReady();
   const version = await monerodService.getVersion();
 
   // Remove all non-digits or decimals.
@@ -123,6 +131,7 @@ export async function getVersion() {
 }
 
 export async function getTransaction(txid) {
+  await monerodService.isReady();
   const transactionObj = await monerodService.getTransaction(txid);
 
   return {
@@ -138,12 +147,14 @@ export async function getTransaction(txid) {
 }
 
 export async function getNetworkInfo() {
+  await monerodService.isReady();
   const networkInfo = await monerodService.getNetworkInfo();
 
   return networkInfo.result; // eslint-disable-line object-shorthand
 }
 
 export async function getBlock(hash) {
+  await monerodService.isReady();
   const blockObj = await monerodService.getBlock(hash);
 
   return {
@@ -206,6 +217,7 @@ const initializedMemoizedGetFormattedBlock = memoizedGetFormattedBlock();
 
 
 export async function getBlockRangeTransactionChunks(fromHeight, toHeight, blocksPerChunk) {
+  await monerodService.isReady();
   const {blocks} = await getBlocks(fromHeight, toHeight);
 
   const chunks = [];
@@ -224,6 +236,7 @@ export async function getBlockRangeTransactionChunks(fromHeight, toHeight, block
 }
 
 export async function getBlocks(fromHeight, toHeight) {
+  await monerodService.isReady();
   const blocks = [];
 
   // loop from 'to height' till 'from Height'
@@ -245,6 +258,7 @@ export async function getBlocks(fromHeight, toHeight) {
 }
 
 export async function getBlockHash(height) {
+  await monerodService.isReady();
   const getBlockHashObj = await monerodService.getBlockHash(height);
 
   return {
@@ -253,6 +267,7 @@ export async function getBlockHash(height) {
 }
 
 export async function nodeStatusSummary() {
+  await monerodService.isReady();
   const blockchainInfo = await monerodService.getBlockChainInfo();
 
   return {
@@ -266,6 +281,7 @@ export async function nodeStatusSummary() {
 }
 
 export async function stop() {
+  await monerodService.isReady();
   const stopResponse = await monerodService.stop();
   return {stopResponse};
 }

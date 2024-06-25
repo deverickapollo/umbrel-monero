@@ -52,13 +52,26 @@ class MoneroDaemon {
   private ready: Promise<void>;
   
   constructor() {
-    this.ready = (async () => {
-      try {
-        await this.init();
-      } catch (err) {
-        throw new MonerodError('Unable to initialize Monero daemon.', err);
-      }
-    })();
+    // this.ready = (async () => {
+    //   try {
+    //     await this.init();
+    //   } catch (err) {
+    //     throw new MonerodError('Unable to initialize Monero daemon.', err);
+    //   }
+    // })();
+  }
+
+  async initialize() {
+    if (!this.ready) {
+      this.ready = (async () => {
+        try {
+          await this.init();
+        } catch (err) {
+          throw new MonerodError('Unable to initialize Monero daemon.', err);
+        }
+      })();
+    }
+    return this.ready;
   }
 
   async init() {
@@ -89,7 +102,7 @@ class MoneroDaemon {
 
 
 const daemonController = new MoneroDaemon();
-// await daemonController.init();
+await daemonController.initialize();
 
 // function promiseify(rpcObj, rpcFn, what) {
 //   return new Promise((resolve, reject) => {
