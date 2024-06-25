@@ -1,8 +1,10 @@
-const express = require('express');
+import express from 'express';
+import * as monerod from '../../../logic/monerod.js';
+import * as safeHandler from '../../../utils/safeHandler.js';
+import * as monerodService from '../../../build/services/monerod.js';
 const router = express.Router();
-const monerod = require('logic/monerod.js');
-const monerodService = require('services/monerod.js');
-const safeHandler = require('utils/safeHandler');
+
+
 
 const aggregates = {
   '1hr': [],
@@ -49,9 +51,9 @@ const setAggregatesValues = async () => {
   }
 };
 
-router.get('/charts', safeHandler((req, res) => {
+router.get('/charts', safeHandler.safeHandler((req, res) => {
   res.json(aggregates);
 },
 ));
 
-module.exports = router;
+export default router;

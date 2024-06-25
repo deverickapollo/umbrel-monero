@@ -132,10 +132,14 @@ const actions = {
         const peers = await API.get(
           `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/info/connections`
         );
-        if(peers.total > 1){
+        if(peers.total >1){
           commit("isOperational", status.operational);
           await dispatch("getSync");
+        }else{
+          commit("isOperational", false);
         }
+    }else{
+      commit("isOperational", status.operational);
     }
   },
 

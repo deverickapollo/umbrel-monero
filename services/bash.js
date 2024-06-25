@@ -1,4 +1,4 @@
-const childProcess = require('child_process');
+import childProcess from 'child_process';
 
 // Sets environment variables on container.
 // Env should not contain sensitive data, because environment variables are not secure.
@@ -9,7 +9,7 @@ function extendProcessEnv(env) {
 }
 
 // Executes docker-compose command with common options
-const exec = (command, args, opts) => new Promise((resolve, reject) => {
+export const exec = (command, args, opts) => new Promise((resolve, reject) => {
   const options = opts || {};
 
   const cwd = options.cwd || null;
@@ -50,7 +50,3 @@ const exec = (command, args, opts) => new Promise((resolve, reject) => {
     childProc.stderr.pipe(process.stderr);
   }
 });
-
-module.exports = {
-  exec,
-};

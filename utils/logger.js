@@ -1,12 +1,14 @@
 /* eslint-disable no-shadow, no-unused-vars, max-len, no-console, object-shorthand*/
-require('winston-daily-rotate-file');
-const constants = require('utils/const.js');
-const fs = require('fs');
-const path = require('path');
-const winston = require('winston');
-const {format} = require('winston');
+
+import 'winston-daily-rotate-file';
+import * as constants from './const.js';
+import fs from 'fs';
+import path from 'path';
+import winston, { format } from 'winston';
+import { getNamespace } from 'continuation-local-storage';
+
 const {combine, timestamp, printf} = format;
-const getNamespace = require('continuation-local-storage').getNamespace;
+
 
 const LOCAL = 'local';
 const logDir = './logs';
@@ -124,11 +126,10 @@ function debug(message, _module, data) {
   });
 }
 
-module.exports = {
-  error: error,
-  warn: warn,
-  info: info,
-  debug: debug,
-  morganConfiguration: morganConfiguration,
+export default {
+  error,
+  warn,
+  info,
+  debug,
+  morganConfiguration,
 };
-

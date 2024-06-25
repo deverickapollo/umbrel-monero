@@ -1,0 +1,23 @@
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+//where is my app path
+
+const app = require('../../../../app'); // replace with path to your app file
+
+chai.use(chaiHttp);
+const { expect } = chai;
+
+describe('v1/monerod API', () => {
+  describe('GET /getSyncStatus', () => {
+    it('should respond with a JSON object', (done) => {
+      chai.request(app)
+        .get('/routes/v1/monerod/getSyncStatus')
+        .end((err, res) => {
+          expect(err).to.be.null;
+          expect(res).to.have.status(200);
+          expect(res.body).to.be.an('object');
+          done();
+        });
+    });
+  });
+});

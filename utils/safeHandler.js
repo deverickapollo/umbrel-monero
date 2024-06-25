@@ -2,7 +2,7 @@
 // so that we always fallback and return an exception if there is an error
 // inside of an async function
 // Mostly copied from vault/server/utils/safeHandler.js
-function safeHandler(handler) {
+export function safeHandler(handler) {
   return async (req, res, next) => {
     try {
       return await handler(req, res, next);
@@ -11,5 +11,3 @@ function safeHandler(handler) {
     }
   };
 }
-
-module.exports = safeHandler;
