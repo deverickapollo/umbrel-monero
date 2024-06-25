@@ -24,7 +24,7 @@ RUN npm run install:ui
 RUN npm run build:ui
 
 # Final Stage (Production) 
-FROM node:21.6.1-alpine AS monero-middleware
+FROM node:22-alpine AS monero-middleware
 
 # Copy built code from build stage to '/app' directory
 COPY --from=monero-middleware-builder /app /app
