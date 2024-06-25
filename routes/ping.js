@@ -1,7 +1,7 @@
 import express from 'express';
 
 // import * as pjson from '../package.json';
-import pjson from '../package.json' assert { type: 'json' };
+import pjson from '../package.json';
 const router = express.Router();
 
 router.get('/', function(req, res) {
