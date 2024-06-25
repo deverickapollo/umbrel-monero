@@ -103,13 +103,13 @@ function settingsToMultilineConfString(settings) {
   umbrelMoneroConfig.push(`p2p-bind-port=${constants.MONERO_P2P_PORT}`);
 
   // i2p Outbound Connections
-  // if (settings.i2p) {
-  //   umbrelMoneroConfig.push(`tx-proxy=i2p,${constants.I2P_DAEMON_IP}:${constants.I2P_DAEMON_PORT}`);
-  // }
+  if (settings.i2p) {
+    umbrelMoneroConfig.push(`tx-proxy=i2p,${constants.I2P_DAEMON_IP}:${constants.I2P_DAEMON_PORT}`);
+  }
 
   // tor Outbound Connections
   if (settings.tor) {
-    // umbrelMoneroConfig.push(`tx-proxy=tor,${constants.TOR_PROXY_IP}:${constants.TOR_PROXY_PORT}`);
+    umbrelMoneroConfig.push(`tx-proxy=tor,${constants.TOR_PROXY_IP}:${constants.TOR_PROXY_PORT}`);
     // # Tor: add P2P seed nodes for the Tor network
     // # For an up-to-date list of working nodes see ...
 
