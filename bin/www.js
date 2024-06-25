@@ -64,6 +64,7 @@ async function createConfFilesAndRestartMonerod() {
     if (status.operational){
       try {
         await monerodLogic.stop();
+        console.log('Monerod stopped');
         break;
       } catch (error) {
         console.log(`Attempt ${tries + 1} to stop monerod failed:`, error);
