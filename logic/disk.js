@@ -158,6 +158,28 @@ function settingsToMultilineConfString(settings) {
     umbrelMoneroConfig.push(`confirm-external-bind=1`);
   }
 
+  if(settings.zmq) {
+    if(!settings.publicNode){
+      umbrelMoneroConfig.push('public-node=1');
+      umbrelMoneroConfig.push(`confirm-external-bind=1`);
+    }
+    umbrelMoneroConfig.push('');
+    umbrelMoneroConfig.push('# Enable ZeroMQ');
+    umbrelMoneroConfig.push(`zmq-pub=tcp://0.0.0.0:${constants.MONERO_ZMQ_PORT}`);
+    umbrelMoneroConfig.push(`add-priority-node=p2pmd.xmrvsbeast.com:18080`);
+    umbrelMoneroConfig.push(`add-priority-node=nodes.hashvault.pro:18080`);
+    umbrelMoneroConfig.push(`disable-dns-checkpoints=1`);
+    umbrelMoneroConfig.push(`enable-dns-blocklist=1`);
+
+    umbrelMoneroConfig.push(`zmq-rpc-bind-ip=0.0.0.0`);
+    umbrelMoneroConfig.push(`zmq-rpc-bind-port=${constants.MONERO_ZMQ_RPC_PORT}`);
+
+  }else{
+    umbrelMoneroConfig.push('');
+    umbrelMoneroConfig.push('# Disable ZeroMQ');
+    umbrelMoneroConfig.push(`no-zmq=true`);
+  }
+
   if (process.env.APP_BTCPAY_IP && process.env.APP_BTCPAY_PORT) {
     umbrelMoneroConfig.push('');
     umbrelMoneroConfig.push('# Execute command when a block is added or removed from blockchain.');

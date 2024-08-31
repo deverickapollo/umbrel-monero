@@ -249,6 +249,52 @@
           <div>
             <div class="d-flex justify-content-between align-items-center">
               <div class="w-75">
+                <label class="mb-0" for="btcpayserver">
+                  <p class="font-weight-bold mb-0">Enable Monero Support for BTCPayServer</p>
+                </label>
+              </div>
+              <div>
+                <toggle-switch
+                  id="btcpayserver"
+                  class="align-self-center"
+                  :on="settings.btcpayserver"
+                  @toggle="status => (settings.btcpayserver = status)"
+                ></toggle-switch>
+              </div>
+            </div>
+            <small class="w-sm-75 d-block text-muted mt-1">
+              Enable Monero for BTCPayServer (default is false)
+            </small>
+          </div>
+
+          <hr class="advanced-settings-divider" />
+
+          <div>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="w-75">
+                <label class="mb-0" for="zmq">
+                  <p class="font-weight-bold mb-0">Enable ZMQ Support</p>
+                </label>
+              </div>
+              <div>
+                <toggle-switch
+                  id="zmq"
+                  class="align-self-center"
+                  :on="settings.zmq"
+                  @toggle="status => (settings.zmq = status)"
+                ></toggle-switch>
+              </div>
+            </div>
+            <small class="w-sm-75 d-block text-muted mt-1">
+              Enable ZMQ Support (default is false)
+            </small>
+          </div>
+
+          <hr class="advanced-settings-divider" />
+
+          <div>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="w-75">
                 <label class="mb-0" for="checkpoint">
                   <p class="font-weight-bold mb-0">
                     Enable DNS Checkpointing on Node
@@ -361,7 +407,6 @@
             <div
               class="col-12 col-md-4 col-sm-12 d-flex justify-content-center justify-content-md-end align-items-center"
             >
-              <div ref="address" class="d-none">{{ address }}</div>
               <donation></donation>
             </div>
           </div>
@@ -441,6 +486,17 @@
         </small>
       </b-alert>
 
+      <b-alert
+        variant="warning"
+        :show="showBTCPayError"
+        class="mt-2"
+        @dismissed="showBTCPayError = false"
+      >
+        <small>
+          Please first enable BTCPayServer app to enable Monero support.
+        </small>
+      </b-alert>
+
       <div class="mt-2 mb-2">
         <b-row>
           <b-col cols="12" lg="6">
@@ -483,7 +539,19 @@ export default {
   data() {
     return {
       settings: {
-        minercpu: { enabled: false }
+        minercpu: { enabled: false },
+        btcpayserver: false,
+        tor: true,
+        i2p: false,
+        dbSalvage: false,
+        p2pFullNode: false,
+        publicNode: false,
+        hidePort: false,
+        mining: false,
+        moneroAddress: "",
+        upnp: false,
+        checkpoint: false,
+        incomingConnections: false,
       },
       dbSyncMode: [
         { value: "fastest", text: "fastest" },
@@ -496,7 +564,8 @@ export default {
         { value: "stagenet", text: "stagenet" }
       ],
       showOutgoingConnectionsError: false,
-      showMiningError: false
+      showMiningError: false,
+      showBTCPayError: false
     };
   },
   computed: {
@@ -524,6 +593,7 @@ export default {
     async submit() {
       this.showOutgoingConnectionsError = false;
       this.showMiningError = false;
+      this.showBTCPayError = false;
       const addressVerification = await this.isValidAddress(
         this.settings.moneroAddress
       );
@@ -532,7 +602,24 @@ export default {
       //Here we need to verify the monero address is valid
       if (this.settings.mining && !addressVerification)
         return (this.showMiningError = true);
+      //If enabling btcpayserver support, verify that the btcpayserver app is installed
+      if (this.settings.btcpayserver) {
+        const isBTCPayRunning = await this.checkDockerContainer('btcpayserver');
+        if (!isBTCPayRunning) {
+          return (this.showBTCPayError = true);
+        }
+      }
       this.$emit("submit", this.settings);
+    },
+    async checkDockerContainer(containerName) {
+      try {
+        const response = await fetch(`/api/check-docker/${containerName}`);
+        const data = await response.json();
+        return data.isRunning;
+      } catch (error) {
+        console.error('Error checking Docker container:', error);
+        return false;
+      }
     },
     clickRestoreDefaults() {
       if (
