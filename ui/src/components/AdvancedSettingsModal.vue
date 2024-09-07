@@ -536,6 +536,7 @@ import MinerSlider from "./MinerSlider.vue";
 import Donation from "@/components/DonationModal";
 
 export default {
+  name: "AdvancedSettingsModal",
   data() {
     return {
       settings: {
@@ -604,22 +605,13 @@ export default {
         return (this.showMiningError = true);
       //If enabling btcpayserver support, verify that the btcpayserver app is installed
       if (this.settings.btcpayserver) {
-        const isBTCPayRunning = await this.checkDockerContainer('btcpayserver');
+        await this.checkDockerContainer();
+        const isBTCPayRunning = this.$store.state.system.dockerImages['btcpayserver'];
         if (!isBTCPayRunning) {
           return (this.showBTCPayError = true);
         }
       }
       this.$emit("submit", this.settings);
-    },
-    async checkDockerContainer(containerName) {
-      try {
-        const response = await fetch(`/api/check-docker/${containerName}`);
-        const data = await response.json();
-        return data.isRunning;
-      } catch (error) {
-        console.error('Error checking Docker container:', error);
-        return false;
-      }
     },
     clickRestoreDefaults() {
       if (
@@ -640,7 +632,10 @@ export default {
       const isValid = await MoneroUtils.isValidAddress(address, 0);
       if (isValid) return true;
       return false;
-    }
+    },
+    async checkDockerContainer() {
+      await this.$store.dispatch('system/checkDockerContainer', 'tor_server');
+    },
   }
 };
 </script>

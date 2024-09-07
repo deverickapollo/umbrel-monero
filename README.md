@@ -4,7 +4,7 @@
   </a>
   <h1 align="center">Monero Node for Umbrel</h1>
   <p align="center">
-    Run a Monero node on your Umbrel personal server. An unofficial app by @deverickapollo and @CryptoGrampy
+    Run a Monero node on your Umbrel personal server.
     <br />
     <a href="https://getmonero.org"><strong>getmonero.org »</strong></a>
     <br />
@@ -24,7 +24,7 @@
   </p>
 </p>
 
-### Development
+# Development
 
 ## 1. Clone the Repository
 

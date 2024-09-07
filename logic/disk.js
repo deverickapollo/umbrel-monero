@@ -5,6 +5,7 @@ const DEFAULT_ADVANCED_SETTINGS = {
   tor: true,
   i2p: false,
   incomingConnections: false,
+  btcpayserver: false,
   dbSyncMode: constants.MONERO_SYNC_MODE,
   dbSyncType: constants.MONERO_SYNC_TYPE,
   dbBlocksPerSync: constants.MONERO_BLOCKS_PER_SYNC,

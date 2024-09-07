@@ -6,7 +6,8 @@ const state = () => ({
   api: {
     operational: false,
     version: ""
-  }
+  },
+  dockerImages: {},
 });
 
 // Functions to update the state directly
@@ -16,7 +17,13 @@ const mutations = {
   },
   setApi(state, api) {
     state.api = api;
-  }
+  },
+  setDockerImageStatus(state, { imageName, isInstalled }) {
+    state.dockerImages = {
+      ...state.dockerImages,
+      [imageName]: isInstalled,
+    };
+  },
 };
 
 // Functions to get data from the API
@@ -27,7 +34,15 @@ const actions = {
       operational: !!(api && api.version),
       version: api && api.version ? api.version : ""
     });
-  }
+  },
+  async checkDockerContainer({ commit }, imageName) {
+    try {
+      const response = await API.get(`${process.env.VUE_APP_API_BASE_URL}/api/system/check-image/${imageName}`);
+      commit('setDockerImageStatus', { imageName, isInstalled: response.data.isInstalled });
+    } catch (error) {
+      console.error('Error checking Docker image:', error);
+    }
+  },
 };
 
 const getters = {};

@@ -3,8 +3,21 @@ import * as systemLogic from '../../../logic/system.js';
 import * as diskLogic from '../../../logic/disk.js';
 import * as monerodLogic from '../../../logic/monerod.js';
 import * as safeHandler from '../../../utils/safeHandler.js';
+import logger from '../../../utils/logger.js'; // Import the logger
 
 const router = express.Router();
+import dockerService from '../../../services/docker.js';
+
+router.get('/check-image', safeHandler.safeHandler(async (req, res) => {
+  try {
+    const isInstalled = await dockerService.isBtcpayServerRunning();
+    console.log(`BTCPAY image running: ${isInstalled}`); // Log the result
+    res.json({ isInstalled });
+  } catch (error) {
+    console.log(`Error checking BTCPay: ${error.message}`); // Log the error
+    res.status(500).json({ error: error.message });
+  } 
+}));
 
 router.get('/monero-p2p-connection-details', safeHandler.safeHandler(async (req, res) => {
   const connectionDetails = systemLogic.getMoneroP2PConnectionDetails();
@@ -22,6 +35,7 @@ router.get('/monero-config', safeHandler.safeHandler(async (req, res) => {
   const moneroConfig = await diskLogic.getJsonStore();
   return res.json(moneroConfig);
 }));
+
 
 // updateJsonStore / generateMoneroConfig are all called through these routes below so that even if user closes the browser prematurely, the backend will complete the update.
 

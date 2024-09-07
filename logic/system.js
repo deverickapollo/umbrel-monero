@@ -1,6 +1,23 @@
 import * as constants from '../utils/const.js';
 // import * as NodeError from '../models/errors.js';
 
+import axios from 'axios';
+
+const state = {
+  // Define your state here if needed
+};
+
+const getters = {
+  // Define your getters here if needed
+};
+
+const actions = {
+};
+
+const mutations = {
+  // Define your mutations here if needed
+};
+
 export function getMoneroP2PConnectionDetails() {
   const torAddress = constants.MONERO_P2P_HIDDEN_SERVICE;
   const port = constants.MONERO_P2P_PORT;
@@ -45,3 +62,10 @@ export function getMoneroRPCConnectionDetails() {
     restrictedConnectionString,
   };
 }
+
+export default {
+  state,
+  getters,
+  actions,
+  mutations,
+};
