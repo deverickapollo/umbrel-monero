@@ -3,7 +3,6 @@ import * as systemLogic from '../../../logic/system.js';
 import * as diskLogic from '../../../logic/disk.js';
 import * as monerodLogic from '../../../logic/monerod.js';
 import * as safeHandler from '../../../utils/safeHandler.js';
-import logger from '../../../utils/logger.js'; // Import the logger
 
 const router = express.Router();
 import dockerService from '../../../services/docker.js';
@@ -11,7 +10,6 @@ import dockerService from '../../../services/docker.js';
 router.get('/check-image', safeHandler.safeHandler(async (req, res) => {
   try {
     const isInstalled = await dockerService.isBtcpayServerRunning();
-    console.log(`BTCPAY image running: ${isInstalled}`); // Log the result
     res.json({ isInstalled });
   } catch (error) {
     console.log(`Error checking BTCPay: ${error.message}`); // Log the error

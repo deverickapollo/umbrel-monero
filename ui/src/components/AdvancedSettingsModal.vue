@@ -634,7 +634,7 @@ export default {
       return false;
     },
     async checkDockerContainer() {
-      await this.$store.dispatch('system/checkDockerContainer', 'tor_server');
+      await this.$store.dispatch('system/checkDockerContainer', 'btcpay-server_web_1');
     },
   }
 };
