@@ -38,7 +38,7 @@ const actions = {
   async checkDockerContainer({ commit }, imageName) {
     try {
       const response = await API.get(`${process.env.VUE_APP_API_BASE_URL}/v1/monerod/system/check-image`);
-      commit('setDockerImageStatus', { imageName, isInstalled: response.data.isInstalled });
+      commit('setDockerImageStatus', { imageName, isInstalled: response.isInstalled });
     } catch (error) {
       console.error('Error checking Docker image:', error);
     }
