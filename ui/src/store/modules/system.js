@@ -18,10 +18,10 @@ const mutations = {
   setApi(state, api) {
     state.api = api;
   },
-  setDockerImageStatus(state, { imageName, isInstalled }) {
+  setDockerImageStatus(state, isInstalled) {
     state.dockerImages = {
       ...state.dockerImages,
-      [imageName]: isInstalled,
+      btcpayserver: isInstalled,
     };
   },
 };
@@ -35,10 +35,14 @@ const actions = {
       version: api && api.version ? api.version : ""
     });
   },
-  async checkDockerContainer({ commit }, imageName) {
+  async checkDockerContainer({ commit }) {
     try {
       const response = await API.get(`${process.env.VUE_APP_API_BASE_URL}/v1/monerod/system/check-image`);
-      commit('setDockerImageStatus', { imageName, isInstalled: response.isInstalled });
+      if (response) {
+        commit('setDockerImageStatus', response.isInstalled);
+      } else {
+        console.error('Invalid response format:', response);
+      }
     } catch (error) {
       console.error('Error checking Docker image:', error);
     }
