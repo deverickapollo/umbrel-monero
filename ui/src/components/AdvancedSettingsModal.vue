@@ -221,49 +221,30 @@
             </small>
           </div>
 
-          <hr class="advanced-settings-divider" />
+          <hr v-if="settings.mining" class="advanced-settings-divider" />
 
-          <div>
+          <div v-if="settings.mining">
             <div class="d-flex justify-content-between align-items-center">
               <div class="w-75">
-                <label class="mb-0" for="upnp">
-                  <p class="font-weight-bold mb-0">Enable UPnP on Node</p>
+                <label class="mb-0" for="p2pool">
+                  <p class="font-weight-bold mb-0">Monero P2Pool</p>
                 </label>
               </div>
               <div>
                 <toggle-switch
-                  id="upnp"
+                  id="p2pool"
                   class="align-self-center"
-                  :on="settings.upnp"
-                  @toggle="status => (settings.upnp = status)"
+                  :on="settings.p2pool"
+                  @toggle="
+                    status => {
+                      settings.p2pool = status;
+                    }
+                  "
                 ></toggle-switch>
               </div>
             </div>
             <small class="w-sm-75 d-block text-muted mt-1">
-              Enable UPnP (default is false)
-            </small>
-          </div>
-
-          <hr class="advanced-settings-divider" />
-
-          <div>
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="w-75">
-                <label class="mb-0" for="btcpayserver">
-                  <p class="font-weight-bold mb-0">Enable Monero Support for BTCPayServer</p>
-                </label>
-              </div>
-              <div>
-                <toggle-switch
-                  id="btcpayserver"
-                  class="align-self-center"
-                  :on="settings.btcpayserver"
-                  @toggle="status => (settings.btcpayserver = status)"
-                ></toggle-switch>
-              </div>
-            </div>
-            <small class="w-sm-75 d-block text-muted mt-1">
-              Enable Monero for BTCPayServer (default is false)
+              Enable Monero P2Pool. Full restart required.
             </small>
           </div>
 
@@ -286,7 +267,76 @@
               </div>
             </div>
             <small class="w-sm-75 d-block text-muted mt-1">
-              Enable ZMQ Support (default is false)
+              ZMQ support is required for P2Pool support
+            </small>
+          </div>
+
+          <hr class="advanced-settings-divider" />
+
+          <div>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="w-75">
+                <label class="mb-0" for="upnp">
+                  <p class="font-weight-bold mb-0">Enable UPnP on Node</p>
+                </label>
+              </div>
+              <div>
+                <toggle-switch
+                  id="upnp"
+                  class="align-self-center"
+                  :on="settings.upnp"
+                  @toggle="status => (settings.upnp = status)"
+                ></toggle-switch>
+              </div>
+            </div>
+            <small class="w-sm-75 d-block text-muted mt-1">
+              Enable UPnP (default is true)
+            </small>
+          </div>
+
+          <hr class="advanced-settings-divider" />
+
+          <div>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="w-75">
+                <label class="mb-0" for="prune">
+                  <p class="font-weight-bold mb-0">Prune node</p>
+                </label>
+              </div>
+              <div>
+                <toggle-switch
+                  id="prune"
+                  class="align-self-center"
+                  :on="settings.prune"
+                  @toggle="status => (settings.prune = status)"
+                ></toggle-switch>
+              </div>
+            </div>
+            <small class="w-sm-75 d-block text-muted mt-1">
+              Enable Pruning
+            </small>
+          </div>
+
+          <hr class="advanced-settings-divider" />
+
+          <div>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="w-75">
+                <label class="mb-0" for="btcpayserver">
+                  <p class="font-weight-bold mb-0">Enable Monero Support for BTCPayServer</p>
+                </label>
+              </div>
+              <div>
+                <toggle-switch
+                  id="btcpayserver"
+                  class="align-self-center"
+                  :on="settings.btcpayserver"
+                  @toggle="status => (settings.btcpayserver = status)"
+                ></toggle-switch>
+              </div>
+            </div>
+            <small class="w-sm-75 d-block text-muted mt-1">
+              Enable Monero for BTCPayServer
             </small>
           </div>
 
@@ -311,7 +361,7 @@
               </div>
             </div>
             <small class="w-sm-75 d-block text-muted mt-1">
-              Enable DNS checkpoint (default is false)
+              Enable DNS checkpoint (default is true)
             </small>
           </div>
 
@@ -544,6 +594,9 @@ export default {
         btcpayserver: false,
         tor: true,
         i2p: false,
+        p2pool: false,
+        zmq: false,
+        prune: false,
         dbSalvage: false,
         p2pFullNode: false,
         publicNode: false,

@@ -9,6 +9,7 @@ const DEFAULT_ADVANCED_SETTINGS = {
   dbSyncMode: constants.MONERO_SYNC_MODE,
   dbSyncType: constants.MONERO_SYNC_TYPE,
   dbBlocksPerSync: constants.MONERO_BLOCKS_PER_SYNC,
+  p2pool: false,
   upnp: true,
   checkpoint: true,
   publicNode: true,
