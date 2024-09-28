@@ -62,7 +62,7 @@ services:
         ipv4_address: "10.21.1.6"
 
   server:
-    image: deverick/monero-frontend:v3.0.0
+    image: deverick/monero-frontend:v1.0.8
     restart: on-failure
     ports:
       - "8889:8889"
@@ -70,7 +70,6 @@ services:
     volumes:
       - ${PWD}/data/app:/data # volume to persist advanced settings json
       - ${PWD}/data/monero:/monero/.monero # volume to persist umbrel-monero.conf and bitmonero.conf
-      - /var/run/docker.sock:/var/run/docker.sock
     environment:
       PORT: "8889"
       MONERO_HOST: "monerod"
