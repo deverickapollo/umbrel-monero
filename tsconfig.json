@@ -1,10 +1,11 @@
 {
     "compilerOptions": {
-      "module": "ESNext",
+      "module": "es2022",
       "esModuleInterop": true,
       "target": "es2017",
       "allowJs": true,
       "noImplicitAny": true,
+      "strict": true,
       "moduleResolution": "node",
       "sourceMap": true,
       "outDir": "./build",
@@ -21,5 +22,8 @@
     ],
     "exclude": [
       "node_modules"
+    ],
+    "files" : [
+      "services/monerod.ts"
     ]
   }

@@ -31,7 +31,7 @@
 
 <script>
 import { mapState } from "vuex";
-import Loading from "@/components/Loading";
+import Loading from "@/components/Loading.vue";
 
 export default {
   name: "App",
@@ -70,11 +70,13 @@ export default {
       if (this.loadingProgress <= 40) {
         this.loadingProgress = 40;
         await this.$store.dispatch("system/getApi");
+
         if (!this.isApiOperational) {
           this.loading = true;
           this.loadingPollInProgress = false;
           return;
         }
+
       }
 
       this.loadingProgress = 100;

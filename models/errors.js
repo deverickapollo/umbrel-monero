@@ -1,4 +1,5 @@
 // /* eslint-disable no-magic-numbers */
+const STATUS_CODE_BAD_REQUEST = 400;
 
 class NodeError extends Error {
   constructor(message, statusCode) {
@@ -18,11 +19,11 @@ class MonerodError extends Error {
 }
 
 class ValidationError extends Error {
-  constructor(message, statusCode = 400) {
+  constructor(message, statusCode = STATUS_CODE_BAD_REQUEST) {
     super(message);
     this.name = this.constructor.name;
     this.statusCode = statusCode;
   }
 }
 
-export { NodeError, MonerodError, ValidationError };
+export {NodeError, MonerodError, ValidationError};

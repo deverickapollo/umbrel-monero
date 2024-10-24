@@ -1,37 +1,38 @@
-import API from "@/helpers/api";
-import { toPrecision } from "@/helpers/units";
+import API from '@/helpers/api';
+import {toPrecision} from '@/helpers/units';
 
-//const BYTES_PER_GB = 1000000000;
+// const BYTES_PER_GB = 1000000000;
 // Initial state
 const state = () => ({
   operational: false,
+
   // calibrating: false,
-  version: "",
+  version: '',
   p2p: {
-    port: "",
-    localAddress: "",
-    localConnectionString: "",
-    torAddress: "",
-    torConnectionString: ""
+    port: '',
+    localAddress: '',
+    localConnectionString: '',
+    torAddress: '',
+    torConnectionString: ''
   },
   rpc: {
-    rpcuser: "",
-    rpcpassword: "",
-    port: "",
-    restrictedPort: "",
-    localAddress: "",
-    localConnectionString: "",
-    torAddress: "",
-    torConnectionString: "",
-    restrictedConnectionString: ""
+    rpcuser: '',
+    rpcpassword: '',
+    port: '',
+    restrictedPort: '',
+    localAddress: '',
+    localConnectionString: '',
+    torAddress: '',
+    torConnectionString: '',
+    restrictedConnectionString: ''
   },
   currentBlock: 0,
-  chain: "",
+  chain: '',
   pruned: false,
   blockHeight: 0,
   blocks: [],
-  percent: -1, //for loading state
-  depositAddress: "",
+  percent: -1, // for loading state
+  depositAddress: '',
   stats: {
     peers: -1,
     mempool: -1,
@@ -66,10 +67,12 @@ const mutations = {
 
   setBlocks(state, blocks) {
     const mergedBlocks = [...blocks, ...state.blocks];
+
     // remove duplicate blocks
     const uniqueBlocks = mergedBlocks.filter(
       (v, i, a) => a.findIndex(t => t.height === v.height) === i
     );
+
     // limit to latest 6 blocks
     state.blocks = [...uniqueBlocks.slice(0, 6)];
   },
@@ -122,65 +125,65 @@ const mutations = {
 
 // Functions to get data from the API
 const actions = {
-  async getStatus({ commit, dispatch }) {
+  async getStatus({commit, dispatch}) {
     const status = await API.get(
-      `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/info/status`
+      `${import.meta.env.VITE_API_BASE_URL}/v1/monerod/info/status`
     );
 
     if (status.operational) {
-        // Add check for peers to ensure we have a targetheight before calling getSync dispatch
-        const peers = await API.get(
-          `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/info/connections`
-        );
-        if(peers.total >1){
-          commit("isOperational", status.operational);
-          await dispatch("getSync");
-        }else{
-          commit("isOperational", false);
-        }
-    }else{
-      commit("isOperational", status.operational);
+      // Add check for peers to ensure we have a targetheight before calling getSync dispatch
+      const peers = await API.get(
+        `${import.meta.env.VITE_API_BASE_URL}/v1/monerod/info/connections`
+      );
+      if (peers.total > 1) {
+        commit('isOperational', status.operational);
+        await dispatch('getSync');
+      } else {
+        commit('isOperational', false);
+      }
+    } else {
+      commit('isOperational', status.operational);
     }
   },
 
-  async getP2PInfo({ commit }) {
+  async getP2PInfo({commit}) {
     const p2pInfo = await API.get(
-      `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/system/monero-p2p-connection-details`
+      `${import.meta.env.VITE_API_BASE_URL}/v1/monerod/system/monero-p2p-connection-details`
     );
 
     if (p2pInfo) {
-      commit("setP2PInfo", p2pInfo);
+      commit('setP2PInfo', p2pInfo);
     }
   },
 
-  async getRpcInfo({ commit }) {
+  async getRpcInfo({commit}) {
     const rpcInfo = await API.get(
-      `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/system/monero-rpc-connection-details`
+      `${import.meta.env.VITE_API_BASE_URL}/v1/monerod/system/monero-rpc-connection-details`
     );
 
     if (rpcInfo) {
-      commit("setRpcInfo", rpcInfo);
+      commit('setRpcInfo', rpcInfo);
     }
   },
 
-  async getSync({ commit }) {
+  async getSync({commit}) {
     const sync = await API.get(
-      `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/info/sync`
+      `${import.meta.env.VITE_API_BASE_URL}/v1/monerod/info/sync`
     );
-    
+
     if (sync) {
-      commit("syncStatus", sync);
+      commit('syncStatus', sync);
     }
   },
 
-  async getBlocks({ commit, state, dispatch }) {
-    await dispatch("getSync");
+  async getBlocks({commit, state, dispatch}) {
+    await dispatch('getSync');
 
     // Cache block height array of latest 3 blocks for loading view
     const currentBlock = state.currentBlock;
 
     // Don't fetch blocks if no new block has been found
-    if (state.blocks.length && currentBlock === state.blocks[0]["height"]) {
+    if (state.blocks.length && currentBlock === state.blocks[0].height) {
       return;
     }
 
@@ -190,10 +193,10 @@ const actions = {
       return;
     }
 
-    //TODO: Fetch only new blocks
+    // TODO: Fetch only new blocks
     const latestFiveBlocks = await API.get(
       `${
-        process.env.VUE_APP_API_BASE_URL
+        import.meta.env.VITE_API_BASE_URL
       }/v1/monerod/info/blocks?from=${currentBlock - 3}&to=${currentBlock}`
     );
 
@@ -202,12 +205,12 @@ const actions = {
     }
 
     // Update blocks
-    commit("setBlocks", latestFiveBlocks.blocks);
+    commit('setBlocks', latestFiveBlocks.blocks);
   },
 
-  async getChartData({ dispatch, state, commit }) {
+  async getChartData({dispatch, state, commit}) {
     // get the latest block height
-    await dispatch("getSync");
+    await dispatch('getSync');
 
     const currentBlock = state.currentBlock;
 
@@ -219,15 +222,15 @@ const actions = {
     // get last 180 blocks (~24 hours)
     const lastDaysBlocks = await API.get(
       `${
-        process.env.VUE_APP_API_BASE_URL
+        import.meta.env.VITE_API_BASE_URL
       }/v1/monerod/info/blocks?from=${currentBlock - 179}&to=${currentBlock}`
     );
 
     // exit if we don't get the blocks for some reason
     if (
-      !lastDaysBlocks ||
-      !lastDaysBlocks.blocks ||
-      !lastDaysBlocks.blocks.length
+      !lastDaysBlocks
+      || !lastDaysBlocks.blocks
+      || !lastDaysBlocks.blocks.length
     ) {
       return;
     }
@@ -242,7 +245,7 @@ const actions = {
     let transactionsInCurrentChunk = 0;
     let currentChunkSize = 0;
 
-    for (let block of lastDaysBlocks.blocks) {
+    for (const block of lastDaysBlocks.blocks) {
       transactionsInCurrentChunk += Number(block.numTransactions);
       currentChunkSize++;
       if (currentChunkSize === CHUNK_SIZE) {
@@ -255,32 +258,32 @@ const actions = {
     // sort by ascending timestamps and update state
     chartData.sort((a, b) => a[0] - b[0]);
 
-    commit("setChartData", chartData);
+    commit('setChartData', chartData);
   },
 
-  async getVersion({ commit }) {
+  async getVersion({commit}) {
     const version = await API.get(
-      `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/info/version`
+      `${import.meta.env.VITE_API_BASE_URL}/v1/monerod/info/version`
     );
 
     if (version) {
-      commit("setVersion", version);
+      commit('setVersion', version);
     }
   },
 
-  async getPeers({ commit }) {
+  async getPeers({commit}) {
     const peers = await API.get(
-      `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/info/connections`
+      `${import.meta.env.VITE_API_BASE_URL}/v1/monerod/info/connections`
     );
 
     if (peers) {
-      commit("peers", peers);
+      commit('peers', peers);
     }
   },
 
-  async getStats({ commit }) {
+  async getStats({commit}) {
     const stats = await API.get(
-      `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/info/stats`
+      `${import.meta.env.VITE_API_BASE_URL}/v1/monerod/info/stats`
     );
 
     if (stats) {
@@ -290,7 +293,7 @@ const actions = {
       const hashrate = stats.networkhashps;
       const blockchainSize = stats.size;
 
-      commit("setStats", {
+      commit('setStats', {
         peers,
         mempool,
         mempoolTransactions,
@@ -304,13 +307,13 @@ const actions = {
 const getters = {
   status(state) {
     const data = {
-      class: "loading",
-      text: "Loading..."
+      class: 'loading',
+      text: 'Loading...'
     };
 
     if (state.operational) {
-      data.class = "active";
-      data.text = "Operational";
+      data.class = 'active';
+      data.text = 'Operational';
     }
 
     return data;

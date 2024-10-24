@@ -1,26 +1,26 @@
-import API from "@/helpers/api";
+import API from '@/helpers/api';
 
 // Initial state
 const state = () => ({
-  version: "",
+  version: '',
   api: {
     operational: false,
-    version: ""
+    version: ''
   },
   dockerImages: {},
 });
 
 // Functions to update the state directly
 const mutations = {
-  setVersion(state, version) {
-    state.version = version;
+  setVersion(mutateState, version) {
+    mutateState.version = version;
   },
-  setApi(state, api) {
-    state.api = api;
+  setApi(mutateState, api) {
+    mutateState.api = api;
   },
-  setDockerImageStatus(state, isInstalled) {
-    state.dockerImages = {
-      ...state.dockerImages,
+  setDockerImageStatus(mutateState, isInstalled) {
+    mutateState.dockerImages = {
+      ...mutateState.dockerImages,
       btcpayserver: isInstalled,
     };
   },
@@ -28,16 +28,17 @@ const mutations = {
 
 // Functions to get data from the API
 const actions = {
-  async getApi({ commit }) {
-    const api = await API.get(`${process.env.VUE_APP_API_BASE_URL}/ping`);
-    commit("setApi", {
+  async getApi({commit}) {
+
+    const api = await API.get(`${import.meta.env.VITE_API_BASE_URL}/ping`);
+    commit('setApi', {
       operational: !!(api && api.version),
-      version: api && api.version ? api.version : ""
+      version: api && api.version ? api.version : ''
     });
   },
-  async checkDockerContainer({ commit }) {
+  async checkDockerContainer({commit}) {
     try {
-      const response = await API.get(`${process.env.VUE_APP_API_BASE_URL}/v1/monerod/system/check-image`);
+      const response = await API.get(`${import.meta.env.VITE_API_BASE_URL}/v1/monerod/system/check-image`);
       if (response) {
         commit('setDockerImageStatus', response.isInstalled);
       } else {

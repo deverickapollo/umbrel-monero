@@ -1,10 +1,12 @@
 import * as constants from '../utils/const.js';
 
 const state = {
+
   // Define your state here if needed
 };
 
 const getters = {
+
   // Define your getters here if needed
 };
 
@@ -12,12 +14,14 @@ const actions = {
 };
 
 const mutations = {
+
   // Define your mutations here if needed
 };
 
 export function getMoneroP2PConnectionDetails() {
   const torAddress = constants.MONERO_P2P_HIDDEN_SERVICE;
   const port = constants.MONERO_P2P_PORT;
+
   // const restrictedPort = constants.MONERO_RESTRICTED_RPC_PORT;
   const onionPort = constants.MONERO_ONION_P2P_PORT;
   const torConnectionString = `${torAddress}:${port}`;

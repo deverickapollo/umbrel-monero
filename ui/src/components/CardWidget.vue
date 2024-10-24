@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import Status from "@/components/Utility/Status";
+import Status from "@/components/Utility/Status.vue";
 
 export default {
   data() {

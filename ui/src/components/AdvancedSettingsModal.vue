@@ -577,13 +577,13 @@
   </b-form>
 </template>
 
-<script>
+<script lang="ts">
 import cloneDeep from "lodash.clonedeep";
 import { mapState } from "vuex";
 import ToggleSwitch from "./Utility/ToggleSwitch.vue";
-import { MoneroUtils } from "monero-javascript";
+import { MoneroUtils } from "monero-ts"; 
 import MinerSlider from "./MinerSlider.vue";
-import Donation from "@/components/DonationModal";
+import Donation from "@/components/DonationModal.vue";
 
 export default {
   name: "AdvancedSettingsModal",

@@ -5,8 +5,8 @@ import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 
-import * as requestCorrelationMiddleware  from './middlewares/requestCorrelationId.js';
-import { camelCaseRequest as camelCaseReqMiddleware } from './middlewares/camelCaseRequest.js';
+import * as requestCorrelationMiddleware from './middlewares/requestCorrelationId.js';
+import {camelCaseRequest as camelCaseReqMiddleware} from './middlewares/camelCaseRequest.js';
 import * as errorHandleMiddleware from './middlewares/errorHandling.js';
 import * as logger from './utils/logger.js';
 import * as monerod from './routes/v1/monerod/info.js';
@@ -14,11 +14,10 @@ import * as charts from './routes/v1/monerod/charts.js';
 import * as system from './routes/v1/monerod/system.js';
 import * as ping from './routes/ping.js';
 
-import { addAlias } from 'module-alias';
+import {addAlias} from 'module-alias';
 
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-
+import {fileURLToPath} from 'url';
+import {dirname} from 'path';
 
 
 const __filename = fileURLToPath(import.meta.url);

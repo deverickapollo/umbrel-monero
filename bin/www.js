@@ -5,13 +5,16 @@
  */
 
 import * as app from '../app.js';
-import debug from 'debug';
 import http from 'http';
 
 import * as diskLogic from '../logic/disk.js';
 import * as diskService from '../services/disk.js';
 import * as monerodLogic from '../logic/monerod.js';
 import * as constants from '../utils/const.js';
+import logger from '../utils/logger.js';
+
+
+logger.info('Starting backend server...');
 
 /**
  * Get port from environment and store in Express.
@@ -38,46 +41,46 @@ server.on('listening', onListening);
  */
 
 async function createConfFilesAndRestartMonerod() {
-  console.log('bitmonero.conf does not exist, creating config files with DEFAULT values!');
-
-  try{
+  logger.info('bitmonero.conf does not exist, creating config files with DEFAULT values!');
+  try {
     const config = await diskLogic.getJsonStore();
     await diskLogic.applyCustomMoneroConfig(config, true);
   } catch (error) {
-    console.log(error);
+    logger.error('Failed to create bitmonero.conf:', error);
+
     return;
   }
 
-  //Verify config file was created successfully and matches the default values
-  if (! await diskService.fileExists(constants.MONERO_CONF_FILEPATH)) {
-    console.log('Failed to create bitmonero.conf');
+  // Verify config file was created successfully and matches the default values
+  if (!await diskService.fileExists(constants.MONERO_CONF_FILEPATH)) {
+    logger.error('Failed to create bitmonero.conf');
+
     return;
   } else {
-    console.log('bitmonero.conf now exists');
+    logger.info('bitmonero.conf now exists');
   }
-  
+
   const MAX_TRIES = 10;
   let tries = 0;
-  
+
   while (tries < MAX_TRIES) {
     const status = await monerodLogic.getStatus();
-    if (status.operational){
+    if (status.operational) {
       try {
         await monerodLogic.stop();
-        console.log('Monerod stopped');
+        logger.info('Monerod stopped');
         break;
       } catch (error) {
-        console.log(`Attempt ${tries + 1} to stop monerod failed:`, error);
-
+        logger.error(`Attempt ${tries + 1} to stop monerod failed:`, error);
       }
-    }else{
-      console.log(`Monerod is not connected, retrying in ${2 ** tries} seconds...`);
+    } else {
+      logger.info('Monerod is not connected, retrying in', 2 ** tries, 'seconds...');
     }
     tries++;
-    await new Promise((resolve) => setTimeout(resolve, 2 ** tries * 1000));
+    await new Promise(resolve => setTimeout(resolve, 2 ** tries * 1000));
   }
   if (tries === MAX_TRIES) {
-    console.log('Max attempts to stop monerod reached, giving up.');
+    logger.error('Max attempts to stop monerod reached, giving up.');
   }
 }
 
@@ -86,16 +89,16 @@ async function createConfFilesAndRestartMonerod() {
  */
 
 function normalizePort(val) {
-  const port = parseInt(val, 10);
+  const portNumber = parseInt(val, 10);
 
-  if (isNaN(port)) {
+  if (isNaN(portNumber)) {
     // named pipe
     return val;
   }
 
-  if (port >= 0) {
+  if (portNumber >= 0) {
     // port number
-    return port;
+    return portNumber;
   }
 
   return false;
@@ -110,20 +113,21 @@ function onError(error) {
     throw error;
   }
 
-  const bind = typeof port === 'string' ?
-    'Pipe ' + port :
-    'Port ' + port;
+  const bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
-    case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
-      process.exit(1);
-    case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
-      process.exit(1);
-    default:
-      throw error;
+  case 'EACCES':
+    logger.error(bind + ' requires elevated privileges');
+    process.exit(1);
+
+  case 'EADDRINUSE':
+    logger.error(bind + ' is already in use');
+    process.exit(1);
+  default:
+    throw error;
   }
 }
 
@@ -133,15 +137,15 @@ function onError(error) {
 
 async function onListening() {
   const addr = server.address();
-  const bind = typeof addr === 'string' ?
-    'pipe ' + addr :
-    'port ' + addr.port;
-  debug('Listening on ' + bind);
-  console.log('Listening on ' + bind);
+  const bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+
+  logger.info('Listening on ' + bind);
   await monerodLogic.getIsReady();
 
   // if bitmonero.conf does not exist, create default monero config files and restart monerod.
-  if (! await diskService.fileExists(constants.MONERO_CONF_FILEPATH)) {
+  if (!await diskService.fileExists(constants.MONERO_CONF_FILEPATH)) {
     createConfFilesAndRestartMonerod();
   }
 }

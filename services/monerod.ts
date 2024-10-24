@@ -49,7 +49,7 @@ interface State {
 class MoneroDaemon {
   private static instance: MoneroDaemon;
   daemon: MoneroDaemonRpc | undefined;
-  private ready: Promise<void>;
+  ready: Promise<void> | false = false;
   
   constructor() {
     // this.ready = (async () => {
@@ -86,7 +86,6 @@ class MoneroDaemon {
     }
   }
 
-
   public returnReady() {
     return this.ready;
   } 
@@ -104,57 +103,9 @@ class MoneroDaemon {
 const daemonController = new MoneroDaemon();
 await daemonController.initialize();
 
-// function promiseify(rpcObj, rpcFn, what) {
-//   return new Promise((resolve, reject) => {
-//     try {
-//       rpcFn.call(rpcObj, (err, info) => {
-//         if (err) {
-//           reject(new MonerodError(`Unable to obtain ${what}`, err));
-//         } else {
-//           resolve(camelizeKeys(info, '_'));
-//         }
-//       });
-//     } catch (error) {
-//       reject(error);
-//     }
-//   });
-// }
-
-// function promiseifyParam(rpcObj, rpcFn, param, what) {
-//   return new Promise((resolve, reject) => {
-//     try {
-//       rpcFn.call(rpcObj, param, (err, info) => {
-//         if (err) {
-//           reject(new MonerodError(`Unable to obtain ${what}`, err));
-//         } else {
-//           resolve(camelizeKeys(info, '_'));
-//         }
-//       });
-//     } catch (error) {
-//       reject(error);
-//     }
-//   });
-// }
-
-// function promiseifyParamTwo(rpcObj, rpcFn, param1, param2, what) {
-//   return new Promise((resolve, reject) => {
-//     try {
-//       rpcFn.call(rpcObj, param1, param2, (err, info) => {
-//         if (err) {
-//           reject(new MonerodError(`Unable to obtain ${what}`, err));
-//         } else {
-//           resolve(camelizeKeys(info, '_'));
-//         }
-//       });
-//     } catch (error) {
-//       reject(error);
-//     }
-//   });
-// }
-
 export async function getBlockHash(height: number): Promise<{result: string}> {
   try {
-    const blockhash: string = await daemonController.daemon.getBlockHash(height);
+    const blockhash: string = await daemonController.daemon!.getBlockHash(height);
     return {result: blockhash};
   } catch (err) {
     throw new MonerodError('Unable to obtain getBlockHash from Daemon', err);
@@ -163,7 +114,7 @@ export async function getBlockHash(height: number): Promise<{result: string}> {
 
 export async function getBlock(hash: string): Promise<{result: BlockInterface}> {
   try {
-    const state: MoneroBlock = await daemonController.daemon.getBlockByHash(hash);
+    const state: MoneroBlock = await daemonController.daemon!.getBlockByHash(hash);
 
     const block: BlockInterface = {
       hash: state.hash,
@@ -182,7 +133,7 @@ export async function getBlock(hash: string): Promise<{result: BlockInterface}> 
 
 export async function getTransaction(txHash: string): Promise<{result: MoneroTx}> {
   try {
-    const hash: MoneroTx = await daemonController.daemon.getTx(txHash);
+    const hash: MoneroTx = await daemonController.daemon!.getTx(txHash);
     return {result: hash};
   } catch (err) {
     throw new MonerodError('Unable to obtain getTransaction from Daemon', err);
@@ -202,7 +153,7 @@ export async function getIsConnected() {
     if(!daemonController.daemon) {
       throw new MonerodError('Daemon is not connected during check connection');
     }
-    const connected = await daemonController.daemon.isConnected();
+    const connected = await daemonController.daemon!.isConnected();
     return {result: connected};
   } catch (err) {
     throw new MonerodError('Unable to obtain isConnecteds from Daemon', err);
@@ -211,9 +162,9 @@ export async function getIsConnected() {
 
 export async function getBlockChainInfo(): Promise<{result: infoInterface}>{
   try {
-    const infoState: MoneroDaemonInfo = await daemonController.daemon.getInfo();
+    const infoState: MoneroDaemonInfo = await daemonController.daemon!.getInfo();
     
-    const miningInfo: MoneroTxPoolStats = await daemonController.daemon.getTxPoolStats();
+    const miningInfo: MoneroTxPoolStats = await daemonController.daemon!.getTxPoolStats();
 
     const infoResult: infoInterface = {
       chain: RpcClient.MoneroNetworkType.toString(infoState.networkType),
@@ -243,7 +194,7 @@ export async function getBlockChainInfo(): Promise<{result: infoInterface}>{
 
 export async function getPeerInfo() {
   try {
-    const peers: MoneroPeer[] = await daemonController.daemon.getPeers();
+    const peers: MoneroPeer[] = await daemonController.daemon!.getPeers();
 
     let mappedPeers: State[] = [];
     if (peers && peers.length > 0) {
@@ -263,7 +214,7 @@ export async function getPeerInfo() {
 
 export async function getBlockCount(): Promise<number>{
   try {
-    const state: MoneroDaemonInfo = await daemonController.daemon.getInfo();
+    const state: MoneroDaemonInfo = await daemonController.daemon!.getInfo();
 
     return state.height;
   } catch (err) {
@@ -275,7 +226,7 @@ export async function getBlockCount(): Promise<number>{
 export async function getMempoolInfo(): Promise<{result: MoneroTx[]}>{
   try {
 
-    const pool: MoneroTx[] = await daemonController.daemon.getTxPool();
+    const pool: MoneroTx[] = await daemonController.daemon!.getTxPool();
 
     return {result: pool};
   } catch (err) {
@@ -285,7 +236,7 @@ export async function getMempoolInfo(): Promise<{result: MoneroTx[]}>{
 
 export async function getVersion() {
   try {
-    const info: MoneroDaemonInfo  = await daemonController.daemon.getInfo();
+    const info: MoneroDaemonInfo  = await daemonController.daemon!.getInfo();
 
     return info.version;
   } catch (err) {
@@ -296,7 +247,7 @@ export async function getVersion() {
 // TODO implement
 export async function getNetworkInfo() {
   try {
-    const peers: MoneroPeer[]  = await daemonController.daemon.getPeers();
+    const peers: MoneroPeer[]  = await daemonController.daemon!.getPeers();
 
     interface HardForkInfoData {
       connections: number | undefined;
@@ -341,7 +292,7 @@ export async function getNetworkInfo() {
 }
 
 export async function stop() {
-  await daemonController.daemon.stop();
+  await daemonController.daemon!.stop();
 }
 
 export async function isReady() {

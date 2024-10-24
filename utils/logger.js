@@ -4,8 +4,8 @@ import 'winston-daily-rotate-file';
 import * as constants from './const.js';
 import fs from 'fs';
 import path from 'path';
-import winston, { format } from 'winston';
-import { getNamespace } from 'continuation-local-storage';
+import winston, {format} from 'winston';
+import {getNamespace} from 'continuation-local-storage';
 
 const {combine, timestamp, printf} = format;
 
@@ -42,7 +42,7 @@ const apiFileTransport = new winston.transports.DailyRotateFile({
   maxFiles: '7d',
 });
 
-const localLogFormat = printf((info) => {
+const localLogFormat = printf(info => {
   let data = '';
   if (info.data) {
     data = JSON.stringify({data: info.data});
@@ -63,9 +63,9 @@ if (ENV === 'dev') {
 winston.loggers.add(LOCAL, {
   level: 'info',
   format: combine(
-      timestamp(),
-      appendCorrelationId(),
-      localLogFormat
+    timestamp(),
+    appendCorrelationId(),
+    localLogFormat
   ),
   transports: localLoggerTransports,
 });

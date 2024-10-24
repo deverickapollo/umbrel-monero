@@ -254,11 +254,11 @@ import { mapState } from "vuex";
 import API from "@/helpers/api";
 import delay from "@/helpers/delay";
 
-import CardWidget from "@/components/CardWidget";
-import Blockchain from "@/components/Blockchain";
-import Stat from "@/components/Utility/Stat";
-import ConnectionModal from "@/components/ConnectionModal";
-import AdvancedSettingsModal from "@/components/AdvancedSettingsModal";
+import CardWidget from "@/components/CardWidget.vue";
+import Blockchain from "@/components/Blockchain.vue";
+import Stat from "@/components/Utility/Stat.vue";
+import ConnectionModal from "@/components/ConnectionModal.vue";
+import AdvancedSettingsModal from "@/components/AdvancedSettingsModal.vue";
 import ChartWrapper from "@/components/ChartWrapper.vue";
 
 export default {
@@ -355,7 +355,7 @@ export default {
         this.$store.dispatch("user/updateMoneroConfig", moneroConfig);
 
         const response = await API.post(
-          `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/system/update-monero-config`,
+          `${import.meta.env.VITE_API_BASE_URL}/v1/monerod/system/update-monero-config`,
           { moneroConfig }
         );
 
@@ -382,7 +382,7 @@ export default {
         this.isRestartPending = true;
 
         const response = await API.post(
-          `${process.env.VUE_APP_API_BASE_URL}/v1/monerod/system/restore-default-monero-config`
+          `${import.meta.env.VITE_API_BASE_URL}/v1/monerod/system/restore-default-monero-config`
         );
 
         // dispatch getMoneroConfig after post request to avoid referencing default values in the store.

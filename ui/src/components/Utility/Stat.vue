@@ -90,7 +90,7 @@
 </template>
 
 <script>
-import CountUp from "@/components/Utility/CountUp";
+import CountUp from "@/components/Utility/CountUp.vue";
 
 const abbreviate = n => {
   if (n < 1e2) return [Number(n), ""];

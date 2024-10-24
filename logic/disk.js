@@ -33,22 +33,22 @@ function settingsToMultilineConfString(settings) {
   if (settings.network !== 'mainnet') {
     // Check if set to testnet or stagenet
     if (settings.network === 'testnet') {
-      umbrelMoneroConfig.push(`testnet=1`);
+      umbrelMoneroConfig.push('testnet=1');
     } else if (settings.network === 'stagenet') {
-      umbrelMoneroConfig.push(`stagenet=1`);
+      umbrelMoneroConfig.push('stagenet=1');
     }
   }
   umbrelMoneroConfig.push('# RPC ssl settings');
-  umbrelMoneroConfig.push(`rpc-ssl=autodetect`);
+  umbrelMoneroConfig.push('rpc-ssl=autodetect');
   umbrelMoneroConfig.push('');
 
   // bandwidth settings
   umbrelMoneroConfig.push('# Bandwidth settings');
   umbrelMoneroConfig.push('');
-  umbrelMoneroConfig.push(`out-peers=12`);
-  umbrelMoneroConfig.push(`in-peers=12`);
-  umbrelMoneroConfig.push(`limit-rate-up=1048576`);
-  umbrelMoneroConfig.push(`limit-rate-down=1048576`);
+  umbrelMoneroConfig.push('out-peers=12');
+  umbrelMoneroConfig.push('in-peers=12');
+  umbrelMoneroConfig.push('limit-rate-up=1048576');
+  umbrelMoneroConfig.push('limit-rate-down=1048576');
 
 
   // Database Sync Mode
@@ -62,21 +62,21 @@ function settingsToMultilineConfString(settings) {
   if (settings.checkpoint) {
     umbrelMoneroConfig.push('');
     umbrelMoneroConfig.push('# DNS Checkpoints');
-    umbrelMoneroConfig.push(`enforce-dns-checkpointing=1`);
+    umbrelMoneroConfig.push('enforce-dns-checkpointing=1');
   }
 
   // Prune blockchain
   if (settings.prune) {
     umbrelMoneroConfig.push('');
     umbrelMoneroConfig.push('# Prune blockchain to reduce storage requirements');
-    umbrelMoneroConfig.push(`prune-blockchain=1`);
+    umbrelMoneroConfig.push('prune-blockchain=1');
   }
 
   /*
    * Enable Mining
    */
   if (settings.mining && settings.moneroAddress) {
-    umbrelMoneroConfig.push(`bg-mining-enable=1`);
+    umbrelMoneroConfig.push('bg-mining-enable=1');
     umbrelMoneroConfig.push(`start-mining=${settings.moneroAddress}`);
     umbrelMoneroConfig.push('');
     umbrelMoneroConfig.push('# Enable mining on CPU');
@@ -94,14 +94,14 @@ function settingsToMultilineConfString(settings) {
   if (settings.hidePort) {
     umbrelMoneroConfig.push('');
     umbrelMoneroConfig.push('# Hide the port from the peers');
-    umbrelMoneroConfig.push(`hide-my-port=1`);
+    umbrelMoneroConfig.push('hide-my-port=1');
   }
 
   if (settings.upnp) {
-    umbrelMoneroConfig.push(`igd=enabled`);
+    umbrelMoneroConfig.push('igd=enabled');
   }
 
-  umbrelMoneroConfig.push(`p2p-bind-ip=0.0.0.0`);
+  umbrelMoneroConfig.push('p2p-bind-ip=0.0.0.0');
   umbrelMoneroConfig.push(`p2p-bind-port=${constants.MONERO_P2P_PORT}`);
 
   // i2p Outbound Connections
@@ -112,6 +112,7 @@ function settingsToMultilineConfString(settings) {
   // tor Outbound Connections
   if (settings.tor) {
     umbrelMoneroConfig.push(`tx-proxy=tor,${constants.TOR_PROXY_IP}:${constants.TOR_PROXY_PORT}`);
+
     // # Tor: add P2P seed nodes for the Tor network
     // # For an up-to-date list of working nodes see ...
 
@@ -150,36 +151,37 @@ function settingsToMultilineConfString(settings) {
 
 
   // umbrelMoneroConfig.push(`rpc-bind-ip=0.0.0.0`);
-  umbrelMoneroConfig.push(`rpc-restricted-bind-ip=0.0.0.0`);
+  umbrelMoneroConfig.push('rpc-restricted-bind-ip=0.0.0.0');
+
   // umbrelMoneroConfig.push(`rpc-bind-port=${constants.MONERO_RPC_PORT}`);
   umbrelMoneroConfig.push(`rpc-restricted-bind-port=${constants.MONERO_RESTRICTED_RPC_PORT}`);
 
   // Public Node
   if (settings.publicNode) {
     umbrelMoneroConfig.push('public-node=1');
-    umbrelMoneroConfig.push(`confirm-external-bind=1`);
+    umbrelMoneroConfig.push('confirm-external-bind=1');
   }
 
-  if(settings.zmq) {
-    if(!settings.publicNode){
+  if (settings.zmq) {
+    if (!settings.publicNode) {
       umbrelMoneroConfig.push('public-node=1');
-      umbrelMoneroConfig.push(`confirm-external-bind=1`);
+      umbrelMoneroConfig.push('confirm-external-bind=1');
     }
     umbrelMoneroConfig.push('');
     umbrelMoneroConfig.push('# Enable ZeroMQ');
     umbrelMoneroConfig.push(`zmq-pub=tcp://0.0.0.0:${constants.MONERO_ZMQ_PORT}`);
-    umbrelMoneroConfig.push(`add-priority-node=p2pmd.xmrvsbeast.com:18080`);
-    umbrelMoneroConfig.push(`add-priority-node=nodes.hashvault.pro:18080`);
-    umbrelMoneroConfig.push(`disable-dns-checkpoints=1`);
-    umbrelMoneroConfig.push(`enable-dns-blocklist=1`);
+    umbrelMoneroConfig.push('add-priority-node=p2pmd.xmrvsbeast.com:18080');
+    umbrelMoneroConfig.push('add-priority-node=nodes.hashvault.pro:18080');
+    umbrelMoneroConfig.push('disable-dns-checkpoints=1');
+    umbrelMoneroConfig.push('enable-dns-blocklist=1');
 
-    umbrelMoneroConfig.push(`zmq-rpc-bind-ip=0.0.0.0`);
+    umbrelMoneroConfig.push('zmq-rpc-bind-ip=0.0.0.0');
     umbrelMoneroConfig.push(`zmq-rpc-bind-port=${constants.MONERO_ZMQ_RPC_PORT}`);
 
-  }else{
+  } else {
     umbrelMoneroConfig.push('');
     umbrelMoneroConfig.push('# Disable ZeroMQ');
-    umbrelMoneroConfig.push(`no-zmq=true`);
+    umbrelMoneroConfig.push('no-zmq=true');
   }
 
   if (process.env.APP_BTCPAY_IP && process.env.APP_BTCPAY_PORT) {
@@ -194,6 +196,7 @@ function settingsToMultilineConfString(settings) {
 export async function getJsonStore() {
   try {
     const jsonStore = await diskService.readJsonFile(constants.JSON_STORE_FILE);
+
     return {...DEFAULT_ADVANCED_SETTINGS, ...jsonStore};
   } catch (error) {
     return DEFAULT_ADVANCED_SETTINGS;
@@ -203,6 +206,7 @@ export async function getJsonStore() {
 // There's a race condition here if you do two updates in parallel but it's fine for our current use case
 async function updateJsonStore(newProps) {
   const jsonStore = await getJsonStore();
+
   return diskService.writeJsonFile(constants.JSON_STORE_FILE, {
     ...jsonStore,
     ...newProps,
@@ -216,8 +220,10 @@ async function generateMoneroConfig(shouldOverwriteExistingFile = true, setting 
   // if bitmonero.conf does not exist or should be overwritten, create it with config-file=umbrel-monero.conf
   if (!fileExists || shouldOverwriteExistingFile) {
     const confString = settingsToMultilineConfString(setting);
+
     return diskService.writePlainTextFile(constants.MONERO_CONF_FILEPATH, confString);
   }
+
   // INVESTIGATE WHETHER THIS IS NEEDED - Comment out for now
   // if bitmonero.conf exists but does not include config-file=umbrel-monero.conf, add config-file=umbrel-monero.conf to the top of the file
   // const existingConfContents = await diskService.readUtf8File(constants.MONERO_CONF_FILEPATH);

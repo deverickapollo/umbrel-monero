@@ -1,5 +1,5 @@
-import axios from "axios";
-import store from "@/store";
+import axios from 'axios';
+import store from '@/store';
 
 // An object to store the response time of completed API requests
 const responseTime = {};
@@ -25,33 +25,34 @@ axios.interceptors.response.use(
 
     // Return the same 401 back if user is trying to login with incorrect password
     if (
-      error.config.url ===
-      `${process.env.VUE_APP_MANAGER_API_URL}/v1/account/login`
+      error.config.url
+      === `${import.meta.env.VUE_APP_MANAGER_API_URL}/v1/account/login`
     ) {
       return Promise.reject(error);
     }
 
     // Logout user if token refresh didn't work
     if (
-      error.config.url ===
-      `${process.env.VUE_APP_MANAGER_API_URL}/v1/account/refresh`
+      error.config.url
+      === `${import.meta.env.VUE_APP_MANAGER_API_URL}/v1/account/refresh`
     ) {
-      store.dispatch("user/logout");
+      store.dispatch('user/logout');
+
       return Promise.reject(error);
     }
 
     // Try request again with new token if error is due to invalid JWT
 
-    if (error.response.data === "Invalid JWT") {
+    if (error.response.data === 'Invalid JWT') {
       try {
-        await store.dispatch("user/refreshJWT");
+        await store.dispatch('user/refreshJWT');
       } catch (error) {
         return Promise.reject(error);
       }
 
       // New request with new token
       const config = error.config;
-      config.headers["Authorization"] = `JWT ${store.state.user.jwt}`;
+      config.headers.Authorization = `JWT ${store.state.user.jwt}`;
 
       return new Promise((resolve, reject) => {
         axios
@@ -77,10 +78,11 @@ const API = {
 
       try {
         const startTime = new Date();
+
         // await new Promise(resolve => setTimeout(resolve, 2000)) //2s API delay
 
         const requestOptions = {
-          method: "get",
+          method: 'get',
           url
         };
 
@@ -96,7 +98,7 @@ const API = {
 
         response = false;
       } finally {
-        responsePending[url] = false; // eslint-disable-line require-atomic-updates
+        responsePending[url] = false;
       }
     }
 
@@ -106,7 +108,7 @@ const API = {
   // Wrap a post call
   async post(url, data = {}) {
     const requestOptions = {
-      method: "post",
+      method: 'post',
       url,
       data
     };
@@ -117,7 +119,7 @@ const API = {
   // Wrap a delete call
   async delete(url, data) {
     const requestOptions = {
-      method: "delete",
+      method: 'delete',
       url,
       data
     };
@@ -126,7 +128,7 @@ const API = {
   },
 
   // Wrap a download call (GET)
-  async download(url, data = {}, filename = "download") {
+  async download(url, data = {}, filename = 'download') {
     let response;
 
     if (responsePending[url] === undefined || responsePending[url] === false) {
@@ -134,12 +136,13 @@ const API = {
 
       try {
         const startTime = new Date();
+
         // await new Promise(resolve => setTimeout(resolve, 2000)) //2s API delay
 
         const requestOptions = {
-          method: "get",
+          method: 'get',
           url,
-          responseType: "blob"
+          responseType: 'blob'
         };
 
         response = (await axios(requestOptions, data)).data;
@@ -149,21 +152,21 @@ const API = {
 
         // Download file
         const blob = new Blob([response]);
-        const blobURL =
-          window.URL && window.URL.createObjectURL
+        const blobURL
+          = window.URL && window.URL.createObjectURL
             ? window.URL.createObjectURL(blob)
             : window.webkitURL.createObjectURL(blob);
-        const tempLink = document.createElement("a");
-        tempLink.style.display = "none";
+        const tempLink = document.createElement('a');
+        tempLink.style.display = 'none';
         tempLink.href = blobURL;
-        tempLink.setAttribute("download", filename);
+        tempLink.setAttribute('download', filename);
 
         // Safari thinks _blank anchor are pop ups. We only want to set _blank
         // target if the browser does not support the HTML5 download attribute.
         // This allows us to download files in desktop safari if pop up blocking
         // is enabled.
-        if (typeof tempLink.download === "undefined") {
-          tempLink.setAttribute("target", "_blank");
+        if (typeof tempLink.download === 'undefined') {
+          tempLink.setAttribute('target', '_blank');
         }
 
         document.body.appendChild(tempLink);
@@ -182,7 +185,7 @@ const API = {
 
         response = false;
       } finally {
-        responsePending[url] = false; // eslint-disable-line require-atomic-updates
+        responsePending[url] = false;
       }
     }
 

@@ -157,3 +157,15 @@ This app is built upon the work done by [Casa](https://github.com/casa) on its o
 [![License](https://img.shields.io/github/license/getumbrel/umbrel-bitcoin?color=%235351FB)](https://github.com/getumbrel/umbrel-bitcoin/blob/master/LICENSE.md)
 
 [umbrel.com](https://umbrel.com)
+
+## Software Stack
+
+- [Node.js](https://nodejs.org/)
+- [Express](https://expressjs.com/)
+- [Vue.js](https://vuejs.org/)
+- [Babel](https://babeljs.io/)
+- [Docker](https://www.docker.com/) 
+- [Docker Compose](https://docs.docker.com/compose/)
+- [Monero](https://getmonero.org/)
+- [Monero RPC](https://getmonero.org/resources/developer-guides/daemon-rpc.html)
+- [Monero Wallet RPC](https://getmonero.org/resources/developer-guides/wallet-rpc.html)

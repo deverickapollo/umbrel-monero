@@ -70,6 +70,7 @@ export async function getStatus() {
 
 export async function getMempoolInfo() {
   await monerodService.isReady();
+
   return await monerodService.getMempoolInfo();
 }
 
@@ -98,6 +99,7 @@ export async function getLocalSyncInfo() {
   const headerCount = blockChainInfo.headers;
   const percent = blockChainInfo.verificationprogress;
   const pruned = blockChainInfo.pruned;
+
   return {
     chain,
     percent,
@@ -127,7 +129,7 @@ export async function getVersion() {
   // Remove all non-digits or decimals.
   const formattedVersion = version.replace(/[^\d.]/g, '');
 
-  return {version: formattedVersion}; // eslint-disable-line object-shorthand
+  return {version: formattedVersion};
 }
 
 export async function getTransaction(txid) {
@@ -150,7 +152,7 @@ export async function getNetworkInfo() {
   await monerodService.isReady();
   const networkInfo = await monerodService.getNetworkInfo();
 
-  return networkInfo.result; // eslint-disable-line object-shorthand
+  return networkInfo.result;
 }
 
 export async function getBlock(hash) {
@@ -172,12 +174,13 @@ export async function getBlock(hash) {
 const memoizedGetFormattedBlock = () => {
   const cache = {};
 
-  return async (blockHeight) => {
+  return async blockHeight => {
     // cache cleanup
-    // 6 blocks/hr * 24 hrs/day * 7 days = 1008 blocks over 7 days
+    // Monero block time is approximately 2 minutes per block
+    // 30 blocks/hr * 24 hrs/day * 7 days = 5040 blocks over 7 days
     // plus some wiggle room in case weird difficulty adjustment or period of faster blocks
     // Make CACHE_LIMIT configurable
-    const CACHE_LIMIT = process.env.CACHE_LIMIT || 1100;
+    const CACHE_LIMIT = process.env.CACHE_LIMIT || 5080;
     while (Object.keys(cache).length > CACHE_LIMIT) {
       const cacheItemToDelete = Object.keys(cache)[0];
       delete cache[cacheItemToDelete];
@@ -250,7 +253,7 @@ export async function getBlocks(fromHeight, toHeight) {
       const formattedBlock = await initializedMemoizedGetFormattedBlock(currentHeight);
       blocks.push(formattedBlock);
     } catch (e) {
-      console.error('Error memoizing formatted blocks');
+      console.error('Error fetching block:', e);
     }
   }
 
@@ -283,9 +286,10 @@ export async function nodeStatusSummary() {
 export async function stop() {
   await monerodService.isReady();
   const stopResponse = await monerodService.stop();
+
   return {stopResponse};
 }
 
-export async function getIsReady(){
+export async function getIsReady() {
   return await monerodService.isReady();
 }

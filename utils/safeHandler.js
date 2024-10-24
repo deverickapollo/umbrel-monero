@@ -3,7 +3,7 @@
 // inside of an async function
 // Mostly copied from vault/server/utils/safeHandler.js
 export function safeHandler(handler) {
-  return async (req, res, next) => {
+  return async(req, res, next) => {
     try {
       return await handler(req, res, next);
     } catch (err) {

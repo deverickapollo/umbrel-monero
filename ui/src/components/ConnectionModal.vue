@@ -173,8 +173,8 @@
 
 <script>
 import { mapState } from "vuex";
-import QrCode from "@/components/Utility/QrCode";
-import InputCopy from "@/components/Utility/InputCopy";
+import QrCode from "@/components/Utility/QrCode.vue";
+import InputCopy from "@/components/Utility/InputCopy.vue";
 
 export default {
   data() {

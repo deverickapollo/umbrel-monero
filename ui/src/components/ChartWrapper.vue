@@ -18,8 +18,8 @@
 <script>
 import { mapState } from "vuex";
 
-import Chart from "@/components/Chart";
-import ChartEmptyState from "@/components/ChartEmptyState";
+import Chart from "@/components/Chart.vue";
+import ChartEmptyState from "@/components/ChartEmptyState.vue";
 
 export default {
   data() {

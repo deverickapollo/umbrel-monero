@@ -13,11 +13,8 @@ RUN npm install --production --fetch-timeout 300000
 # Copy project files and folders to the current working directory (i.e. '/app')
 COPY . .
 
-# Install TypeScript globally
-RUN npm install -g typescript
-
 # Compile TypeScript files
-RUN tsc
+RUN npm run build
 
 # Install UI dependencies and build UI 
 RUN npm run install:ui

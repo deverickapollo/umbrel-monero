@@ -1,10 +1,10 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import Vue from 'vue';
+import Vuex from 'vuex';
 
-//Modules
-import system from "./modules/system";
-import monero from "./modules/monero";
-import user from "./modules/user";
+// Modules
+import system from './modules/system';
+import monero from './modules/monero';
+import user from './modules/user';
 
 Vue.use(Vuex);
 
@@ -23,12 +23,12 @@ const getters = {
 // Mutations
 const mutations = {
   toggleMobileMenu(state) {
-    //disable body's scrolling on menu open
+    // disable body's scrolling on menu open
     if (!state.isMobileMenuOpen) {
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = 'hidden';
       state.isMobileMenuOpen = true;
     } else {
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = 'auto';
       state.isMobileMenuOpen = false;
     }
   }
@@ -37,7 +37,7 @@ const mutations = {
 // Actions
 const actions = {
   toggleMobileMenu(context) {
-    context.commit("toggleMobileMenu");
+    context.commit('toggleMobileMenu');
   }
 };
 

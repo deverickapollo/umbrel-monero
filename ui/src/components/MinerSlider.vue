@@ -1,12 +1,11 @@
 <template>
   <div class="miner-slider">
-    <vue-slider
+    <Slider
       v-model="value"
       :tooltip="'always'"
       :min="minValue"
       :max="maxValue"
       :interval="1"
-      :contrained="true"
       :disabled="disabled"
       @change="change"
     >
@@ -15,17 +14,18 @@
           <small class="text-muted">{{ value }}%</small>
         </div>
       </template>
-    </vue-slider>
+    </Slider>
   </div>
 </template>
 
 <script>
-import VueSlider from "vue-slider-component";
-import "vue-slider-component/theme/default.css";
 
+import Slider from '@vueform/slider/dist/slider.vue2.js'
+import '@vueform/slider/themes/default.css';
 export default {
   components: {
-    VueSlider
+    // VueSlider
+    Slider
   },
   data() {
     return {
