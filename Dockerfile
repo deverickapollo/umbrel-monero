@@ -7,12 +7,12 @@ WORKDIR /app
 # Copy 'package-lock.json' and 'package.json'
 COPY package-lock.json package.json ./
 
-ENV NODE_ENV=development
+# ENV NODE_ENV=development
 
 # Install dependencies
 RUN npm install --fetch-timeout 300000
 
-ENV NODE_ENV=production
+# ENV NODE_ENV=production
 
 # Copy project files and folders to the current working directory (i.e. '/app')
 COPY . .
