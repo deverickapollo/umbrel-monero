@@ -283,6 +283,20 @@ export async function nodeStatusSummary() {
   };
 }
 
+export async function miningSummary() {
+  await monerodService.isReady();
+  const miningInfo = await monerodService.getMiningInfo();
+
+  return {
+    miningAddress: miningInfo.result.mining,
+    miningState: miningInfo.result.miningState,
+    miningSpeed: miningInfo.result.miningSpeed,
+    miningBackground: miningInfo.result.miningBackground,
+    miningNumThreads: miningInfo.result.miningNumThreads,
+  };
+
+}
+
 export async function stop() {
   await monerodService.isReady();
   const stopResponse = await monerodService.stop();

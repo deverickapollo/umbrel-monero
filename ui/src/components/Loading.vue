@@ -10,12 +10,12 @@
 
     <!-- <b-spinner class="my-4" variant="primary"></b-spinner> -->
     <small v-if="isRestarting" class="text-muted mb-3">Restarting...</small>
-    <b-progress
+    <BProgress
       :value="progress"
       class="mb-2 w-75"
       variant="orange"
       :style="{ height: '4px', maxWidth: '360px' }"
-    ></b-progress>
+    ></BProgress>
     <slot></slot>
   </div>
 </template>

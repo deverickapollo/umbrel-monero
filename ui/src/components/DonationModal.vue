@@ -27,7 +27,7 @@
 </style>
 
 <script>
-  import QrCode from "@/components/Utility/QrCodeMonero.vue";
+  import QrCode from "./Utility/QrCodeMonero.vue";
   export default {
     name: "DonationModal",
     props: {

@@ -1,0 +1,19 @@
+{
+    "extends": "./tsconfig.base.json",
+    "compilerOptions": {
+      "baseUrl": ".",
+      "paths": {
+        "*": [
+          "node_modules/*"
+        ]
+      }
+    },
+    "include": [
+      "services/**/*.ts",
+      "components.d.ts"
+    ],
+    "exclude": [
+      "node_modules",
+      "ui/"
+    ]
+  }

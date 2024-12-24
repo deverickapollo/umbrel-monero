@@ -48,6 +48,13 @@ const state = () => ({
     tor: 0,
     i2p: 0
   },
+  mining: {
+    hashrate: -1,
+    address: '',
+    threadCount: -1,
+    isMining: false,
+    background: false
+  },
   chartData: []
 });
 
@@ -120,6 +127,14 @@ const mutations = {
 
   setChartData(state, chartData) {
     state.chartData = chartData;
+  },
+
+  setMining(state, mining) {
+    state.mining.hashrate = mining.hashrate;
+    state.mining.address = mining.address;
+    state.mining.threadCount = mining.threadCount;
+    state.mining.isMining = mining.isMining;
+    state.mining.background = mining.background;
   }
 };
 
@@ -176,6 +191,16 @@ const actions = {
     }
   },
 
+  async getMining({commit}) {
+    const mining = await API.get(
+      `${import.meta.env.VITE_API_BASE_URL}/v1/monerod/info/mining`
+    );
+
+    if (mining) {
+      commit('setMining', mining);
+    }
+  },
+
   async getBlocks({commit, state, dispatch}) {
     await dispatch('getSync');
 
@@ -207,6 +232,7 @@ const actions = {
     // Update blocks
     commit('setBlocks', latestFiveBlocks.blocks);
   },
+
 
   async getChartData({dispatch, state, commit}) {
     // get the latest block height

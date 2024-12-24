@@ -1,10 +1,10 @@
 <template v-slot:modal-header="{ close }" title="Advanced Settings">
-  <b-form @submit.prevent="submit">
+  <BForm @submit.prevent="submit">
     <div
       class="px-0 px-sm-3 pb-3 d-flex flex-column justify-content-between w-100"
     >
       <h3 class="mt-1">Advanced Settings</h3>
-      <b-alert variant="warning" show class="mb-3">
+      <BAlert variant="warning" :model-value="true" class="mb-3">
         <small>
           Be careful when changing the settings below as they may cause issues
           with other apps on your Umbrel that connect to your Monero node. Only
@@ -12,9 +12,9 @@
           or wallets.
           <br />
         </small>
-      </b-alert>
+      </BAlert>
 
-      <b-overlay :show="isSettingsDisabled" rounded="sm">
+      <BOverlay :show="isSettingsDisabled" rounded="sm">
         <div
           class="advanced-settings-container d-flex flex-column p-3 pb-sm-3 bg-light mb-2"
         >
@@ -187,7 +187,7 @@
             <small class="w-sm-75 d-block text-muted mt-1">
               Specify maximum percentage cpu use by miner
             </small>
-            <miner-slider
+            <MinerSlider
               id="miner-cpu"
               class="mt-3 mb-3"
               :minValue="1"
@@ -195,25 +195,25 @@
               :startingValue="33"
               :disabled="!settings.mining"
               @change="value => (settings.minercpuTarget = value)"
-            ></miner-slider>
+            ></MinerSlider>
           </div>
 
           <hr v-if="settings.mining" class="advanced-settings-divider" />
 
           <div v-if="settings.mining">
             <div class="d-flex justify-content-between align-items-center">
-              <div class="w-75">
+              <div class="w-10">
                 <label class="mb-0" for="moneroAddress">
                   <p class="font-weight-bold mb-0">Monero Address</p>
                 </label>
               </div>
-              <div>
-                <b-form-input
+              <div class="w-90">
+                <BFormInput
                   id="moneroAddress"
                   v-model="settings.moneroAddress"
                   type="text"
                   placeholder="Enter your Monero address"
-                ></b-form-input>
+                ></BFormInput>
               </div>
             </div>
             <small class="w-sm-75 d-block text-muted mt-1">
@@ -401,11 +401,12 @@
                 </label>
               </div>
               <div class="">
-                <b-form-select
+              <!-- TODO check dbSyncMode -->
+                <BFormSelect
                   id="dbSyncMode"
                   v-model="settings.dbSyncMode"
                   :options="dbSyncMode"
-                ></b-form-select>
+                ></BFormSelect>
               </div>
             </div>
             <small class="w-sm-75 d-block text-muted mt-1">
@@ -443,7 +444,7 @@
 
           <hr class="advanced-settings-divider" />
 
-          <div class="row">
+          <BRow>
             <div
               class="col-12 col-md-8 col-sm-12 d-flex flex-column align-items-start mb-md-0"
             >
@@ -459,30 +460,11 @@
             >
               <donation></donation>
             </div>
-          </div>
+          </BRow>
 
           <hr class="advanced-settings-divider" />
-
-          <!-- <div class="row">
-            <div
-              class="col-12 col-md-8 col-sm-12 d-flex flex-column align-items-start mb-md-0"
-            >
-              <p class="font-weight-bold mb-0">Support & Feedback</p>
-              <small class=" d-block text-muted mt-1 mb-3">
-                Follow me on Twitter
-                <a href="https://twitter.com/deverickapollo" target="_blank"
-                  >@deverickapollo</a
-                >
-              </small>
-            </div>
-            <div
-              class="col-12 col-md-4 col-sm-12 d-flex justify-content-center justify-content-md-end align-items-center"
-            >
-              <div ref="address" class="d-none">{{ address }}</div>
-              <donation></donation>
-            </div>
-          </div> -->
-          <div class="row">
+          
+          <BRow>
             <div
               class="col-12 col-md-8 col-sm-12 d-flex flex-column align-items-start mb-md-0"
             >
@@ -505,15 +487,15 @@
                 to stay updated on upcoming releases.
               </small>
             </div>
-          </div>
+          </BRow>
         </div>
         <!-- template overlay with empty div to show an overlay with no spinner -->
         <template #overlay>
           <div></div>
         </template>
-      </b-overlay>
+      </BOverlay>
 
-      <b-alert
+      <BAlert
         variant="warning"
         :show="showOutgoingConnectionsError"
         class="mt-2"
@@ -523,9 +505,9 @@
           Please choose at least one source for outgoing connections (Clearnet
           or Tor).
         </small>
-      </b-alert>
+      </BAlert>
 
-      <b-alert
+      <BAlert
         variant="warning"
         :show="showMiningError"
         class="mt-2"
@@ -534,9 +516,9 @@
         <small>
           Please enter a valid Monero address.
         </small>
-      </b-alert>
+      </BAlert>
 
-      <b-alert
+      <BAlert
         variant="warning"
         :show="showBTCPayError"
         class="mt-2"
@@ -545,36 +527,35 @@
         <small>
           Please first enable BTCPayServer app to enable Monero support.
         </small>
-      </b-alert>
-
+      </BAlert>
       <div class="mt-2 mb-2">
-        <b-row>
-          <b-col cols="12" lg="6">
-            <b-button
+        <BRow>
+          <BCol cols="12" lg="6">
+            <BButton
               @click="clickRestoreDefaults"
               class="btn-border"
               variant="outline-secondary"
               block
               :disabled="isSettingsDisabled"
             >
-              Restore Default Settings</b-button
-            >
-          </b-col>
-          <b-col cols="12" lg="6">
-            <b-button
+              Restore Default Settings
+            </BButton>
+          </BCol>
+          <BCol cols="12" lg="6">
+            <BButton
               class="mt-2 mt-lg-0"
               variant="success"
               type="submit"
               block
               :disabled="isSettingsDisabled"
             >
-              Save and Restart Monero Node</b-button
-            >
-          </b-col>
-        </b-row>
+              Save and Restart Monero Node
+            </BButton>
+          </BCol>
+        </BRow>
       </div>
     </div>
-  </b-form>
+  </BForm>
 </template>
 
 <script lang="ts">
@@ -583,7 +564,8 @@ import { mapState } from "vuex";
 import ToggleSwitch from "./Utility/ToggleSwitch.vue";
 import { MoneroUtils } from "monero-ts"; 
 import MinerSlider from "./MinerSlider.vue";
-import Donation from "@/components/DonationModal.vue";
+import Donation from "./DonationModal.vue";
+
 
 export default {
   name: "AdvancedSettingsModal",

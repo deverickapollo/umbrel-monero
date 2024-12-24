@@ -11,6 +11,7 @@ const UINT32_BYTES = 4;
 export async function fileExists(filePath) {
   try {
     await fs.promises.access(filePath);
+
     return true;
   } catch (err) {
     return false;
@@ -43,7 +44,7 @@ export async function readJsonFile(filePath) {
 // This is _not_ concurrency safe, so don't export it without making it like writeJsonFile
 export function writeFile(filePath, data, encoding) {
   return new Promise((resolve, reject) =>
-    fs.writeFile(filePath, data, encoding, (err) => {
+    fs.writeFile(filePath, data, encoding, err => {
       if (err) {
         reject(err);
       } else {
@@ -55,61 +56,61 @@ export function writeFile(filePath, data, encoding) {
 
 export function writeJsonFile(filePath, obj) {
   const tempFileName = `${filePath}.${crypto
-      .randomBytes(UINT32_BYTES)
-      .readUInt32LE(0)}`;
+    .randomBytes(UINT32_BYTES)
+    .readUInt32LE(0)}`;
 
   return writeFile(tempFileName, JSON.stringify(obj, null, 2), 'utf8')
-      .then(
-          () =>
-            new Promise((resolve, reject) =>
-              fs.rename(tempFileName, filePath, (err) => {
-                if (err) {
-                  reject(err);
-                } else {
-                  resolve();
-                }
-              }),
-            ),
-      )
-      .catch((err) => {
-        if (err) {
-          fs.unlink(tempFileName, (err) => {
-            logger.warn('Error removing temporary file after error', 'disk', {
-              err,
-              tempFileName,
-            });
+    .then(
+      () =>
+        new Promise((resolve, reject) =>
+          fs.rename(tempFileName, filePath, err => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve();
+            }
+          }),
+        ),
+    )
+    .catch(err => {
+      if (err) {
+        fs.unlink(tempFileName, err => {
+          logger.warn('Error removing temporary file after error', 'disk', {
+            err,
+            tempFileName,
           });
-        }
-        throw err;
-      });
+        });
+      }
+      throw err;
+    });
 }
 
 export function writePlainTextFile(filePath, string) {
   const tempFileName = `${filePath}.${crypto
-      .randomBytes(UINT32_BYTES)
-      .readUInt32LE(0)}`;
+    .randomBytes(UINT32_BYTES)
+    .readUInt32LE(0)}`;
 
   return writeFile(tempFileName, string, 'utf8')
-      .then(
-          () =>
-            new Promise((resolve, reject) =>
-              fs.rename(tempFileName, filePath, (err) => {
-                if (err) {
-                  reject(err);
-                } else {
-                  resolve();
-                }
-              }),
-            ),
-      ).catch((err) => {
-        if (err) {
-          fs.unlink(tempFileName, (err) => {
-            logger.warn('Error removing temporary file after error', 'disk', {
-              err,
-              tempFileName,
-            });
+    .then(
+      () =>
+        new Promise((resolve, reject) =>
+          fs.rename(tempFileName, filePath, err => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve();
+            }
+          }),
+        ),
+    ).catch(err => {
+      if (err) {
+        fs.unlink(tempFileName, err => {
+          logger.warn('Error removing temporary file after error', 'disk', {
+            err,
+            tempFileName,
           });
-        }
-      });
+        });
+      }
+    });
 }
 

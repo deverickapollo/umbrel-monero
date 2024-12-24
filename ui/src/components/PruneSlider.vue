@@ -1,6 +1,6 @@
 <template>
   <div class="prune-slider">
-    <vue-slider
+    <Slider
       v-model="value"
       :tooltip="'always'"
       :min="minValue"
@@ -15,17 +15,16 @@
           <small class="text-muted">{{ value }}GB</small>
         </div>
       </template>
-    </vue-slider>
+    </Slider>
   </div>
 </template>
 
 <script>
-import VueSlider from "vue-slider-component";
-import "vue-slider-component/theme/default.css";
+import Slider from '@vueform/slider'
 
 export default {
   components: {
-    VueSlider
+    Slider
   },
   data() {
     return {

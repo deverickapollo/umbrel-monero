@@ -1,10 +1,6 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
-
+import {createRouter, createWebHistory} from 'vue-router';
 import Layout from '@/layouts/Layout.vue';
 import Monero from '@/views/Monero.vue';
-
-Vue.use(VueRouter);
 
 const routes = [
   {
@@ -21,9 +17,11 @@ const routes = [
   }
 ];
 
-const router = new VueRouter({
-  mode: 'history',
-  base: import.meta.env.BASE_URL,
+const router = createRouter({
+
+  // mode: 'history',
+  // base: import.meta.env.BASE_URL,
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes,
   scrollBehavior: (to, from, savedPosition) => {
     // Exists when Browser's back/forward pressed
@@ -43,7 +41,8 @@ const router = new VueRouter({
 
       return {selector: to.hash};
 
-      // By changing queries we are still in the same component, so "from.path" === "to.path" (new query changes just "to.fullPath", but not "to.path").
+      // By changing queries we are still in the same component,
+      // so "from.path" === "to.path" (new query changes just "to.fullPath", but not "to.path").
     } else if (from.path === to.path) {
       return {};
     }

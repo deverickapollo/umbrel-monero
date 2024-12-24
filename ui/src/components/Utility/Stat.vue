@@ -25,24 +25,22 @@
             suffix
           }}</span>
 
-        <div class="ml-1">
-            <b-popover
+          <div :id="popoverId" class="ms-1">
+            
+            <BPopover
               v-if="showPopover"
-              :target="popoverId"
+              :id="popoverId"
               placement="bottom"
               triggers="hover focus"
             >
+              <template #target>
+                <!-- <carbon-face-cool class=" text-3xl text-muted" /> -->
+                  <svg class="text-muted" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 32 32">
+                    <path fill="currentColor" d="M16 4C9.383 4 4 9.383 4 16s5.383 12 12 12s12-5.383 12-12S22.617 4 16 4m0 2c5.535 0 10 4.465 10 10s-4.465 10-10 10S6 21.535 6 16S10.465 6 16 6m-1 4v8h2v-8zm0 10v2h2v-2z" />
+                  </svg>
+              </template>
               <p v-for="content in popoverContent" :key="content" class="m-0">{{ content }}</p>
-            </b-popover>
-
-            <b-icon
-              v-if="showPopover"
-              :id="popoverId"
-              icon="info-circle"
-              size="lg"
-              style="cursor: pointer"
-              class="text-muted"
-            ></b-icon>
+            </BPopover>
           </div>
 
         </div>
@@ -71,7 +69,7 @@
           />
         </svg>
         <span
-          class="change-text ml-1"
+          class="change-text m-1"
           :class="{
             'text-success': change.value > 0,
             'text-danger': change.value < 0,

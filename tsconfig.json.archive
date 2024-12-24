@@ -1,0 +1,33 @@
+{
+    "compilerOptions": {
+      "module": "es2022",
+      "esModuleInterop": true,
+      "target": "es2022",
+      "allowJs": true,
+      "noImplicitAny": true,
+      "strict": true,
+      "moduleResolution": "node",
+      "sourceMap": true,
+      "outDir": "./build",
+      "baseUrl": ".",
+      "paths": {
+        "*": [
+          "node_modules/*"
+        ]
+      },
+      "types": [
+        "node"
+      ]
+    },
+    "include": [
+      "services/*.ts",
+      "components.d.ts"
+    ],
+    "exclude": [
+      "node_modules",
+      "ui/"
+    ],
+    "files" : [
+      "services/monerod.ts"
+    ]
+  }

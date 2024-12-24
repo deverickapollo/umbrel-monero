@@ -24,6 +24,11 @@ router.get('/version', safeHandler.safeHandler((req, res) =>
     .then(version => res.json(version)),
 ));
 
+router.get('/mining', safeHandler.safeHandler((req, res) =>
+  monerod.miningSummary()
+    .then(version => res.json(version)),
+));
+
 router.get('/stats', safeHandler.safeHandler((req, res) =>
   monerod.nodeStatusSummary()
     .then(statussumarry => res.json(statussumarry)),

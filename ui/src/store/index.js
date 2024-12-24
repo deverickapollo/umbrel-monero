@@ -1,4 +1,4 @@
-import Vue from 'vue';
+// import Vue from 'vue';
 import Vuex from 'vuex';
 
 // Modules
@@ -6,7 +6,7 @@ import system from './modules/system';
 import monero from './modules/monero';
 import user from './modules/user';
 
-Vue.use(Vuex);
+// Vue.use(Vuex);
 
 // Initial State
 const state = {
@@ -15,8 +15,8 @@ const state = {
 
 // Getters
 const getters = {
-  isMobileMenuOpen(state) {
-    return state.isMobileMenuOpen;
+  isMobileMenuOpen(mobileMenu) {
+    return mobileMenu.isMobileMenuOpen;
   }
 };
 
@@ -41,7 +41,7 @@ const actions = {
   }
 };
 
-export default new Vuex.Store({
+export default Vuex.createStore({
   state,
   mutations,
   actions,

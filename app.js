@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import express from 'express';
-import path from 'path';
+import path, {dirname} from 'path';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import cors from 'cors';
@@ -17,7 +17,6 @@ import * as ping from './routes/ping.js';
 import {addAlias} from 'module-alias';
 
 import {fileURLToPath} from 'url';
-import {dirname} from 'path';
 
 
 const __filename = fileURLToPath(import.meta.url);

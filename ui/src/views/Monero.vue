@@ -8,7 +8,7 @@
           class="d-flex flex-grow-1 justify-content-start align-items-start mb-3"
         >
           <img
-            class="app-icon mr-2 mr-sm-3"
+            class="app-icon me-2 me-sm-3"
             src="@/assets/community-monero-icon.svg"
           />
           <div>
@@ -26,10 +26,10 @@
                 :fill="`${isMoneroCoreOperational ? '#00CD98' : '#F6B900'}`"
               />
             </svg>
-            <small v-if="isMoneroCoreOperational" class="ml-1 text-success"
+            <small v-if="isMoneroCoreOperational" class="ms-1 text-success"
               >Running</small
             >
-            <small v-else class="ml-1 text-warning">Starting</small>
+            <small v-else class="ms-1 text-warning">Starting</small>
             <h3 class="d-block font-weight-bold mb-1">Monero Node</h3>
             <span class="d-block text-muted">{{
               version ? `Monero Core ${version}` : "..."
@@ -40,20 +40,21 @@
           class="d-flex col-12 col-md-auto justify-content-start align-items-center p-0"
         >
           <!-- TODO - work on responsiveness of connect + settings button -->
-          <b-button
+          <BButton
             type="button"
             variant="primary"
-            class="btn capitalize py-1 pl-2 pr-3 w-100 custom-connect-btn"
-            v-b-modal.connect-modal
+            class="btn capitalize py-1 ps-2 pe-3 w-100 custom-connect-btn me-3"
+            @click="showConnectModal = !showConnectModal"
           >
-            <b-icon icon="plus" aria-hidden="true"></b-icon>
+            <ic-round-plus  />
             Connect
-          </b-button>
+          </BButton>
 
-          <b-dropdown
-            class="ml-3"
+          <BDropdown
+            class="ms-3"
             variant="link"
-            toggle-class="text-decoration-none p-0"
+            toggle-class="text-decoration-none"
+            @click="toggleAdvancedSettingsDropdown = !toggleAdvancedSettingsDropdown"
             no-caret
             right
           >
@@ -85,33 +86,30 @@
                 />
               </svg>
             </template>
-            <b-dropdown-item
-              href="#"
-              v-b-modal.advanced-settings-modal
+            <BDropdownItem
+              @click="showAdvancedSettingsModal = !showAdvancedSettingsModal"
               class="custom-dropdown"
-              ><b-badge pill variant="primary" class="mr-1 custom-badge"
-                >New</b-badge
               >
-              Advanced Settings</b-dropdown-item
+              Advanced Settings</BDropdownItem
             >
-          </b-dropdown>
+          </BDropdown>
         </div>
       </div>
-      <b-alert :show="showReindexCompleteAlert" variant="warning"
-        >Reindexing is now complete. Turn off "Reindex blockchain" in
-        <span
-          class="open-settings"
-          @click="() => $bvModal.show('advanced-settings-modal')"
-          >advanced settings</span
-        >
-        to prevent reindexing every time Monero Node restarts.</b-alert
+      <BAlert :show="showReindexCompleteAlert" variant="warning"
+            >Reindexing is now complete. Turn off "Reindex blockchain" in
+            <span
+              class="open-settings"
+              @click="() => $bvModal.show('advanced-settings-modal')"
+              >advanced settings</span
+            >
+            to prevent reindexing every time Monero Node restarts.</BAlert
+          >
+
+      <BAlert :show="showReindexInProgressAlert" variant="info"
+        >Reindexing in progress...</BAlert
       >
 
-      <b-alert :show="showReindexInProgressAlert" variant="info"
-        >Reindexing in progress...</b-alert
-      >
-
-      <b-alert
+      <BAlert
         :show="showRestartError"
         variant="danger"
         dismissible
@@ -119,11 +117,10 @@
       >
         Something went wrong while attempting to change the configuration of
         Monero Node.
-      </b-alert>
+      </BAlert>
     </div>
-
-    <b-row class="row-eq-height">
-      <b-col col cols="12" md="5" lg="4">
+    <BRow class="row-eq-height">
+      <BCol cols="12" md="5" lg="4">
         <card-widget
           header="Blockchain"
           :loading="syncPercent !== 100 || blocks.length === 0"
@@ -148,12 +145,12 @@
                   ></span>
                 </h3>
               </div>
-              <b-progress
+              <BProgress
                 :value="Math.round(syncPercent)"
                 class="mb-1"
                 variant="success"
                 :style="{ height: '4px' }"
-              ></b-progress>
+              ></BProgress>
               <small
                 class="text-muted d-block text-right"
                 v-if="currentBlock < blockHeight - 1"
@@ -166,13 +163,13 @@
             <blockchain :numBlocks="5"></blockchain>
           </div>
         </card-widget>
-      </b-col>
-      <b-col col cols="12" md="7" lg="8">
+      </BCol>
+      <BCol cols="12" md="7" lg="8">
         <card-widget class="overflow-x" :header="networkWidgetHeader">
           <div class>
             <div class="px-3 px-lg-4">
-              <b-row>
-                <b-col col cols="6" md="3">
+              <BRow>
+                <BCol cols="6" md="3">
                   <stat
                     title="Connections"
                     :value="stats.peers"
@@ -188,8 +185,9 @@
                       `I2P: ${peers.i2p}`
                     ]"
                   ></stat>
-                </b-col>
-                <b-col col cols="6" md="3">
+                
+                </BCol>
+                <BCol cols="6" md="3">
                   <stat
                     title="Mempool"
                     :value="abbreviateSize(stats.mempool)[0]"
@@ -201,8 +199,8 @@
                       `Transaction Count: ${stats.mempoolTransactions}`
                     ]"
                   ></stat>
-                </b-col>
-                <b-col col cols="6" md="3">
+                </BCol>
+                <BCol cols="6" md="3">
                   <stat
                     title="Hashrate"
                     :value="abbreviateHashRate(stats.hashrate)[0]"
@@ -210,29 +208,44 @@
                     hasDecimals
                     showPercentChange
                   ></stat>
-                </b-col>
-                <b-col col cols="6" md="3">
+                </BCol>
+                <BCol cols="6" md="3">
                   <stat
                     title="Blockchain Size"
                     :value="abbreviateSize(stats.blockchainSize)[0]"
                     :suffix="abbreviateSize(stats.blockchainSize)[1]"
                     showPercentChange
                   ></stat>
-                </b-col>
-              </b-row>
+                </BCol>
+                <!-- <BCol cols="6" md="2">
+                  <stat
+                    title="Mining Status"
+                    :value="abbreviateSize(stats.blockchainSize)[0]"
+                    :suffix="abbreviateSize(stats.blockchainSize)[1]"
+                    showPercentChange
+                  ></stat>
+                </BCol>
+                <BCol cols="6" md="2">
+                  <stat
+                    title="Mining Status"
+                    :value="abbreviateSize(stats.blockchainSize)[0]"
+                    :suffix="abbreviateSize(stats.blockchainSize)[1]"
+                    showPercentChange
+                  ></stat>
+                </BCol> -->
+              </BRow>
             </div>
             <chart-wrapper></chart-wrapper>
-          </div>
+          </div> 
         </card-widget>
-      </b-col>
-    </b-row>
-
-    <b-modal id="connect-modal" size="lg" centered hide-footer>
+      </BCol>
+    </BRow>
+    <BModal v-model="showConnectModal" size="lg" centered hide-footer>
       <connection-modal></connection-modal>
-    </b-modal>
+    </BModal>
 
-    <b-modal
-      id="advanced-settings-modal"
+    <BModal
+      v-model="showAdvancedSettingsModal"
       size="lg"
       centered
       hide-footer
@@ -243,7 +256,7 @@
         @submit="saveSettingsAndRestartMonero"
         @clickRestoreDefaults="restoreDefaultSettingsAndRestartMonero"
       ></advanced-settings-modal>
-    </b-modal>
+    </BModal>
   </div>
 </template>
 
@@ -265,7 +278,9 @@ export default {
   data() {
     return {
       isRestartPending: false,
-      showRestartError: false
+      showRestartError: false,
+      showConnectModal: false,
+      showAdvancedSettingsModal: false
     };
   },
   computed: {
@@ -278,6 +293,7 @@ export default {
       blockHeight: state => state.monero.blockHeight,
       stats: state => state.monero.stats,
       peers: state => state.monero.peers,
+      mining: state => state.monero.mining,
       rpc: state => state.monero.rpc,
       p2p: state => state.monero.p2p,
       reindex: state => state.user.moneroConfig.reindex,
@@ -323,6 +339,13 @@ export default {
         this.$store.dispatch("monero/getStats");
       } catch (error) {
         console.error("Error fetching stats:", error);
+      }
+    },
+    fetchMiningData(){
+      try {
+        this.$store.dispatch("monero/mining");
+      } catch (error) {
+        console.error("Error fetching mining data:", error);
       }
     },
     fetchPeers() {
@@ -423,6 +446,9 @@ export default {
     this.fetchStats();
     this.fetchPeers();
     this.fetchConnectionDetails();
+    // this.miningInterval = window.setInterval(() => {
+    //   this.fetchMiningData();
+    // }, 15000)
     this.interval = window.setInterval(() => {
       this.fetchStats();
       this.fetchPeers();
@@ -431,7 +457,11 @@ export default {
   beforeDestroy() {
     if (this.interval) {
       window.clearInterval(this.interval);
+
     }
+    // if (this.miningInterval) {
+    //   window.clearInterval(this.miningInterval);
+    // }
   },
   components: {
     CardWidget,

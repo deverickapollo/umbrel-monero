@@ -19,12 +19,10 @@
 </template>
 
 <script>
+import Slider from '@vueform/slider'
 
-import Slider from '@vueform/slider/dist/slider.vue2.js'
-import '@vueform/slider/themes/default.css';
 export default {
   components: {
-    // VueSlider
     Slider
   },
   data() {
@@ -58,6 +56,7 @@ export default {
   }
 };
 </script>
+<style src="@vueform/slider/themes/default.css"></style>
 
 <style lang="scss">
 $dotShadow: 0px 4px 10px rgba(0, 0, 0, 0.25);

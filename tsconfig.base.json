@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+      "target": "es2022",
+      "module": "Node16",
+      "moduleResolution": "node16",
+      "strict": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "allowJs": true,
+      "noImplicitAny": true,
+      "sourceMap": true,
+      "outDir": "./build"
+    }
+  }

@@ -1,5 +1,5 @@
 <template>
-  <b-card
+  <BCard
     header-tag="header"
     footer-tag="footer"
     no-body
@@ -26,12 +26,12 @@
             "
           >
             <slot name="header-right"></slot>
-            <b-dropdown
+            <BDropdown
               variant="link"
               toggle-class="text-decoration-none p-0"
               no-caret
               right
-              class="ml-2"
+              class="ms-2"
             >
               <template v-slot:button-content>
                 <svg
@@ -62,7 +62,7 @@
                 </svg>
               </template>
               <slot name="menu"></slot>
-            </b-dropdown>
+            </BDropdown>
           </div>
         </div>
       </div>
@@ -85,7 +85,7 @@
       </div>
     </div>
     <!-- <template v-slot:footer></template> -->
-  </b-card>
+  </BCard>
 </template>
 
 <script>

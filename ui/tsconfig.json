@@ -1,0 +1,31 @@
+{
+    "extends": "../tsconfig.base.json",
+    "compilerOptions": {
+      "baseUrl": ".",
+      "importHelpers": true,
+      "esModuleInterop": true,
+      "allowSyntheticDefaultImports": true,
+      "resolveJsonModule": true,
+      "isolatedModules": true,
+      "noEmit": true,
+      "paths": {
+        "*": [
+          "node_modules/*"
+        ]
+      },
+      "types": [
+        "node",
+        "unplugin-icons/types/vue"
+      ]
+    },
+    "include": [
+      "src/**/*.ts",
+      "src/**/*.d.ts",
+      "src/**/*.tsx",
+      "src/**/*.vue",
+      "src/vue-shim.d.ts"
+    ],
+    "exclude": [
+      "node_modules"
+    ]
+  }

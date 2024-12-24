@@ -72,7 +72,7 @@ $toggle-width: 50px;
   // TODO - may want to calc box-shadow px values to scale correctly with $toggle-width
   box-shadow: inset 0px 5px 10px rgba(0, 0, 0, 0.1);
   &.toggle-on {
-    background: var(--success);
+    background: linear-gradient(346.78deg, #f2b304 0%, #f07f06 100%);
     box-shadow: none;
   }
   &.toggle-disabled {

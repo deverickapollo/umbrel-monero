@@ -18,17 +18,17 @@
             showLogo
           ></qr-code>
         </div>
-        <div class="col-12 col-lg-8 align-items-center">
+        <BCol cols="12" lg="8" class="align-items-center">
           <label class="mb-1 d-block"
             ><small class="font-weight-bold"
               >Select mode and network</small
             ></label
           >
-          <b-form-select
+          <BFormSelect
             class="mb-2"
             v-model="chosenMode"
             :options="modes"
-          ></b-form-select>
+          ></BFormSelect>
 
           <!-- RPC Section -->
           <div
@@ -38,8 +38,8 @@
                 chosenMode === 'rpcRestricted'
             "
           >
-            <b-row>
-              <b-col cols="12" lg="6">
+            <BRow>
+              <BCol cols="12" lg="6">
                 <label class="mb-1 d-block"
                   ><small class="font-weight-bold"
                     >Monero RPC Username</small
@@ -56,9 +56,9 @@
                   style="width: 100%;"
                   v-else
                 ></span>
-              </b-col>
+              </BCol>
 
-              <b-col cols="12" lg="6">
+              <BCol cols="12" lg="6">
                 <label class="mb-1 d-block"
                   ><small class="font-weight-bold"
                     >Monero RPC Password</small
@@ -75,9 +75,9 @@
                   style="width: 100%;"
                   v-else
                 ></span>
-              </b-col>
+              </BCol>
 
-              <b-col cols="12" lg="6">
+              <BCol cols="12" lg="6">
                 <label class="mb-1 d-block"
                   ><small class="font-weight-bold"
                     >Monero RPC Address (Host)</small
@@ -96,9 +96,9 @@
                   style="width: 100%;"
                   v-else
                 ></span>
-              </b-col>
+              </BCol>
 
-              <b-col cols="12" lg="6">
+              <BCol cols="12" lg="6">
                 <label class="mb-1 d-block"
                   ><small class="font-weight-bold"
                     >Monero RPC Port</small
@@ -119,8 +119,8 @@
                   style="width: 100%;"
                   v-else
                 ></span>
-              </b-col>
-            </b-row>
+              </BCol>
+            </BRow>
           </div>
           <!-- P2P Section -->
           <div v-if="chosenMode === 'p2pLocal' || chosenMode === 'p2pTor'">
@@ -156,7 +156,7 @@
               v-else
             ></span>
           </div>
-        </div>
+        </BCol>
       </div>
       <p class="mt-2">
         Looking for step-by-step instructions to connect your wallet to your
@@ -214,7 +214,7 @@ export default {
     }
   },
   created() {
-    console.log(this.rpc, this.p2p);
+    // console.log(this.rpc, this.p2p);
   },
   components: {
     QrCode,

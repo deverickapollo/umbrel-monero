@@ -1,6 +1,6 @@
 import RpcClient from "monero-ts";
 import { MonerodError } from '../models/errors.js';
-import { MoneroDaemonRpc, MoneroBlock, MoneroTx, MoneroDaemonInfo, MoneroTxPoolStats, MoneroPeer, ConnectionType } from 'monero-ts';
+import { MoneroDaemonRpc, MoneroBlock, MoneroTx, MoneroDaemonInfo, MoneroTxPoolStats, MoneroMiningStatus, MoneroPeer, ConnectionType } from 'monero-ts';
 
 const MONEROD_RPC_PORT = process.env.MONERO_RPC_PORT || 18081; // eslint-disable-line no-magic-numbers, max-len
 const MONEROD_HOST = process.env.MONERO_HOST || '127.0.0.1';
@@ -30,6 +30,14 @@ interface infoInterface {
   mempoolTransactions: number;
   verificationprogress: number;
   pruned: boolean;
+}
+
+interface miningInterface {
+  miningAddress: string;
+  miningState: boolean;
+  miningSpeed: number;
+  miningBackground: boolean;
+  miningNumThreads: number;
 }
 
 interface State {
@@ -166,6 +174,7 @@ export async function getBlockChainInfo(): Promise<{result: infoInterface}>{
     
     const miningInfo: MoneroTxPoolStats = await daemonController.daemon!.getTxPoolStats();
 
+
     const infoResult: infoInterface = {
       chain: RpcClient.MoneroNetworkType.toString(infoState.networkType),
       blocks: infoState.height,
@@ -231,6 +240,24 @@ export async function getMempoolInfo(): Promise<{result: MoneroTx[]}>{
     return {result: pool};
   } catch (err) {
     throw new MonerodError('Unable to obtain getMempoolInfo from Daemon', err);
+  }
+}
+
+export async function getMiningInfo() {
+  try {
+    const soloMiningInfo: MoneroMiningStatus = await daemonController.daemon!.getMiningStatus();
+
+    const miningResult: miningInterface = {
+      miningAddress: soloMiningInfo.getAddress(),
+      miningState: soloMiningInfo.getIsActive(),
+      miningSpeed: soloMiningInfo.getSpeed(),
+      miningBackground: soloMiningInfo.getIsBackground(),
+      miningNumThreads: soloMiningInfo.getNumThreads(),
+    };
+
+    return {result: miningResult};
+  } catch (err) {
+    throw new MonerodError('Unable to obtain getVersion from Daemon', err);
   }
 }
 
