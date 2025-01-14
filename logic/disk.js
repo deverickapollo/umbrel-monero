@@ -22,6 +22,7 @@ const DEFAULT_ADVANCED_SETTINGS = {
   minercpuTarget: 0,
   dbSalvage: false,
   network: constants.MONERO_DEFAULT_NETWORK,
+  resetPassword: false,
 };
 
 
@@ -159,11 +160,16 @@ function settingsToMultilineConfString(settings) {
   // Public Node
   if (settings.publicNode) {
     umbrelMoneroConfig.push('public-node=1');
+
+    // TODO: Remove as defined in exports.sh
     umbrelMoneroConfig.push('confirm-external-bind=1');
   }
 
   if (settings.zmq) {
+    // TODO: Set public
     if (!settings.publicNode) {
+      // TODO: Set public to true on ui
+      // TODO: Remove as defined in exports.sh
       umbrelMoneroConfig.push('public-node=1');
       umbrelMoneroConfig.push('confirm-external-bind=1');
     }
@@ -201,6 +207,15 @@ export async function getJsonStore() {
   } catch (error) {
     return DEFAULT_ADVANCED_SETTINGS;
   }
+}
+
+export async function resetPassword() {
+  const jsonStore = await getJsonStore();
+
+  await updateJsonStore({
+    ...jsonStore,
+    resetPassword: true,
+  });
 }
 
 // There's a race condition here if you do two updates in parallel but it's fine for our current use case

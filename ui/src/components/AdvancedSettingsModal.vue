@@ -442,23 +442,32 @@
             connected to your Monero node continue to work properly.
           </small>
 
+
+
           <hr class="advanced-settings-divider" />
+
 
           <BRow>
             <div
               class="col-12 col-md-8 col-sm-12 d-flex flex-column align-items-start mb-md-0"
             >
-              <p class="font-weight-bold mb-0">Monero Donation Address</p>
+              <p class="font-weight-bold mb-0">Reset password</p>
               <small class=" d-block text-muted mt-1 mb-3">
-                To support our developers, please consider donating to our
-                Monero address. Funds will go towards development of this app
-                and other Monero apps on Umbrel.
+                Did you share your password with someone you shouldn't have? You can reset it here.
               </small>
             </div>
             <div
               class="col-12 col-md-4 col-sm-12 d-flex justify-content-center justify-content-md-end align-items-center"
             >
-              <donation></donation>
+              <BButton
+                @click="clickResetPassword"
+                class="btn-border"
+                variant="outline-secondary"
+                block
+                :disabled="isSettingsDisabled"
+              >
+                Reset RPC Password
+              </BButton>
             </div>
           </BRow>
 
@@ -488,6 +497,29 @@
               </small>
             </div>
           </BRow>
+          
+          <hr class="advanced-settings-divider" />
+
+          <BRow>
+            <div
+              class="col-12 col-md-8 col-sm-12 d-flex flex-column align-items-start mb-md-0"
+            >
+              <p class="font-weight-bold mb-0">Monero Donation Address</p>
+              <small class=" d-block text-muted mt-1 mb-3">
+                To support our developers, please consider donating to our
+                Monero address. Funds will go towards development of this app
+                and other Monero apps on Umbrel.
+              </small>
+            </div>
+            <div
+              class="col-12 col-md-4 col-sm-12 d-flex justify-content-center justify-content-md-end align-items-center"
+            >
+              <donation></donation>
+            </div>
+          </BRow>
+
+
+
         </div>
         <!-- template overlay with empty div to show an overlay with no spinner -->
         <template #overlay>
@@ -533,7 +565,7 @@
           <BCol cols="12" lg="6">
             <BButton
               @click="clickRestoreDefaults"
-              class="btn-border"
+              class="btn-border btn-block"
               variant="outline-secondary"
               block
               :disabled="isSettingsDisabled"
@@ -588,6 +620,7 @@ export default {
         upnp: false,
         checkpoint: false,
         incomingConnections: false,
+        resetpassword: false,
       },
       dbSyncMode: [
         { value: "fastest", text: "fastest" },
@@ -653,6 +686,13 @@ export default {
         window.confirm("Are you sure you want to restore the default settings?")
       ) {
         this.$emit("clickRestoreDefaults");
+      }
+    },
+    clickResetPassword() {
+      if (
+        window.confirm("Are you sure you want to reset your RPC password?")
+      ) {
+        this.$emit("clickResetPassword");
       }
     },
     setSettings() {

@@ -73,4 +73,14 @@ router.post('/restore-default-monero-config', safeHandler.safeHandler(async(req,
   }
 }));
 
+router.post('/reset-rpc-password', safeHandler.safeHandler(async(req, res) => {
+  try {
+    await diskLogic.resetPassword();
+    await monerodLogic.stop();
+    res.json({success: true});
+  } catch (error) {
+    res.json({success: false});
+  }
+}));
+
 export default router;

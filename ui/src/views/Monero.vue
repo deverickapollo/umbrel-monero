@@ -255,6 +255,7 @@
         :isSettingsDisabled="isRestartPending"
         @submit="saveSettingsAndRestartMonero"
         @clickRestoreDefaults="restoreDefaultSettingsAndRestartMonero"
+        @clickResetPassword="restoreRPCPassword"
       ></advanced-settings-modal>
     </BModal>
   </div>
@@ -423,6 +424,29 @@ export default {
       } catch (error) {
         console.error(error);
         this.fetchMoneroConfigSettings();
+        this.showRestartError = true;
+        this.$bvModal.hide("advanced-settings-modal");
+        this.isRestartPending = false;
+      }
+    },
+    // Restore RPC password
+    async restoreRPCPassword(){
+      try {
+        const response = await API.post(
+          `${import.meta.env.VITE_API_BASE_URL}/v1/monerod/system/reset-rpc-password`
+        );
+
+        if (response.data.success) {
+            // reload the page to reset all state and show loading view while monero core restarts.
+            this.$router.push({ query: { restart: "1" } });
+            window.location.reload();
+        } else {
+          this.fetchMoneroConfigSettings();
+          this.showRestartError = true;
+          this.isRestartPending = false;
+        }
+      } catch (error) {
+        console.error(error);
         this.showRestartError = true;
         this.$bvModal.hide("advanced-settings-modal");
         this.isRestartPending = false;
