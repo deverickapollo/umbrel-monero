@@ -5,7 +5,6 @@ import * as monerodService from '../../../build/services/monerod.js';
 const router = express.Router();
 
 
-
 const aggregates = {
   '1hr': [],
   '6hr': [],
@@ -15,7 +14,7 @@ const aggregates = {
   '7d': [],
 };
 
-const setAggregatesValues = async () => {
+const setAggregatesValues = async() => {
   const {result: blockchainInfo} = await monerodService.getBlockChainInfo();
   const syncPercent = blockchainInfo.verificationprogress;
 

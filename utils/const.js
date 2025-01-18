@@ -11,9 +11,13 @@ export const MONERO_I2P_HIDDEN_SERVICE = process.env.MONERO_I2P_HIDDEN_SERVICE;
 export const MONERO_RPC_USER = process.env.MONERO_RPC_USER;
 export const MONERO_RPC_PASSWORD = process.env.MONERO_RPC_PASSWORD;
 export const DEVICE_DOMAIN_NAME = process.env.DEVICE_DOMAIN_NAME;
-export const JSON_STORE_FILE = process.env.JSON_STORE_FILE || (isDevelopment ? './data/monero-config.json' : '/data/monero-config.json');
-export const MONERO_CONF_FILEPATH = process.env.MONERO_CONF_FILE || (isDevelopment ? './data/monero/bitmonero.conf' : '/monero/.monero/bitmonero.conf');
-export const MONERO_LOG_FILE_PATH = isDevelopment ? './data/monero/devtest-bitmonero.log' : '/data/monero/bitmonero.log';
+export const JSON_STORE_FILE = process.env.JSON_STORE_FILE
+|| (isDevelopment ? './data/monero-config.json' : '/data/monero-config.json');
+export const MONERO_CONF_FILEPATH = process.env.MONERO_CONF_FILE
+|| (isDevelopment ? './data/monero/bitmonero.conf' : '/monero/.monero/bitmonero.conf');
+export const MONERO_LOG_FILE_PATH = isDevelopment
+  ? './data/monero/devtest-bitmonero.log'
+  : '/data/monero/bitmonero.log';
 export const MONERO_SYNC_MODE = process.env.MONERO_SYNC_MODE || 'fast';
 export const MONERO_SYNC_TYPE = process.env.MONERO_SYNC_TYPE || 'sync';
 export const MONERO_BLOCKS_PER_SYNC = process.env.MONERO_BLOCKS_PER_SYNC || 1000;

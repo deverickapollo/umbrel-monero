@@ -7,7 +7,7 @@
   "scripts": {
     "lint": "eslint",
     "lintui": "cd ui && npm run lint",
-    "build": "npx tsc",
+    "build": "npx tsc --build",
     "start": "node ./bin/www",
     "start:server:dev": "NODE_ENV=development node --watch ./bin/www",
     "start:ui:dev": "cd ui && npm run serve:dev",

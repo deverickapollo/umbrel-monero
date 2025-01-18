@@ -1,0 +1,92 @@
+# Dockerfile defined for testing the monero-frontend app during development and testing
+# version: "3.7"
+
+services:
+  
+  tor_server:
+    container_name: tor_server
+    image: getumbrel/tor:0.4.7.8@sha256:2ace83f22501f58857fa9b403009f595137fa2e7986c4fda79d82a8119072b6a
+    user: "1000:1000"
+    restart: on-failure
+    entrypoint: /tor-entrypoint/tor-entrypoint.sh
+    volumes:
+      - ${PWD}/data/tor:/etc/tor
+      - ${PWD}/tor-entrypoint:/tor-entrypoint
+    environment:
+      HOME: "/tmp"
+    networks:
+      default:
+        ipv4_address: "10.21.1.3"
+
+  monerod:
+    user: "1000:1000"
+    restart: unless-stopped
+    stop_grace_period: 1m
+    command: --rpc-bind-ip=0.0.0.0 --confirm-external-bind --rpc-bind-port=18081 --hide-my-port --prune-blockchain --enable-dns-blocklist --log-level=0
+    image: sethsimmons/simple-monerod:latest
+    ports:
+      - "18080:18080"
+      - "18081:18081"
+      - "18082:18082"
+    volumes:
+      - ${PWD}/data/monero:/home/monero/.bitmonero
+    networks:
+      default:
+        ipv4_address: "10.21.1.4"
+
+  monerod_wallet:
+    restart: unless-stopped
+    container_name: monero_wallet
+    image: btcpayserver/monero:0.18.3.3
+    entrypoint: monero-wallet-rpc --rpc-bind-ip=0.0.0.0 --disable-rpc-login --confirm-external-bind --rpc-bind-port=18083 --non-interactive --trusted-daemon  --daemon-address=monerod:18081 --wallet-dir=/wallet --tx-notify="/bin/sh ./scripts/notifier.sh  -X GET http://btcpayserver:49392/monerolikedaemoncallback/tx?cryptoCode=xmr&hash=%s"
+    ports:
+      - "18083:18083"
+    volumes:
+       - ${PWD}/data/monero-wallet:/wallet
+    depends_on:
+      - monerod
+    networks:
+      default:
+        ipv4_address: "10.21.1.6"
+
+  server:
+    image: deverick/monero-frontend:v4.0.0
+    restart: on-failure
+    ports:
+      - "8889:8889"
+      - "9229:9229"
+    volumes:
+      # update the below paths to point to monerod on your local machine 
+      - ${PWD}/data/app:/data # volume to persist advanced settings json
+      - ${PWD}/data/monero:/monero/.monero # volume to persist umbrel-monero.conf and bitmonero.conf
+    environment:
+      PORT: "8889"
+      MONERO_HOST: "monerod"
+      MONERO_P2P_PORT: 18080
+      MONERO_ONION_P2P_PORT: 18083
+      MONERO_RPC_PORT: 18081
+      MONERO_ZMQ_PORT: 18082 
+      MONERO_DEFAULT_NETWORK: "mainnet"
+      MONERO_RPC_USER: "monero"
+      MONERO_RPC_PASSWORD: "monero"
+      MONERO_RPC_HIDDEN_SERVICE: "somehiddenservice.onion"
+      MONERO_P2P_HIDDEN_SERVICE: "anotherhiddenservice.onion"
+      DEVICE_DOMAIN_NAME: "monero.local"
+      MONEROD_IP: "10.21.1.4"
+      TOR_PROXY_IP: "10.21.1.3"
+      TOR_PROXY_PORT: "9050"
+      TOR_PROXY_CONTROL_PORT: "9051"
+      TOR_PROXY_CONTROL_PASSWORD: "moneroisprivate"
+      I2P_DAEMON_IP: "10.21.1.2"
+      I2P_DAEMON_PORT: "7656"
+    networks:
+      default:
+        ipv4_address: "10.21.1.5"
+
+networks:
+    default:
+      name: advanced_settings_test_network
+      ipam:
+          driver: default
+          config:
+              - subnet: "10.21.0.0/16"
