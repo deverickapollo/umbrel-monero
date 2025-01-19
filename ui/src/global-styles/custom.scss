@@ -666,6 +666,7 @@ body {
     background-color: #e85f00 !important; 
   }
 
-  .custom-dropdown > a:active, .custom-dropdown > a:focus {
+  .custom-dropdown .dropdown-item:active,
+  .custom-dropdown .dropdown-item:focus {
     background-color: #e85f00;
   }

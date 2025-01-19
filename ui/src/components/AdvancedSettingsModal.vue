@@ -185,7 +185,7 @@
               </div>
             </div>
             <small class="w-sm-75 d-block text-muted mt-1">
-              Specify maximum percentage cpu use by miner
+              Select the maximum percentage of CPU usage for mining monero.
             </small>
             <MinerSlider
               id="miner-cpu"
@@ -202,23 +202,24 @@
 
           <div v-if="settings.mining">
             <div class="d-flex justify-content-between align-items-center">
-              <div class="w-10">
-                <label class="mb-0" for="moneroAddress">
-                  <p class="font-weight-bold mb-0">Monero Address</p>
-                </label>
-              </div>
-              <div class="w-90">
-                <BFormInput
-                  id="moneroAddress"
-                  v-model="settings.moneroAddress"
-                  type="text"
-                  placeholder="Enter your Monero address"
-                ></BFormInput>
+              <div class="w-75">
+              <label class="mb-0" for="moneroAddress">
+                <p class="font-weight-bold mb-0">Monero Address</p>
+              </label>
               </div>
             </div>
             <small class="w-sm-75 d-block text-muted mt-1">
               Set your Monero address for mining rewards.
             </small>
+            <div class="mt-2">
+              <BFormInput
+              id="moneroAddress"
+              v-model="settings.moneroAddress"
+              type="text"
+              placeholder="Enter your Monero address"
+              ></BFormInput>
+            </div>
+
           </div>
 
           <hr v-if="settings.mining" class="advanced-settings-divider" />

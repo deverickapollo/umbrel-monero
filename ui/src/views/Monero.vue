@@ -125,9 +125,6 @@
           header="Blockchain"
           :loading="syncPercent !== 100 || blocks.length === 0"
         >
-          <!-- <template v-slot:menu>
-            <b-dropdown-item variant="danger" href="#" disabled>Resync Blockchain</b-dropdown-item>
-          </template>-->
           <div class>
             <div class="px-3 px-lg-4 mb-5">
               <div class="w-100 d-flex justify-content-between mb-2">
