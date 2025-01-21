@@ -12,11 +12,11 @@ COPY package-lock.json package.json ./
 # Install dependencies
 RUN npm install --fetch-timeout 300000
 
-# Copy project files and folders to the current working directory (i.e. '/app')
-COPY . .
-
 # Compile TypeScript files
 RUN npm run build
+
+# Copy project files and folders to the current working directory (i.e. '/app')
+COPY . .
 
 # Install UI dependencies and build UI 
 RUN npm run install:ui
