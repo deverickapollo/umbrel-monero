@@ -12,8 +12,6 @@ COPY package-lock.json package.json ./
 # Install dependencies
 RUN npm install --fetch-timeout 300000
 
-# ENV NODE_ENV=production
-
 # Copy project files and folders to the current working directory (i.e. '/app')
 COPY . .
 
