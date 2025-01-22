@@ -114,7 +114,7 @@ To build:
 
 ## Getting started
 
-This app can be installed in one click via the Umbrel Community App Store.
+This app can be installed in one click via the Umbrel App Store.
 
 ## Copying blockchain from another node
 
