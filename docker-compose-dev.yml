@@ -50,6 +50,7 @@ services:
         ipv4_address: "10.21.1.6"
 
   server:
+    # image: deverickapollo/umbrel-monero:dev-p2pool
     image: deverick/monero-frontend:v4.0.0
     restart: on-failure
     ports:
