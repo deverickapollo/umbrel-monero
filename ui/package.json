@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "serve:dev": "export NODE_OPTIONS=--openssl-legacy-provider && VITE_API_BASE_URL=http://localhost:8889 DEV=true NODE_ENV=development vite dev",
+    "serve:dev": "export NODE_OPTIONS=--openssl-legacy-provider VITE_API_BASE_URL=http://localhost:8889 DEV=true NODE_ENV=development && vite dev",
     "preview:dev": "export NODE_OPTIONS=--openssl-legacy-provider && VITE_API_BASE_URL=http://localhost:8889 DEV=true NODE_ENV=development vite preview",
     "serve": "export NODE_OPTIONS=--openssl-legacy-provider && VITE_API_BASE_URL=http://localhost:8889 vite",
     "build": "vite build",
@@ -16,7 +16,7 @@
     "axios": "^1.7.7",
     "bignumber.js": "^9.0.0",
     "bootstrap": "^5.3.3",
-    "bootstrap-vue-next": "^0.25.13",
+    "bootstrap-vue-next": "^0.26.21",
     "core-js": "^3.4.4",
     "countup.js": "^2.0.4",
     "highcharts": "^9.3.2",

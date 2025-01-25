@@ -8,14 +8,20 @@
     }"
     :size="size ? size : 'sm'"
   >
-    <BFormInput
-      ref="copy-input-field"
+    <!-- <b-form-input
       type="text"
       class="copy-input"
       readonly
       :value="value"
       @input="$emit('update:value', $event.target.value)"
-    ></BFormInput>
+    ></b-form-input> -->
+    <input
+      type="text"
+      class="copy-input form-control"
+      readonly
+      :value="value"
+      @input="$emit('update:value', $event.target.value)"
+    />
 
     <div class="input-group-append copy-icon-btn" @click="copyText">
       <svg
@@ -44,13 +50,18 @@
 </template>
 
 <script>
+import { ref } from 'vue';
+
 export default {
   props: {
     size: {
       type: String,
       default: "sm"
     },
-    value: String,
+    value: {
+      type: String,
+      required: true
+    },
     width: {
       type: String,
       default: "auto"
@@ -60,33 +71,33 @@ export default {
       default: false
     }
   },
-  data() {
-    return {
-      isCopied: false
+  setup(props, { emit }) {
+    const copyInputField = ref(null);
+    const isCopied = ref(false);
+
+    const copyText = async () => {
+      try {
+        if (copyInputField.value) {
+          console.log('Copying:', copyInputField.value.value);
+          await navigator.clipboard.writeText(copyInputField.value.value);
+          isCopied.value = true;
+
+          window.setTimeout(() => {
+            copyInputField.value.blur();
+            window.getSelection().removeAllRanges();
+            isCopied.value = false;
+          }, 1000);
+        }
+      } catch (err) {
+        console.error('Failed to copy text: ', err);
+      }
     };
-  },
-  methods: {
-    copyText() {
-      //copy generated invoice's text to clipboard
 
-      const copyText = this.$refs["copy-input-field"];
-      copyText.select();
-      copyText.setSelectionRange(0, 99999); /*For mobile devices*/
-      document.execCommand("copy");
-
-      window.setTimeout(() => {
-        copyText.blur();
-        window.getSelection().removeAllRanges();
-        this.isCopied = false;
-      }, 1000);
-
-      return (this.isCopied = true);
-    }
-  },
-  watch: {
-    value: function() {
-      this.isCopied = false;
-    }
+    return {
+      copyInputField,
+      isCopied,
+      copyText
+    };
   }
 };
 </script>
