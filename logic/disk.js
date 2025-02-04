@@ -147,15 +147,18 @@ function settingsToMultilineConfString(settings) {
   }
 
 
-  // umbrelMoneroConfig.push(`rpc-bind-ip=0.0.0.0`);
-  umbrelMoneroConfig.push(`rpc-restricted-bind-ip=0.0.0.0`);
-  // umbrelMoneroConfig.push(`rpc-bind-port=${constants.MONERO_RPC_PORT}`);
-  umbrelMoneroConfig.push(`rpc-restricted-bind-port=${constants.MONERO_RESTRICTED_RPC_PORT}`);
-
-  // Public Node
+  // Check if the node should be public or not
   if (settings.publicNode) {
     umbrelMoneroConfig.push('public-node=1');
     umbrelMoneroConfig.push(`confirm-external-bind=1`);
+
+    // Use restricted RPC mode when the node is public
+    umbrelMoneroConfig.push(`rpc-restricted-bind-ip=0.0.0.0`);
+    umbrelMoneroConfig.push(`rpc-restricted-bind-port=${constants.MONERO_RESTRICTED_RPC_PORT}`);
+  } else {
+    // Use unrestricted RPC mode when the node is private
+    umbrelMoneroConfig.push(`rpc-bind-ip=0.0.0.0`);
+    umbrelMoneroConfig.push(`rpc-bind-port=${constants.MONERO_RPC_PORT}`);
   }
 
   if (process.env.APP_BTCPAY_IP && process.env.APP_BTCPAY_PORT) {
@@ -170,7 +173,7 @@ function settingsToMultilineConfString(settings) {
 export async function getJsonStore() {
   try {
     const jsonStore = await diskService.readJsonFile(constants.JSON_STORE_FILE);
-    return {...DEFAULT_ADVANCED_SETTINGS, ...jsonStore};
+    return { ...DEFAULT_ADVANCED_SETTINGS, ...jsonStore };
   } catch (error) {
     return DEFAULT_ADVANCED_SETTINGS;
   }
