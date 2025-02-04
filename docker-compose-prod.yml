@@ -62,7 +62,7 @@ services:
       MONERO_HOST: "monerod"
       MONERO_P2P_PORT: 18080
       MONERO_RPC_PORT: 18081
-      MONERO_ONION_P2P_PORT: 18083
+      MONERO_TOR_PORT: 18084
       MONERO_DEFAULT_NETWORK: "mainnet"
       RPC_USER: "monero"
       RPC_PASSWORD: "monero"
