@@ -1,5 +1,5 @@
-/* eslint-disable indent, id-length, camelcase */
-function getMempoolInfo() {
+/* eslint-disable indent, camelcase */
+export function getMempoolInfo() {
   return {
     result: {
       size: 4524,
@@ -12,7 +12,7 @@ function getMempoolInfo() {
   };
 }
 
-function getNetworkInfoWithTor() {
+export function getNetworkInfoWithTor() {
   return {
     result: {
       version: 170100,
@@ -60,7 +60,7 @@ function getNetworkInfoWithTor() {
   };
 }
 
-function getNetworkInfoWithoutTor() {
+export function getNetworkInfoWithoutTor() {
   return {
     result: {
       version: 170100,
@@ -102,7 +102,7 @@ function getNetworkInfoWithoutTor() {
   };
 }
 
-function getPeerInfo() {
+export function getPeerInfo() {
   return {
     result:
       [{
@@ -318,17 +318,10 @@ function getPeerInfo() {
   };
 }
 
-function getPeerInfoEmpty() {
+export function getPeerInfoEmpty() {
   return {
     result:
       []
   };
 }
 
-module.exports = {
-  getMempoolInfo,
-  getNetworkInfoWithTor,
-  getNetworkInfoWithoutTor,
-  getPeerInfo,
-  getPeerInfoEmpty,
-};

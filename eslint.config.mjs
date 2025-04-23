@@ -31,7 +31,14 @@ export default [...compat.extends('eslint:recommended'), {
       }
     }
   },
-
+  overrides: [
+    {
+      files: ['tests/**/*'],
+      env: {
+        jest: true
+      }
+    }
+  ],
   rules: {
     'comma-dangle': 0,
     'no-cond-assign': 2,

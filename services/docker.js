@@ -2,9 +2,9 @@ import {exec} from 'child_process';
 
 const dockerService = {
   isBtcpayServerRunning() {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       const command = 'ping -c 1 \'btcpay-server_web_1\'';
-      exec(command, (error, stdout, stderr) => {
+      exec(command, error => {
         if (error) {
           resolve(false);
         } else {

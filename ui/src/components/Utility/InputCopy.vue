@@ -20,6 +20,7 @@
       class="copy-input form-control"
       readonly
       :value="value"
+      ref="copyInputField"
       @input="$emit('update:value', $event.target.value)"
     />
 

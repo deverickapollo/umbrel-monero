@@ -10,4 +10,4 @@ export function handleError(error, req, res, next) {
 
   res.status(statusCode).json(message);
 }
- export default handleError;
+export default handleError;
