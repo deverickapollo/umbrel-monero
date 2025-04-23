@@ -141,7 +141,10 @@ export async function getBlock(hash: string): Promise<{result: BlockInterface}> 
 
 export async function getTransaction(txHash: string): Promise<{result: MoneroTx}> {
   try {
-    const hash: MoneroTx = await daemonController.daemon!.getTx(txHash);
+    const hash: MoneroTx | undefined = await daemonController.daemon!.getTx(txHash);
+    if (!hash) {
+      throw new MonerodError('Transaction not found');
+    }
     return {result: hash};
   } catch (err) {
     throw new MonerodError('Unable to obtain getTransaction from Daemon', err);
