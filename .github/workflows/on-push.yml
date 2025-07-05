@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - master
-      - dev*
+  workflow_dispatch:
 
 env:
   DOCKER_CLI_EXPERIMENTAL: enabled
@@ -17,8 +17,12 @@ jobs:
       - name: Set BRANCH
         run: echo "BRANCH=$(echo ${GITHUB_REF#refs/heads/} | sed 's/\//-/g')" >> $GITHUB_ENV
 
-      - name: Login to Docker Hub
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout project
         uses: actions/checkout@v4.1.7
@@ -32,6 +36,6 @@ jobs:
       - name: Run Docker buildx
         run: |
           docker buildx build \
-          --platform linux/amd64,linux/arm64 \
-          --tag ${{ secrets.DOCKER_HUB_USER }}/umbrel-monero:$BRANCH \
+          --platform linux/amd64,linux/arm64,linux/arm/v7 \
+          --tag ghcr.io/${{ github.repository_owner }}/umbrel-monero:$BRANCH \
           --push .
