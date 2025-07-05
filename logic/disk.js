@@ -142,7 +142,7 @@ function settingsToMultilineConfString(settings) {
       umbrelMoneroConfig.push(`anonymous-inbound=${constants.MONERO_I2P_HIDDEN_SERVICE}:${constants.I2P_DAEMON_PORT},${constants.MONERO_HOST}:${constants.MONERO_I2P_P2P_PORT},25`);
     }
     if (settings.tor) {
-      umbrelMoneroConfig.push(`anonymous-inbound=${constants.MONERO_P2P_HIDDEN_SERVICE}:${constants.MONERO_ONION_P2P_PORT},${constants.MONERO_HOST}:${constants.MONERO_ONION_P2P_PORT},64`);
+      umbrelMoneroConfig.push(`anonymous-inbound=${constants.MONERO_P2P_HIDDEN_SERVICE}:${constants.MONERO_TOR_PORT},${constants.MONERO_HOST}:${constants.MONERO_TOR_PORT},64`);
     }
   }
 

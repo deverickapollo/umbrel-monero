@@ -5,7 +5,7 @@ export function getMoneroP2PConnectionDetails() {
   const torAddress = constants.MONERO_P2P_HIDDEN_SERVICE;
   const port = constants.MONERO_P2P_PORT;
   // const restrictedPort = constants.MONERO_RESTRICTED_RPC_PORT;
-  const onionPort = constants.MONERO_ONION_P2P_PORT;
+  const onionPort = constants.MONERO_TOR_PORT;
   const torConnectionString = `${torAddress}:${port}`;
   const localAddress = constants.DEVICE_DOMAIN_NAME;
   const localConnectionString = `${localAddress}:${port}`;

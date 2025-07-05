@@ -22,7 +22,7 @@
 //   MONERO_SYNC_TYPE: process.env.MONERO_SYNC_TYPE || 'sync',
 //   MONERO_BLOCKS_PER_SYNC: process.env.MONERO_BLOCKS_PER_SYNC || 1000,
 //   MONERO_P2P_PORT: process.env.MONERO_P2P_PORT || '18080',
-//   MONERO_ONION_P2P_PORT: process.env.MONERO_ONION_P2P_PORT || '18083',
+//   MONERO_TOR_PORT: process.env.MONERO_TOR_PORT || '18084',
 //   MONERO_I2P_P2P_PORT: process.env.MONERO_I2P_P2P_PORT || '18087',
 //   MONERO_RPC_PORT: process.env.MONERO_RPC_PORT || '18081',
 //   MONERO_RESTRICTED_RPC_PORT: process.env.MONERO_RESTRICTED_RPC_PORT || '18089',
@@ -44,6 +44,7 @@ export const PORT = process.env.PORT || 8889;
 export const DEVICE_HOSTNAME = process.env.DEVICE_HOSTNAME || 'umbrel.local';
 export const MONERO_HOST = process.env.MONERO_HOST || 'monerod';
 export const MONERO_P2P_HIDDEN_SERVICE = process.env.MONERO_P2P_HIDDEN_SERVICE;
+export const MONERO_TOR_PORT = process.env.MONERO_TOR_PORT || '18084';
 export const MONERO_RPC_HIDDEN_SERVICE = process.env.MONERO_RPC_HIDDEN_SERVICE;
 export const MONERO_I2P_HIDDEN_SERVICE = process.env.MONERO_I2P_HIDDEN_SERVICE;
 export const MONERO_RPC_USER = process.env.MONERO_RPC_USER;
