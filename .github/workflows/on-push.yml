@@ -28,7 +28,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout project
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.4.0
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3.0.0
